@@ -1,0 +1,143 @@
+{
+  "state": 0,
+
+  "graphics": {
+    "textures": [
+      [ "background", "res/textures/locations/outside/main.png" ],
+      [ "wall", "res/textures/locations/outside/wall0.png" ],
+
+      [ "chronodox", "res/textures/characters/chronodox.png" ],
+      [ "player", "res/textures/characters/player.png" ]
+    ],
+
+    "sprites": [
+      {
+        "texture": "background",
+        "pos": [ -1812, -120 ],
+        "anim": null,
+        "layer": "bg"
+      }
+    ]
+  },
+
+  "physics": {
+    "statics": {
+      "boxes": [
+
+      ],
+
+      "chains": [
+        {
+          "loop": false,
+          "verts": [
+            [ 1209, 171 ],
+            [ 1209, 103 ],
+            [ 1111, 103 ],
+            [ 1111, -120 ],
+            [ 906, -120 ],
+            [ 906, 371 ],
+            [ 492, 371 ],
+            [ 492, 64 ],
+            [ 396, 64 ],
+            [ 396, 14 ],
+            [ 321, 14 ],
+            [ 321, 64 ],
+            [ 41, 64 ],
+            [ -81, 357 ],
+            [ 10, 393 ],
+            [ -144, 761 ],
+            [ -217, 738 ],
+            [ -283, 895 ],
+            [ -426, 850 ],
+            [ -491, 1006 ],
+            [ -858, 888 ],
+            [ -454, -50 ]
+          ],
+          "ghosts": [
+            [ 1259, 171 ],
+            [ -424, -20 ]
+          ]
+        }
+      ],
+
+      "box-triggers": [
+        [
+          "entrance",
+          [ 321, 34, 75, 20 ]
+        ],
+        [
+          "basketball",
+          [ 906, 20, 205, 20 ]
+        ],
+        [
+          "aulayard",
+          [ -546, 2516, 200, 20 ]
+        ]
+      ]
+    }
+  },
+
+  "soundtrack": {
+    "reset": true,
+    "name": "birds",
+    "type": "effect",
+    "file": "res/sounds/effects/birds.wav"
+  },
+
+  "camera": {
+    "pos": [ 190, 190 ],
+    "size": [ 480, 270 ],
+    "static-target": [ 190, 190 ],
+    "constrain": false,
+    "constraints": [
+      [ 190, 135 ],
+      [ 275, 190 ]
+    ]
+  },
+
+  "entities": [
+    {
+      "type": "player",
+      "camera-target": true,
+      "pos": [ 250, 150 ],
+      "size": [ 14, 40 ],
+      "texture": "player",
+      "locked": false,
+      "anim": {
+        "frames": [ 4, 5 ],
+        "framerate": 4
+      },
+      "physics": {
+        "offset": [ 7, 33 ],
+        "type": "dynamic",
+        "density": 2,
+        "shape": {
+          "type": "box",
+          "size": [ 14, 14 ]
+        }
+      }
+    },
+    {
+      "type": "character",
+      "camera-target": false,
+      "pos": [ 150, 90 ],
+      "size": [ 20, 50 ],
+      "texture": "chronodox",
+      "locked": false,
+      "anim": {
+        "frames": [ 4, 8 ],
+        "framerate": 4
+      },
+      "physics": null
+    },
+    {
+      "type": "static",
+      "camera-target": false,
+      "pos": [ -87, 145 ],
+      "size": [ 97, 249 ],
+      "texture": "wall",
+      "anim": null,
+      "physics": null
+    }
+  ]
+}

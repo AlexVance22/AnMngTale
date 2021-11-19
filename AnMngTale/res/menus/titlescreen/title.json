@@ -1,0 +1,68 @@
+{
+  "sounds": [
+    [ "mouse_hover", "res/sounds/mouse_hover.wav" ]
+  ],
+
+  "textures": [
+    [ "menu", "res/textures/gui/menus/title.png" ],
+    [ "button", "res/textures/gui/widgets/button.png" ]
+  ],
+
+  "fonts": [
+    [ "cambria", "res/fonts/cambria.ttf" ]
+  ],
+
+  "view": [1920, 1080],
+
+  "presets": {
+
+    "button": {
+
+      "menu-button": {
+        "size": [ 320, 100 ],
+        "texture": "button",
+        "animlen": 3,
+        "font": "cambria",
+        "fontsize": 25,
+        "sound": "mouse_hover"
+      }
+    }
+  },
+
+  "root": {
+
+    "texture": "menu",
+    "font": "cambria",
+
+    "children": {
+
+      "start": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 500 ],
+        "text": "Start"
+      },
+
+      "load": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 625 ],
+        "text": "Load"
+      },
+
+      "options": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 750 ],
+        "text": "Options"
+      },
+
+      "quit": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 875 ],
+        "text": "Quit"
+      }
+    }
+  }
+}

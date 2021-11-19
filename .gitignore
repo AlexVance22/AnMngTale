@@ -1,0 +1,10 @@
+# Directories
+.vs/
+bin/
+bin-int/
+
+# Files
+*.user
+AnMngTale.sln
+AnMngTale/AnMngTale.vcxproj
+AnMngTale/AnMngTale.vcxproj.filters

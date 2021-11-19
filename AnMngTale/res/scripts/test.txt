@@ -1,0 +1,25 @@
+move 5.0 6.0
+place 3.0 2.0
+lock true
+wait 1.0
+anim 3
+move 5.0 6.0
+place 3.0 2.0
+lock true
+wait 1.0
+anim 3
+move 5.0 6.0
+place 3.0 2.0
+lock true
+wait 1.0
+anim 3
+move 5.0 6.0
+place 3.0 2.0
+lock true
+wait 1.0
+anim 3
+move 5.0 6.0
+place 3.0 2.0
+lock true
+wait 1.0
+anim 3

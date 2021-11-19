@@ -1,0 +1,44 @@
+{
+  "state": 0,
+
+  "graphics": {
+    "textures": [
+    ],
+
+    "sprites": [
+    ]
+  },
+
+  "physics": {
+    "statics": {
+      "boxes": [
+      ],
+
+      "chains": [
+      ],
+
+      "box-triggers": [
+      ]
+    }
+  },
+
+  "soundtrack": {
+    "reset": true,
+    "name": "birds",
+    "type": "effect",
+    "file": "res/sounds/effects/birds.wav"
+  },
+
+  "camera": {
+    "pos": [ 190, 190 ],
+    "size": [ 480, 270 ],
+    "static-target": [ 0, 0 ],
+    "constraints": [
+      [ 190, 135 ],
+      [ 275, 190 ]
+    ]
+  },
+
+  "entities": [
+  ]
+}

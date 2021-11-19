@@ -1,0 +1,63 @@
+{
+  "sounds": [
+    [ "mouse_hover", "res/sounds/mouse_hover.wav" ]
+  ],
+
+  "textures": [
+    [ "button", "res/textures/gui/widgets/button.png" ]
+  ],
+
+  "fonts": [
+    [ "cambria", "res/fonts/cambria.ttf" ]
+  ],
+
+  "view": [ 1920, 1080 ],
+
+  "presets": {
+
+    "button": {
+
+      "menu-button": {
+        "size": [ 320, 100 ],
+        "texture": "button",
+        "animlen": 3,
+        "font": "cambria",
+        "fontsize": 25,
+        "sound": "mouse_hover"
+      }
+    }
+  },
+
+  "root": {
+
+    "color": [ 0, 0, 0, 0 ],
+    "texture": null,
+    "font": "cambria",
+    "pos": [ 0, 0 ],
+    "size": [ 1920, 1080 ],
+
+    "children": {
+
+      "0": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 375 ],
+        "text": "Slot 1"
+      },
+
+      "1": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 500 ],
+        "text": "Slot 2"
+      },
+
+      "2": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 625 ],
+        "text": "Slot 3"
+      }
+    }
+  }
+}

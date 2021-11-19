@@ -1,0 +1,51 @@
+{
+  "state": 0,
+
+  "graphics": {
+    "textures": [
+      [ "background", "res/textures/gui/menus/splash.png" ]
+    ],
+
+    "sprites": [
+      {
+        "texture": "background",
+        "pos": [ 0, -0 ],
+        "anim": null,
+        "layer": "bg"
+      }
+    ]
+  },
+
+  "physics": {
+    "statics": {
+      "boxes": [
+      ],
+
+      "chains": [
+      ],
+
+      "box-triggers": [
+      ]
+    }
+  },
+
+  "soundtrack": {
+    "reset": true,
+    "type": "music",
+    "file": "res/sounds/songs/Enter.wav"
+  },
+
+  "camera": {
+    "pos": [ 0, 0 ],
+    "size": [ 1920, 1080 ],
+    "static-target": [ 0, 0 ],
+    "constrain": false,
+    "constraints": [
+      [ 960, 540 ],
+      [ 960, 540 ]
+    ]
+  },
+
+  "entities": [
+  ]
+}

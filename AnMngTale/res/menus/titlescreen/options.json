@@ -1,0 +1,123 @@
+{
+  "sounds": [
+    [ "mouse_hover", "res/sounds/mouse_hover.wav" ]
+  ],
+
+  "textures": [
+    [ "button", "res/textures/gui/widgets/button.png" ]
+  ],
+
+  "fonts": [
+    [ "cambria", "res/fonts/cambria.ttf" ]
+  ],
+
+  "view": [ 1920, 1080 ],
+
+  "presets": {
+
+    "button": {
+
+      "menu-button": {
+        "size": [ 320, 100 ],
+        "texture": "button",
+        "animlen": 3,
+        "font": "cambria",
+        "fontsize": 25,
+        "sound": "mouse_hover"
+      }
+    },
+
+    "slider": {
+
+      "menu-slider": {
+        "size": [ 320, 30 ],
+        "texture": "slider",
+        "sound": "mouse_hover"
+      }
+    },
+
+    "label": {
+
+      "menu-label": {
+        "size": [ 320, 40 ],
+        "font": "cambria",
+        "fontsize": 25
+      }
+    }
+  },
+
+  "root": {
+
+    "color": [ 0, 0, 0, 0 ],
+    "texture": null,
+    "font": "cambria",
+    "pos": [ 0, 0 ],
+    "size": [ 1920, 1080 ],
+
+    "children": {
+
+      "volume-label": {
+        "type": "label",
+        "preset": null,
+        "position": [ 800, 150 ],
+        "size": [ 320, 40 ],
+        "font": "cambria",
+        "fontsize": 30,
+        "text": "Volume"
+      },
+
+      "global-vol": {
+        "type": "slider",
+        "preset": "menu-slider",
+        "position": [ 800, 250 ]
+      },
+
+      "gvol-label": {
+        "type": "label",
+        "preset": "menu-label",
+        "position": [ 800, 200 ],
+        "text": "Global"
+      },
+
+      "music-vol": {
+        "type": "slider",
+        "preset": "menu-slider",
+        "position": [ 800, 350 ]
+      },
+
+      "mvol-label": {
+        "type": "label",
+        "preset": "menu-label",
+        "position": [ 800, 300 ],
+        "text": "Music"
+      },
+
+      "sound-vol": {
+        "type": "slider",
+        "preset": "menu-slider",
+        "position": [ 800, 450 ]
+      },
+
+      "svol-label": {
+        "type": "label",
+        "preset": "menu-label",
+        "position": [ 800, 400 ],
+        "text": "Sound"
+      },
+
+      "language": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 500 ],
+        "text": "Language"
+      },
+
+      "back": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 625 ],
+        "text": "Back"
+      }
+    }
+  }
+}
