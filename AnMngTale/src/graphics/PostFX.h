@@ -4,9 +4,16 @@
 class PostFX : public sf::RenderTexture
 {
 private:
-	std::unordered_map<std::string, sf::Shader> m_shaders;
+	struct Effect
+	{
+		sf::Shader shader;
+		bool enabled = true;
+	};
+
+	std::unordered_map<std::string, Effect> m_shaders;
 	sf::RenderTexture m_buffer;
 	const sf::Vector2u m_resolution;
+	bool m_enabled = true;
 
 public:
 	bool guiIncluded = false;
@@ -16,6 +23,8 @@ public:
 
 	void loadShader(const std::string& filepath, const std::string& name);
 	void removeShader(const std::string& name);
+	void setEnabled(const std::string& name, bool enabled);
+	void setEnabled(bool enabled);
 
 	sf::Shader& getShader(const std::string& name);
 	const sf::Shader& getShader(const std::string& name) const;

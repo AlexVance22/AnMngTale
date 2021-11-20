@@ -30,7 +30,7 @@
 
   "root": {
 
-    "color": [ 0, 0, 0, 100 ],
+    "color": [ 0, 0, 0, 0 ],
     "texture": null,
     "font": "cambria",
     "pos": [ 0, 0 ],
@@ -41,22 +41,22 @@
       "resume": {
         "type": "button",
         "preset": "menu-button",
-        "position": [ 800, 300 ],
+        "position": [ 800, 250 ],
         "text": "Resume"
-      },
-
-      "quit": {
-        "type": "button",
-        "preset": "menu-button",
-        "position": [ 800, 550 ],
-        "text": "Quit"
       },
 
       "options": {
         "type": "button",
         "preset": "menu-button",
-        "position": [ 800, 425 ],
+        "position": [ 800, 375 ],
         "text": "Options"
+      },
+
+      "quit": {
+        "type": "button",
+        "preset": "menu-button",
+        "position": [ 800, 500 ],
+        "text": "Quit"
       }
     }
   }

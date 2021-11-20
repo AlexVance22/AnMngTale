@@ -63,9 +63,14 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 {
 	m_window.setVerticalSyncEnabled(true);
 	Scene::p_window = &m_window;
-	m_scene = new Courtyard();
 
-	Script::compile("res/scripts/courtyard1.txt");
+#ifndef MNG_DIST
+	m_scene = new Courtyard();
+#else
+	m_scene = new MainMenu();
+#endif
+
+	//Script::compile("res/scripts/courtyard1.txt");
 }
 
 

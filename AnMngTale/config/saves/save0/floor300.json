@@ -176,7 +176,7 @@
       "type": "static",
       "camera-target": false,
       "pos": [ -59, -1067 ],
-      "size": [ 21, 68 ],
+      "size": [ 21, 59 ],
       "texture": "wall1",
       "anim": null,
       "physics": null
@@ -185,7 +185,7 @@
       "type": "static",
       "camera-target": false,
       "pos": [ -246, -608 ],
-      "size": [ 23, 169 ],
+      "size": [ 23, 59 ],
       "texture": "wall2",
       "anim": null,
       "physics": null
@@ -194,7 +194,7 @@
       "type": "static",
       "camera-target": false,
       "pos": [ -46, -152 ],
-      "size": [ 11, 94 ],
+      "size": [ 11, 59 ],
       "texture": "wall3",
       "anim": null,
       "physics": null

@@ -401,7 +401,7 @@ void Scene::baseEvents(const sf::Event& event)
 Scene::Scene(const std::string& scenename)
 	: m_name(scenename), m_postfx(sf::Vector2u(1920, 1080))
 	
-#ifdef _DEBUG
+#ifdef MNG_DEBUG
 	, d_debugChainColliders(sf::LineStrip), d_debugBoxColliders(sf::Lines),
 	d_framerate("Framerate: NA", d_debugFont, 18), d_tUpdate("Update:    NA", d_debugFont, 18),
 	d_tRender("Render:    NA", d_debugFont, 18), d_tPhysics("Physics:   NA", d_debugFont, 18),
@@ -410,7 +410,7 @@ Scene::Scene(const std::string& scenename)
 {
 	reloadResources();
 
-#ifdef _DEBUG
+#ifdef MNG_DEBUG
 	d_debugFont.loadFromFile("res/fonts/courierprime.ttf");
 	d_framerate.setPosition(10, 10);
 	d_tUpdate.setPosition(10, 40);
@@ -425,12 +425,15 @@ Scene::Scene(const std::string& scenename)
 #endif
 
 	m_postfx.loadShader("res/shaders/blur.frag", "blur");
+	m_postfx.setEnabled("blur", false);
 }
 
 
 void Scene::update(const float deltaTime)
 {
 	PROFILE_DEBUG_ONLY_BEGIN(false, MICROSECONDS);
+
+	m_postfx.setEnabled("blur", !m_overlays.empty());
 
 	if (m_overlays.empty())
 	{
