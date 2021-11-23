@@ -78,7 +78,7 @@ void Entity::move(sf::Vector2f direction, const float deltaTime)
 	{
 		if (m_body)
 		{
-			sf::Vector2f movement = direction * m_speed * deltaTime * 60.f;
+			sf::Vector2f movement = direction * m_speed;
 			m_body->SetLinearVelocity(b2Vec2(movement.x, movement.y));
 		}
 		else

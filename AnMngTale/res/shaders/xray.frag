@@ -23,5 +23,5 @@ void main()
 
     vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
 
-    gl_FragColor = gl_Color * pixel * vec4(1, 1, 1, vecLength);
+    gl_FragColor = gl_Color * pixel * vec4(1, 1, 1, vecLength * 0.8 + 0.2);
 }

@@ -112,10 +112,16 @@ void Scene::loadGraphics(const rapidjson::Value& data)
 {
 	for (const auto& tex : data["textures"].GetArray())
 		MNG_ASSERT_BASIC(m_textures[tex[0].GetString()].loadFromFile(tex[1].GetString()));
+	for (const auto& sha : data["shaders"].GetArray())
+	{
+		MNG_ASSERT_BASIC(m_shaders[sha["name"].GetString()].loadFromFile(sha["path"].GetString(), (sf::Shader::Type)sha["type"].GetUint()));
+		if (sha["texture"].IsTrue())
+			m_shaders[sha["name"].GetString()].setUniform("texture", sf::Shader::CurrentTexture);
+	}
 
 	for (const auto& spr : data["sprites"].GetArray())
 	{
-		Sprite* s = nullptr;
+		MatSprite* s = nullptr;
 		const char* layer = spr["layer"].GetString();
 		if (strncmp(layer, "bg", 8) == 0)
 			s = &m_backgroundSprites.emplace_back();
@@ -123,16 +129,22 @@ void Scene::loadGraphics(const rapidjson::Value& data)
 			s = &m_foregroundSprites.emplace_back();
 		MNG_ASSERT_SLIM(s);
 
-		s->setPosition(JsonToVec2<float>(spr["pos"]));
+		s->sprite.setPosition(JsonToVec2<float>(spr["pos"]));
 		MNG_ASSERT_SLIM(m_textures.find(spr["texture"].GetString()) != m_textures.end());
-		s->setTexture(m_textures[spr["texture"].GetString()]);
+		s->sprite.setTexture(m_textures[spr["texture"].GetString()]);
 		if (!spr["anim"].IsNull())
 		{
 			const auto& dims = spr["anim"]["dims"];
-			s->animate(dims[0].GetUint(), dims[1].GetUint());
-			s->setFrameRate(spr["anim"]["framerate"].GetFloat());
-			s->setLoop(spr["anim"]["loop"].IsTrue());
-			s->setIsPlaying(spr["anim"]["play"].IsTrue());
+			s->sprite.animate(dims[0].GetUint(), dims[1].GetUint());
+			s->sprite.setFrameRate(spr["anim"]["framerate"].GetFloat());
+			s->sprite.setLoop(spr["anim"]["loop"].IsTrue());
+			s->sprite.setIsPlaying(spr["anim"]["play"].IsTrue());
+		}
+		const auto& sha = spr["shader"];
+		if (!sha.IsNull())
+		{
+			MNG_ASSERT_SLIM(m_shaders.find(sha.GetString()) != m_shaders.end());
+			s->states.shader = &m_shaders[sha.GetString()];
 		}
 	}
 }
@@ -399,7 +411,7 @@ void Scene::baseEvents(const sf::Event& event)
 
 
 Scene::Scene(const std::string& scenename)
-	: m_name(scenename), m_postfx(sf::Vector2u(1920, 1080))
+	: m_name(scenename), m_postfx(sf::Vector2u(1920, 1080)), m_snow(sf::FloatRect(0, 0, 1920, 1080), 0)
 	
 #ifdef MNG_DEBUG
 	, d_debugChainColliders(sf::LineStrip), d_debugBoxColliders(sf::Lines),
@@ -424,6 +436,13 @@ Scene::Scene(const std::string& scenename)
 	d_tUserlogic.setFillColor(sf::Color(0, 0, 0));
 #endif
 
+	//MNG_ASSERT_BASIC(m_textures["particle"].loadFromFile("res/textures/particle.png"));
+	//m_textures["particle"].setSmooth(true);
+	m_snow.setGenRate(6.f);
+	m_snow.setColor(sf::Color(255, 100, 0));
+	//m_snow.setTexture(m_textures["particle"]);
+	m_snow.setSize(sf::Vector2f(2, 2), sf::Vector2f(10, 10));
+
 	m_postfx.loadShader("res/shaders/blur.frag", "blur");
 	m_postfx.setEnabled("blur", false);
 }
@@ -435,16 +454,18 @@ void Scene::update(const float deltaTime)
 
 	m_postfx.setEnabled("blur", !m_overlays.empty());
 
+	m_snow.update(deltaTime);
+
 	if (m_overlays.empty())
 	{
 		handleEvents();
 
 		for (auto& a : m_backgroundSprites)
-			a.update(deltaTime);
+			a.sprite.update(deltaTime);
 		for (auto& e : m_entities)
 			e->update(deltaTime);
 		for (auto& a : m_foregroundSprites)
-			a.update(deltaTime);
+			a.sprite.update(deltaTime);
 
 		impl(deltaTime);
 
@@ -505,11 +526,11 @@ void Scene::render(sf::RenderTarget* target)
 	m_postfx.setView(m_camera);
 
 	for (const auto& sp : m_backgroundSprites)
-		m_postfx.draw(sp);
+		m_postfx.draw(sp.sprite, sp.states);
 	for (const auto& e : m_entities)
 		m_postfx.draw(*e);
 	for (const auto& sp : m_foregroundSprites)
-		m_postfx.draw(sp);
+		m_postfx.draw(sp.sprite, sp.states);
 
 #ifdef MNG_DEBUG
 	m_postfx.draw(d_debugChainColliders);
@@ -530,6 +551,9 @@ void Scene::render(sf::RenderTarget* target)
 
 		if (!m_overlays.empty())
 			m_overlays.top().render(target);
+
+		target->setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
+		target->draw(m_snow);
 	}
 
 	PROFILE_DEBUG_ONLY_STEP();

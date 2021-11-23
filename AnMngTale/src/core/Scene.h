@@ -8,6 +8,8 @@
 #include "entities/Entity.h"
 #include "physics/BoxTrigger.h"
 
+#include "graphics/particles/Particles.h"
+
 
 const char* freadall(const std::string& filepath);
 
@@ -21,6 +23,11 @@ class Scene
 public:
 	static sf::RenderWindow* p_window;
 
+	struct MatSprite {
+		Sprite sprite;
+		sf::RenderStates states;
+	};
+
 protected:
 	enum class AreaState { INTRO, DEFAULT, EXPO, BUILD, CLIMAX };
 	AreaState m_state;
@@ -30,12 +37,14 @@ protected:
 
 	std::unordered_map<std::string, sf::Texture> m_textures;
 	std::unordered_map<std::string, sf::Shader> m_shaders;
-	std::vector<Sprite> m_backgroundSprites;
-	std::vector<Sprite> m_foregroundSprites;
+	std::vector<MatSprite> m_backgroundSprites;
+	std::vector<MatSprite> m_foregroundSprites;
 
 	std::unordered_map<std::string, BoxTrigger> m_triggers;
 	std::vector<std::unique_ptr<Entity>> m_entities;
 	Entity* m_player = nullptr;
+
+	particles::Snow m_snow;
 
 	std::stack<Menu> m_overlays;
 	Scene* m_nextScene = nullptr;

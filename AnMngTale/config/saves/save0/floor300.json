@@ -18,12 +18,22 @@
       [ "player", "res/textures/characters/player.png" ]
     ],
 
+    "shaders": [
+      {
+        "name": "xray",
+        "path": "res/shaders/xray.frag",
+        "type": 2,
+        "texture": true
+      }
+    ],
+
     "sprites": [
       {
         "texture": "background",
         "pos": [ -525, -2775 ],
         "anim": null,
-        "layer": "bg"
+        "layer": "bg",
+        "shader": null
       },
       {
         "texture": "glow",
@@ -34,7 +44,8 @@
           "loop": true,
           "play": true
         },
-        "layer": "bg"
+        "layer": "bg",
+        "shader": null
       },
       {
         "texture": "glow",
@@ -45,19 +56,22 @@
           "loop": true,
           "play": true
         },
-        "layer": "bg"
+        "layer": "bg",
+        "shader": null
       },
       {
         "texture": "top",
         "pos": [ -525, -2775 ],
         "anim": null,
-        "layer": "fg"
+        "layer": "fg",
+        "shader": "xray"
       },
       {
         "texture": "glass",
         "pos": [ 16, 211 ],
         "anim": null,
-        "layer": "fg"
+        "layer": "fg",
+        "shader": null
       }
     ]
   },

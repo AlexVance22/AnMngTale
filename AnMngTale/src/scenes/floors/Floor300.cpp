@@ -43,7 +43,9 @@ void Floor300::handleEvents()
 
 void Floor300::impl(const float deltaTime)
 {
-
+	sf::Vector2f playerRelTex = (m_player->getPosition() + m_player->getSize() * 0.5f) - m_topLayerPos;
+	sf::Vector2f normalised(playerRelTex.x / m_topLayerSize.x, playerRelTex.y / m_topLayerSize.y);
+	m_shaders["xray"].setUniform("player_position", normalised);
 }
 
 

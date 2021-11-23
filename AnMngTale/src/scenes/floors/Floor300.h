@@ -6,6 +6,10 @@
 class Floor300 : public Scene
 {
 private:
+	sf::Vector2f m_topLayerPos{ -525, -2775 };
+	sf::Vector2f m_topLayerSize{ 1005, 3045 };
+
+private:
 	void loadFlags();
 	void manageFlags();
 	void dumpFlags();

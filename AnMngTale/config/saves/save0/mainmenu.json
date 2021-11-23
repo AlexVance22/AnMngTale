@@ -6,12 +6,15 @@
       [ "background", "res/textures/gui/menus/splash.png" ]
     ],
 
+    "shaders": [],
+
     "sprites": [
       {
         "texture": "background",
         "pos": [ 0, -0 ],
         "anim": null,
-        "layer": "bg"
+        "layer": "bg",
+        "shader": null
       }
     ]
   },

@@ -10,12 +10,15 @@
       [ "player", "res/textures/characters/player.png" ]
     ],
 
+    "shaders": [],
+
     "sprites": [
       {
         "texture": "background",
         "pos": [ -1812, -120 ],
         "anim": null,
-        "layer": "bg"
+        "layer": "bg",
+        "shader": null
       }
     ]
   },
