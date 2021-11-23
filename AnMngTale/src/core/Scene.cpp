@@ -411,7 +411,7 @@ void Scene::baseEvents(const sf::Event& event)
 
 
 Scene::Scene(const std::string& scenename)
-	: m_name(scenename), m_postfx(sf::Vector2u(1920, 1080)), m_snow(sf::FloatRect(0, 0, 1920, 1080), 0)
+	: m_name(scenename), m_postfx(sf::Vector2u(1920, 1080)), m_particles(sf::FloatRect(0, 0, 1920, 1080))
 	
 #ifdef MNG_DEBUG
 	, d_debugChainColliders(sf::LineStrip), d_debugBoxColliders(sf::Lines),
@@ -438,10 +438,12 @@ Scene::Scene(const std::string& scenename)
 
 	//MNG_ASSERT_BASIC(m_textures["particle"].loadFromFile("res/textures/particle.png"));
 	//m_textures["particle"].setSmooth(true);
-	m_snow.setGenRate(6.f);
-	m_snow.setColor(sf::Color(255, 100, 0));
+	m_particles.setMode(ParticleSystem::Mode::Fireflies);
+	m_particles.generate(200);
+	//m_particles.setGenRate(6.f);
+	m_particles.setColor(sf::Color(255, 100, 0));
 	//m_snow.setTexture(m_textures["particle"]);
-	m_snow.setSize(sf::Vector2f(2, 2), sf::Vector2f(10, 10));
+	m_particles.setSize(sf::Vector2f(2, 2), sf::Vector2f(10, 10));
 
 	m_postfx.loadShader("res/shaders/blur.frag", "blur");
 	m_postfx.setEnabled("blur", false);
@@ -454,7 +456,7 @@ void Scene::update(const float deltaTime)
 
 	m_postfx.setEnabled("blur", !m_overlays.empty());
 
-	m_snow.update(deltaTime);
+	m_particles.update(deltaTime);
 
 	if (m_overlays.empty())
 	{
@@ -553,7 +555,7 @@ void Scene::render(sf::RenderTarget* target)
 			m_overlays.top().render(target);
 
 		target->setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
-		target->draw(m_snow);
+		target->draw(m_particles);
 	}
 
 	PROFILE_DEBUG_ONLY_STEP();

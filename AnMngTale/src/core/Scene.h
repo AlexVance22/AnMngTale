@@ -8,7 +8,7 @@
 #include "entities/Entity.h"
 #include "physics/BoxTrigger.h"
 
-#include "graphics/particles/Particles.h"
+#include "graphics/ParticleSystem.h"
 
 
 const char* freadall(const std::string& filepath);
@@ -44,7 +44,7 @@ protected:
 	std::vector<std::unique_ptr<Entity>> m_entities;
 	Entity* m_player = nullptr;
 
-	particles::Snow m_snow;
+	ParticleSystem m_particles;
 
 	std::stack<Menu> m_overlays;
 	Scene* m_nextScene = nullptr;
