@@ -292,7 +292,7 @@ void Scene::loadEntities(const rapidjson::Value& data)
 		if (!phys.IsNull())
 		{
 			b2BodyDef bodydef;
-			sf::Vector2f physPos = (entity->getPosition() + JsonToVec2<float>(phys["offset"])) * s_physScale;
+			const sf::Vector2f physPos = (entity->getPosition() + JsonToVec2<float>(phys["offset"])) * s_physScale;
 			bodydef.position.Set(physPos.x, physPos.y);
 
 			const char* type = phys["type"].GetString();
@@ -322,12 +322,12 @@ void Scene::loadEntities(const rapidjson::Value& data)
 				fixturedef.shape = &s;
 				body->CreateFixture(&fixturedef);
 
-				sf::FloatRect collider;
-
-				collider.left = phys["offset"][0].GetFloat();
-				collider.top = phys["offset"][1].GetFloat();
-				collider.width = shape["size"][0].GetFloat();
-				collider.height = shape["size"][1].GetFloat();
+				const sf::FloatRect collider(
+					phys["offset"][0].GetFloat(),
+					phys["offset"][1].GetFloat(),
+					shape["size"][0].GetFloat(),
+					shape["size"][1].GetFloat()
+				);
 
 				entity->simulate(body, collider);
 			}
@@ -358,7 +358,7 @@ void Scene::loadEntities(const rapidjson::Value& data)
 
 void Scene::reloadResources()
 {
-	std::string filepath = "config/saves/save" + std::to_string(0) + "/" + m_name + ".json";
+	const std::string filepath = "config/saves/save" + std::to_string(0) + "/" + m_name + ".json";
 	rapidjson::Document doc;
 	loadjson(doc, filepath);
 
@@ -422,6 +422,18 @@ Scene::Scene(const std::string& scenename)
 {
 	reloadResources();
 
+	//MNG_ASSERT_BASIC(m_textures["particle"].loadFromFile("res/textures/particle.png"));
+	//m_textures["particle"].setSmooth(true);
+	m_particles.setMode(ParticleSystem::Mode::Fireflies);
+	m_particles.generate(200);
+	//m_particles.setGenRate(6.f);
+	m_particles.setColor(sf::Color(255, 100, 0));
+	//m_snow.setTexture(m_textures["particle"]);
+	m_particles.setSize(sf::Vector2f(2, 2), sf::Vector2f(10, 10));
+
+	m_postfx.loadShader("res/shaders/blur.frag", "blur");
+	m_postfx.setEnabled("blur", false);
+
 #ifdef MNG_DEBUG
 	d_debugFont.loadFromFile("res/fonts/courierprime.ttf");
 	d_framerate.setPosition(10, 10);
@@ -435,18 +447,6 @@ Scene::Scene(const std::string& scenename)
 	d_tPhysics.setFillColor(sf::Color(0, 0, 0));
 	d_tUserlogic.setFillColor(sf::Color(0, 0, 0));
 #endif
-
-	//MNG_ASSERT_BASIC(m_textures["particle"].loadFromFile("res/textures/particle.png"));
-	//m_textures["particle"].setSmooth(true);
-	m_particles.setMode(ParticleSystem::Mode::Fireflies);
-	m_particles.generate(200);
-	//m_particles.setGenRate(6.f);
-	m_particles.setColor(sf::Color(255, 100, 0));
-	//m_snow.setTexture(m_textures["particle"]);
-	m_particles.setSize(sf::Vector2f(2, 2), sf::Vector2f(10, 10));
-
-	m_postfx.loadShader("res/shaders/blur.frag", "blur");
-	m_postfx.setEnabled("blur", false);
 }
 
 

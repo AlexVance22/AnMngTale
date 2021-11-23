@@ -60,7 +60,7 @@ sf::FloatRect ParticleSystem::p_getBounds(size_t idx) const
 
 void ParticleSystem::p_erase(size_t idx)
 {
-	for (int64_t i = 3; i > 0; i--)
+	for (int64_t i = 3; i >= 0; i--)
 		m_va.erase(m_va.begin() + (idx * 4) + i);
 }
 
@@ -172,8 +172,8 @@ void ParticleSystem::setSize(sf::Vector2f minRand, sf::Vector2f maxRand)
 		const int num = rand();
 
 		const sf::Vector2f offset(
-			num % (int)(m_dsize.x + 1) * (2 * (m_dsize.x > 0) - 1),
-			num % (int)(m_dsize.y + 1) * (2 * (m_dsize.y > 0) - 1)
+			(float)(num % (int)(m_dsize.x + 1)) * (2 * (m_dsize.x > 0) - 1),
+			(float)(num % (int)(m_dsize.y + 1)) * (2 * (m_dsize.y > 0) - 1)
 		);
 
 		p_setSize(i, minRand + offset);
@@ -206,7 +206,7 @@ void ParticleSystem::append(int idx)
 	{
 		if (idx == -1)
 		{
-			idx = m_particles.size();
+			idx = (int)m_particles.size();
 			m_va.resize(m_va.size() + 4);
 			m_particles.emplace_back();
 		}
@@ -215,8 +215,8 @@ void ParticleSystem::append(int idx)
 		if (m_randSize)
 		{
 			const int num = rand();
-			size.x += num % (int)(m_dsize.x + 1) * (2 * (m_dsize.x > 0) - 1);
-			size.y += num % (int)(m_dsize.y + 1) * (2 * (m_dsize.y > 0) - 1);
+			size.x += (float)(num % (int)(m_dsize.x + 1)) * (2 * (m_dsize.x > 0) - 1);
+			size.y += (float)(num % (int)(m_dsize.y + 1)) * (2 * (m_dsize.y > 0) - 1);
 		}
 
 		p_setSize(idx, size);
@@ -260,7 +260,7 @@ void ParticleSystem::generate(size_t count)
 		m_va.resize((size + count) * 4);
 
 		for (size_t i = 0; i < count; i++)
-			append(size + i);
+			append((int)(size + i));
 	}
 }
 

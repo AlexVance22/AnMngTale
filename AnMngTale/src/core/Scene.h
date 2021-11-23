@@ -31,7 +31,7 @@ public:
 protected:
 	enum class AreaState { INTRO, DEFAULT, EXPO, BUILD, CLIMAX };
 	AreaState m_state;
-	std::string m_name;
+	const std::string m_name;
 
 	//static const std::unordered_map<AreaState, const char*> stateToStr;
 
