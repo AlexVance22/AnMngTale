@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Noise.h"
+
 
 class ParticleSystem : public sf::Drawable
 {
@@ -29,7 +31,7 @@ private:
 
 	std::vector<Particle> m_particles;
 
-	siv::PerlinNoise m_noise;
+	Noise m_noise;
 	float m_totaltime = 0.f;
 	float m_gentime = 1.f;
 

@@ -76,6 +76,7 @@ protected:
 	void loadPhysics(const rapidjson::Value& data);
 	void loadSounds(const rapidjson::Value& data);
 	void loadEntities(const rapidjson::Value& data);
+	void loadParticles(const rapidjson::Value& data);
 
 	void reloadResources();
 

@@ -82,8 +82,8 @@ void ParticleSystem::doFireflies(const float deltaTime)
 {
 	for (size_t i = 0; i < m_particles.size(); i++)
 	{
-		const sf::Vector2f raw((float)m_noise.noise1D(m_particles[i].noiseCoord.x * 0.005) * 20.f,
-							   (float)m_noise.noise1D(m_particles[i].noiseCoord.y * 0.002) * 20.f);
+		const sf::Vector2f raw(m_noise.noise1D(m_particles[i].noiseCoord.x * 0.005f) * 20.f,
+							   m_noise.noise1D(m_particles[i].noiseCoord.y * 0.002f) * 20.f);
 
 		const sf::Vector2f size = p_getSize(i);
 
@@ -108,8 +108,8 @@ void ParticleSystem::doSnow(const float deltaTime)
 
 	for (size_t i = 0; i < m_particles.size(); i++)
 	{
-		const sf::Vector2f raw((float)m_noise.noise1D(m_particles[i].noiseCoord.x * 0.005) * 15.f,
-							   (float)m_noise.noise1D(m_particles[i].noiseCoord.y * 0.002) * 5.f + 4.f);
+		const sf::Vector2f raw(m_noise.noise1D(m_particles[i].noiseCoord.x * 0.005f) * 15.f,
+							   m_noise.noise1D(m_particles[i].noiseCoord.y * 0.002f) * 5.f + 4.f);
 
 		const sf::Vector2f size = p_getSize(i);
 

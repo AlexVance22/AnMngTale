@@ -355,6 +355,11 @@ void Scene::loadEntities(const rapidjson::Value& data)
 	}
 }
 
+void Scene::loadParticles(const rapidjson::Value& data)
+{
+
+}
+
 
 void Scene::reloadResources()
 {
@@ -424,9 +429,9 @@ Scene::Scene(const std::string& scenename)
 
 	//MNG_ASSERT_BASIC(m_textures["particle"].loadFromFile("res/textures/particle.png"));
 	//m_textures["particle"].setSmooth(true);
-	m_particles.setMode(ParticleSystem::Mode::Fireflies);
-	m_particles.generate(200);
-	//m_particles.setGenRate(6.f);
+	m_particles.setMode(ParticleSystem::Mode::Snow);
+	//m_particles.generate(200);
+	m_particles.setGenRate(6.f);
 	m_particles.setColor(sf::Color(255, 100, 0));
 	//m_snow.setTexture(m_textures["particle"]);
 	m_particles.setSize(sf::Vector2f(2, 2), sf::Vector2f(10, 10));

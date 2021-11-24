@@ -29,7 +29,7 @@ void Menu::loadFromFile(const std::string& filepath)
 	loadjson(doc, filepath);
 
 	const auto& vSizeData = doc["view"];
-	sf::Vector2f vSize = JsonToVec2<float>(vSizeData);
+	const sf::Vector2f vSize = JsonToVec2<float>(vSizeData);
 	m_view.setSize(vSize);
 	m_view.setCenter(vSize * 0.5f);
 
