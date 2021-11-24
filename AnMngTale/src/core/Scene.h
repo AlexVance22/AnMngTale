@@ -44,7 +44,7 @@ protected:
 	std::vector<std::unique_ptr<Entity>> m_entities;
 	Entity* m_player = nullptr;
 
-	ParticleSystem m_particles;
+	std::vector<ParticleSystem> m_particles;
 
 	std::stack<Menu> m_overlays;
 	Scene* m_nextScene = nullptr;

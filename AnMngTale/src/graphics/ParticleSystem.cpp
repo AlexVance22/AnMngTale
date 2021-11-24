@@ -122,9 +122,43 @@ void ParticleSystem::doSnow(const float deltaTime)
 	cull();
 }
 
+
 void ParticleSystem::doFountain(const float deltaTime)
 {
+	for (size_t i = 0; i < m_particles.size(); i++)
+	{
+		if (m_dragStr)
+		{
+			//calculate drag velocity as force of drag in opposite direction to particles velocity
+			const sf::Vector2f vel = m_particles[i].velocity;
+			const float lenvel = std::sqrt(vel.x * vel.x + vel.y * vel.y);
+			const sf::Vector2f veldir = m_particles[i].velocity / lenvel;
+			const sf::Vector2f drag = -veldir * m_dragStr;
 
+			m_particles[i].velocity += drag * deltaTime * 60.f;
+			//drag cannot change particles direction - if sign changed, multiply by 0
+			m_particles[i].velocity.x *= ((m_particles[i].velocity.x < 0) == (vel.x < 0));
+			m_particles[i].velocity.y *= ((m_particles[i].velocity.y < 0) == (vel.y < 0));
+
+			/*
+			if (std::abs(vel.x) < std::abs(drag.x))
+				m_particles[i].velocity.x = 0;
+			else
+				m_particles[i].velocity.x -= drag.x;
+
+			if (std::abs(vel.y) < std::abs(drag.y))
+				m_particles[i].velocity.y = 0;
+			else
+				m_particles[i].velocity.y -= drag.y;
+			*/
+		}
+
+		m_particles[i].velocity += m_gravityDir * m_gravityStr * deltaTime * 60.f;
+
+		p_move(i, m_particles[i].velocity * deltaTime * 60.f);
+
+		cull();
+	}
 }
 
 
@@ -194,9 +228,34 @@ void ParticleSystem::setBoundary(sf::FloatRect boundary)
 }
 
 
+void ParticleSystem::setMinParticles(uint32_t minimum)
+{
+	m_minParticles = minimum;
+}
+
+
 void ParticleSystem::setGenRate(float ratePerSec)
 {
 	m_gentime = 1.f / ratePerSec;
+}
+
+
+void ParticleSystem::setGravityStr(float force)
+{
+	m_gravityStr = force;
+}
+
+void ParticleSystem::setGravityDir(float degrees)
+{
+	const float radians = (degrees / 180.f) * 3.14159265f;
+
+	m_gravityDir.x = std::cosf(radians);
+	m_gravityDir.y = std::sinf(radians);
+}
+
+void ParticleSystem::setDragStr(float force)
+{
+	m_dragStr = force;
 }
 
 
@@ -224,7 +283,7 @@ void ParticleSystem::append(int idx)
 		p_setTextureSize(idx, m_texsize);
 
 		const sf::Vector2u noiseCoord((uint32_t)idx * 263U, (uint32_t)idx * 842U + 268325U);
-		const float angle = (rand() % 361) * (180.f / 3.1415f);
+		const float angle = (rand() % 361) * (180.f / 3.14159265f);
 		const sf::Vector2f velocity = sf::Vector2f(std::cos(angle), std::sin(angle)) * m_startVel;
 
 		m_particles[idx] = Particle{ noiseCoord, velocity, angle };

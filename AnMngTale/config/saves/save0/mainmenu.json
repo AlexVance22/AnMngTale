@@ -50,5 +50,17 @@
   },
 
   "entities": [
+  ],
+
+  "particles": [
+    {
+      "bounds": [ 0, 0, 1920, 1080 ],
+      "mode": "snow",
+      "gen-rate": 6,
+      "base-size": [ 2, 2 ],
+      "rand-size": [ 10, 10 ],
+      "color": [ 255, 100, 0, 255 ],
+      "texture": null
+    }
   ]
 }

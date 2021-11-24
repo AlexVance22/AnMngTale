@@ -357,7 +357,43 @@ void Scene::loadEntities(const rapidjson::Value& data)
 
 void Scene::loadParticles(const rapidjson::Value& data)
 {
+	for (const auto& psd : data.GetArray())
+	{
+		sf::FloatRect bounds = JsonToRect(psd["bounds"]);
+		ParticleSystem& ps = m_particles.emplace_back(bounds);
 
+		const char* mode = psd["mode"].GetString();
+
+		if (strncmp(mode, "fireflies", 32) == 0)
+		{
+			ps.setMode(ParticleSystem::Mode::Fireflies);
+			ps.generate(psd["init-count"].GetUint());
+		}
+		else if (strncmp(mode, "snow", 32) == 0)
+		{
+			ps.setMode(ParticleSystem::Mode::Snow);
+			ps.setGenRate(psd["gen-rate"].GetFloat());
+		}
+		else if (strncmp(mode, "fountain", 32) == 0)
+		{
+			ps.setMode(ParticleSystem::Mode::Fountain);
+			ps.setGravityStr(psd["gravity-str"].GetFloat());
+			ps.setGravityDir(psd["gravity-dir"].GetFloat());
+			ps.setDragStr(psd["drag-str"].GetFloat());
+		}
+		else
+			MNG_ASSERT_MSG(false, "Invalid particle system mode");
+
+		if (psd["rand-size"].IsNull())
+			ps.setSize(JsonToVec2<float>(psd["base-size"]));
+		else
+			ps.setSize(JsonToVec2<float>(psd["base-size"]), JsonToVec2<float>(psd["rand-size"]));
+
+		ps.setColor(JsonToColor(psd["color"]));
+
+		if (!psd["texture"].IsNull())
+			ps.setTexture(m_textures[psd["texture"].GetString()]);
+	}
 }
 
 
@@ -372,6 +408,7 @@ void Scene::reloadResources()
 	loadPhysics(doc["physics"]);
 	loadSounds(doc["soundtrack"]);
 	loadEntities(doc["entities"]);
+	loadParticles(doc["particles"]);
 
 	/*
 	render(&m_fadeTarget);
@@ -416,7 +453,7 @@ void Scene::baseEvents(const sf::Event& event)
 
 
 Scene::Scene(const std::string& scenename)
-	: m_name(scenename), m_postfx(sf::Vector2u(1920, 1080)), m_particles(sf::FloatRect(0, 0, 1920, 1080))
+	: m_name(scenename), m_postfx(sf::Vector2u(1920, 1080))
 	
 #ifdef MNG_DEBUG
 	, d_debugChainColliders(sf::LineStrip), d_debugBoxColliders(sf::Lines),
@@ -426,15 +463,6 @@ Scene::Scene(const std::string& scenename)
 #endif
 {
 	reloadResources();
-
-	//MNG_ASSERT_BASIC(m_textures["particle"].loadFromFile("res/textures/particle.png"));
-	//m_textures["particle"].setSmooth(true);
-	m_particles.setMode(ParticleSystem::Mode::Snow);
-	//m_particles.generate(200);
-	m_particles.setGenRate(6.f);
-	m_particles.setColor(sf::Color(255, 100, 0));
-	//m_snow.setTexture(m_textures["particle"]);
-	m_particles.setSize(sf::Vector2f(2, 2), sf::Vector2f(10, 10));
 
 	m_postfx.loadShader("res/shaders/blur.frag", "blur");
 	m_postfx.setEnabled("blur", false);
@@ -461,7 +489,8 @@ void Scene::update(const float deltaTime)
 
 	m_postfx.setEnabled("blur", !m_overlays.empty());
 
-	m_particles.update(deltaTime);
+	for (auto& p : m_particles)
+		p.update(deltaTime);
 
 	if (m_overlays.empty())
 	{
@@ -560,7 +589,8 @@ void Scene::render(sf::RenderTarget* target)
 			m_overlays.top().render(target);
 
 		target->setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
-		target->draw(m_particles);
+		for (const auto& p : m_particles)
+			target->draw(p);
 	}
 
 	PROFILE_DEBUG_ONLY_STEP();

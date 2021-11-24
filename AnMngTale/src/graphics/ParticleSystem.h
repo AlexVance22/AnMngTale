@@ -32,9 +32,15 @@ private:
 	std::vector<Particle> m_particles;
 
 	Noise m_noise;
+
+	size_t m_minParticles = 0;
+
 	float m_totaltime = 0.f;
 	float m_gentime = 1.f;
 
+	sf::Vector2f m_gravityDir;
+	float m_gravityStr = 0.f;
+	float m_dragStr = 0.f;
 	sf::Vector2f m_emitter;
 	float m_startVel = 1.f;
 
@@ -73,7 +79,13 @@ public:
 	void setMode(Mode mode);
 	void setBoundary(sf::FloatRect boundary);
 
+	void setMinParticles(uint32_t minimum);
+
 	void setGenRate(float ratePerSec);
+
+	void setGravityStr(float force);
+	void setGravityDir(float degrees);
+	void setDragStr(float force);
 
 	void append(int idx = -1);
 	void generate(size_t count);

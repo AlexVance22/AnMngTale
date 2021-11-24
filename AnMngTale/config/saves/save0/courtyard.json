@@ -142,5 +142,9 @@
       "anim": null,
       "physics": null
     }
+  ],
+
+  "particles": [
+
   ]
 }
