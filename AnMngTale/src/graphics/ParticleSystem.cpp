@@ -122,7 +122,6 @@ void ParticleSystem::doSnow(const float deltaTime)
 	cull();
 }
 
-
 void ParticleSystem::doFountain(const float deltaTime)
 {
 	for (size_t i = 0; i < m_particles.size(); i++)
