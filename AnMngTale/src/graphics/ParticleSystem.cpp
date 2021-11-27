@@ -65,6 +65,31 @@ void ParticleSystem::p_erase(size_t idx)
 }
 
 
+void ParticleSystem::shrink(const float deltaTime)
+{
+	if (m_shrink)
+	{
+		m_shrinkprog -= deltaTime;
+
+		if (m_shrinkprog < 0)
+		{
+			m_shrinkprog = m_shrinktime;
+			for (int64_t i = (int64_t)m_particles.size() - 1; i >= 0; i--)
+			{
+				sf::Vector2f size = p_getSize(i);
+				float ratio = size.y / size.x;
+				if (size.x - 0.5f < 0.0001f)
+				{
+					p_erase(i);
+					m_particles.erase(m_particles.begin() + i);
+				}
+				else
+					p_setSize(i, size - sf::Vector2f(0.5f, 0.5f * ratio));
+			}
+		}
+	}
+}
+
 void ParticleSystem::cull()
 {
 	for (int64_t i = (int64_t)m_particles.size() - 1; i >= 0; i--)
@@ -92,18 +117,16 @@ void ParticleSystem::doFireflies(const float deltaTime)
 		m_particles[i].noiseCoord.x++;
 		m_particles[i].noiseCoord.y++;
 	}
-
-	cull();
 }
 
 void ParticleSystem::doSnow(const float deltaTime)
 {
-	m_totaltime -= deltaTime;
+	m_genprog -= deltaTime;
 
-	if (m_totaltime < 0)
+	if (m_genprog < 0)
 	{
 		append();
-		m_totaltime = m_gentime;
+		m_genprog = m_gentime;
 	}
 
 	for (size_t i = 0; i < m_particles.size(); i++)
@@ -118,45 +141,33 @@ void ParticleSystem::doSnow(const float deltaTime)
 		m_particles[i].noiseCoord.x++;
 		m_particles[i].noiseCoord.y++;
 	}
-
-	cull();
 }
 
 void ParticleSystem::doFountain(const float deltaTime)
 {
+	m_genprog -= deltaTime;
+
+	if (m_genprog < 0)
+	{
+		append();
+		m_genprog = m_gentime;
+	}
+
 	for (size_t i = 0; i < m_particles.size(); i++)
 	{
 		if (m_dragStr)
 		{
 			//calculate drag velocity as force of drag in opposite direction to particles velocity
 			const sf::Vector2f vel = m_particles[i].velocity;
-			const float lenvel = std::sqrt(vel.x * vel.x + vel.y * vel.y);
-			const sf::Vector2f veldir = m_particles[i].velocity / lenvel;
+			const sf::Vector2f veldir = vel / std::sqrt(vel.x * vel.x + vel.y * vel.y);
 			const sf::Vector2f drag = -veldir * m_dragStr;
 
 			m_particles[i].velocity += drag * deltaTime * 60.f;
-			//drag cannot change particles direction - if sign changed, multiply by 0
-			m_particles[i].velocity.x *= ((m_particles[i].velocity.x < 0) == (vel.x < 0));
-			m_particles[i].velocity.y *= ((m_particles[i].velocity.y < 0) == (vel.y < 0));
-
-			/*
-			if (std::abs(vel.x) < std::abs(drag.x))
-				m_particles[i].velocity.x = 0;
-			else
-				m_particles[i].velocity.x -= drag.x;
-
-			if (std::abs(vel.y) < std::abs(drag.y))
-				m_particles[i].velocity.y = 0;
-			else
-				m_particles[i].velocity.y -= drag.y;
-			*/
 		}
 
 		m_particles[i].velocity += m_gravityDir * m_gravityStr * deltaTime * 60.f;
 
 		p_move(i, m_particles[i].velocity * deltaTime * 60.f);
-
-		cull();
 	}
 }
 
@@ -239,9 +250,19 @@ void ParticleSystem::setGenRate(float ratePerSec)
 }
 
 
+void ParticleSystem::setEmitter(sf::Vector2f pos)
+{
+	m_emitter = pos;
+}
+
+void ParticleSystem::setStartVel(float startVel)
+{
+	m_startVel = startVel;
+}
+
 void ParticleSystem::setGravityStr(float force)
 {
-	m_gravityStr = force;
+	m_gravityStr = force * 0.05f;
 }
 
 void ParticleSystem::setGravityDir(float degrees)
@@ -255,6 +276,18 @@ void ParticleSystem::setGravityDir(float degrees)
 void ParticleSystem::setDragStr(float force)
 {
 	m_dragStr = force;
+}
+
+
+void ParticleSystem::setShrinkRate(float sizePerSec)
+{
+	if (!sizePerSec)
+		m_shrink = false;
+	else
+	{
+		m_shrink = true;
+		m_shrinktime = 1.f / (2.f * sizePerSec);
+	}
 }
 
 
@@ -337,6 +370,9 @@ void ParticleSystem::update(const float deltaTime)
 		doFountain(deltaTime);
 		break;
 	}
+
+	shrink(deltaTime);
+	cull();
 }
 
 void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const

@@ -377,9 +377,12 @@ void Scene::loadParticles(const rapidjson::Value& data)
 		else if (strncmp(mode, "fountain", 32) == 0)
 		{
 			ps.setMode(ParticleSystem::Mode::Fountain);
+			ps.setEmitter(JsonToVec2<float>(psd["emitter"]));
+			ps.setStartVel(psd["start-vel"].GetFloat());
 			ps.setGravityStr(psd["gravity-str"].GetFloat());
 			ps.setGravityDir(psd["gravity-dir"].GetFloat());
 			ps.setDragStr(psd["drag-str"].GetFloat());
+			ps.setGenRate(psd["gen-rate"].GetFloat());
 		}
 		else
 			MNG_ASSERT_MSG(false, "Invalid particle system mode");
@@ -389,10 +392,16 @@ void Scene::loadParticles(const rapidjson::Value& data)
 		else
 			ps.setSize(JsonToVec2<float>(psd["base-size"]), JsonToVec2<float>(psd["rand-size"]));
 
+		if (!psd["shrink-rate"].IsNull())
+			ps.setShrinkRate(psd["shrink-rate"].GetFloat());
+
 		ps.setColor(JsonToColor(psd["color"]));
 
 		if (!psd["texture"].IsNull())
+		{
+			MNG_ASSERT_SLIM(m_textures.find(psd["texture"].GetString()) != m_textures.end());
 			ps.setTexture(m_textures[psd["texture"].GetString()]);
+		}
 	}
 }
 

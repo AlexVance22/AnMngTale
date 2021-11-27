@@ -35,7 +35,7 @@ private:
 
 	size_t m_minParticles = 0;
 
-	float m_totaltime = 0.f;
+	float m_genprog = 0.f;
 	float m_gentime = 1.f;
 
 	sf::Vector2f m_gravityDir;
@@ -43,6 +43,10 @@ private:
 	float m_dragStr = 0.f;
 	sf::Vector2f m_emitter;
 	float m_startVel = 1.f;
+
+	bool m_shrink = false;
+	float m_shrinkprog = 0.f;
+	float m_shrinktime = 0.f;
 
 private:
 	void p_setPosition(size_t idx, sf::Vector2f position);
@@ -60,6 +64,7 @@ private:
 	void p_erase(size_t idx);
 	
 private:
+	void shrink(const float deltaTime);
 	void cull();
 
 	void doFireflies(const float deltaTime);
@@ -83,9 +88,13 @@ public:
 
 	void setGenRate(float ratePerSec);
 
+	void setEmitter(sf::Vector2f pos);
+	void setStartVel(float startVel);
 	void setGravityStr(float force);
 	void setGravityDir(float degrees);
 	void setDragStr(float force);
+
+	void setShrinkRate(float sizePerSec);
 
 	void append(int idx = -1);
 	void generate(size_t count);
