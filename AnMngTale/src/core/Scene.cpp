@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vec)
 }
 
 
-[[nodiscard]] const char* freadall(const std::string& filepath)
+const char* freadall(const std::string& filepath)
 {
 	std::ifstream f(filepath, std::ios::binary);
 	MNG_ASSERT_SLIM(f.is_open());

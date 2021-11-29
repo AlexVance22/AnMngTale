@@ -13,7 +13,7 @@
 #include "scripting/Script.h"
 
 
-[[nodiscard]] const char* freadall(const std::string& filepath);
+const char* freadall(const std::string& filepath);
 
 void loadjson(rapidjson::Document& doc, const std::string& filepath);
 
