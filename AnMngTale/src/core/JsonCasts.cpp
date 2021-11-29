@@ -21,9 +21,9 @@ sf::Vector2<uint32_t> JsonToVec2(const rapidjson::Value& array)
 }
 
 
-b2Vec2 JsonToB2Vec(const rapidjson::Value& array)
+b2Vec2 JsonToB2Vec(const rapidjson::Value& array, float scale)
 {
-	return b2Vec2(array[0].GetFloat(), array[1].GetFloat());
+	return b2Vec2(array[0].GetFloat() * scale, array[1].GetFloat() * scale);
 }
 
 

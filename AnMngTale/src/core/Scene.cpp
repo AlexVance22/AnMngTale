@@ -106,6 +106,8 @@ void Scene::loadCamera(const rapidjson::Value& data)
 								 size[0].GetFloat(), size[1].GetFloat()));
 	m_camera.setConstraints(JsonToVec2<float>(constr[0]), JsonToVec2<float>(constr[1]));
 	m_camera.enableConstraints(data["constrain"].IsTrue());
+
+	m_camera.setDamping(5.f);
 }
 
 void Scene::loadGraphics(const rapidjson::Value& data)
@@ -191,11 +193,14 @@ void Scene::loadPhysics(const rapidjson::Value& data)
 		bodyDef.position.Set(0, 0);
 
 		std::vector<b2Vec2> vertices;
-		for (const auto& vert : chain["verts"].GetArray())
+		const auto& vdata = chain["verts"];
+		vertices.resize(vdata.Size());
+		for (size_t i = 0; i < vdata.Size(); i++)
 		{
-			vertices.emplace_back(vert[0].GetFloat() * s_physScale, vert[1].GetFloat() * s_physScale);
+			vertices[i] = JsonToB2Vec(vdata[(rapidjson::SizeType)i], s_physScale);
+
 #ifdef MNG_DEBUG
-			d_debugChainColliders.append(JsonToVec2<float>(vert));
+			d_debugChainColliders.append(JsonToVec2<float>(vdata[(rapidjson::SizeType)i]));
 #endif
 		}
 
@@ -221,15 +226,15 @@ void Scene::loadPhysics(const rapidjson::Value& data)
 
 	for (const auto& bt : statics["box-triggers"].GetArray())
 	{
-		m_triggers[bt[0].GetString()] = BoxTrigger(JsonToRect(bt[1]));
+		m_triggers[bt["name"].GetString()] = BoxTrigger(JsonToRect(bt["rect"]));
 
 #ifdef MNG_DEBUG
 		sf::RectangleShape debugShape;
 		debugShape.setFillColor(sf::Color(0, 0, 0, 0));
 		debugShape.setOutlineColor(sf::Color(255, 255, 255));
 		debugShape.setOutlineThickness(0.3f);
-		debugShape.setPosition(JsonToVec2<float>(bt[1]));
-		debugShape.setSize(sf::Vector2f(bt[1][2].GetFloat(), bt[1][3].GetFloat()));
+		debugShape.setPosition(JsonToVec2<float>(bt["rect"]));
+		debugShape.setSize(sf::Vector2f(bt["rect"][2].GetFloat(), bt["rect"][3].GetFloat()));
 		d_debugBoxColliders.push_back(debugShape);
 #endif
 	}
@@ -414,16 +419,20 @@ void Scene::loadParticles(const rapidjson::Value& data)
 
 void Scene::loadScripts(const rapidjson::Value& data)
 {
-	for (const auto& s : data.GetArray())
+	m_scripts.resize(data.Size());
+	for (size_t i = 0; i < data.Size(); i++)
 	{
-		Script::compile(s.GetString());
-		m_scripts.emplace_back(Script::suffix(s.GetString()), &m_camera);
+		Script::compile(data[i]["raw"].GetString());
+		m_scripts[i].load(data[i]["bin"].GetString(), &m_camera);
+		m_triggers[data[i]["trigger"].GetString()].onCollide.bind(&Script::play, &m_scripts[i]);
 	}
 }
 
 
 void Scene::reloadResources()
 {
+	Script::reset();
+
 	const std::string filepath = "config/saves/save" + std::to_string(0) + "/" + m_name + ".json";
 	rapidjson::Document doc;
 	loadjson(doc, filepath);
@@ -488,8 +497,6 @@ Scene::Scene(const std::string& scenename)
 	d_tUserlogic("Logic:     NA", d_debugFont, 18)
 #endif
 {
-	Script::reset();
-
 	reloadResources();
 
 	m_postfx.loadShader("res/shaders/blur.frag", "blur");

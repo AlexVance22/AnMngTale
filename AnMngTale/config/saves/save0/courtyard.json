@@ -64,18 +64,23 @@
       ],
 
       "box-triggers": [
-        [
-          "entrance",
-          [ 321, 34, 75, 20 ]
-        ],
-        [
-          "basketball",
-          [ 906, 20, 205, 20 ]
-        ],
-        [
-          "aulayard",
-          [ -546, 2516, 200, 20 ]
-        ]
+        {
+          "name": "entrance",
+          "rect": [ 321, 34, 75, 20 ],
+          "script": null
+        },
+        {
+          "name": "basketball",
+          "rect": [ 906, 20, 205, 20 ]
+        },
+        {
+          "name": "aulayard",
+          "rect": [ -546, 2516, 200, 20 ]
+        },
+        {
+          "name": "interact",
+          "rect": [ 0, 160, 495, 60 ]
+        }
       ]
     }
   },
@@ -103,7 +108,7 @@
       "script-handle": "player",
       "type": "player",
       "camera-target": true,
-      "pos": [ 250, 150 ],
+      "pos": [ 250, 250 ],
       "size": [ 14, 40 ],
       "texture": "player",
       "locked": false,
@@ -152,6 +157,10 @@
   ],
 
   "scripts": [
-    "res/scripts/courtyard1.txt"
+    {
+      "raw": "res/scripts/courtyard1.txt",
+      "bin": "res/scripts/courtyard1.mng",
+      "trigger": "interact"
+    }
   ]
 }

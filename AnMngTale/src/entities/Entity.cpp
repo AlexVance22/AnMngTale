@@ -51,20 +51,17 @@ void Entity::handlePhysics()
 }
 
 
-void Entity::move(sf::Vector2f direction, const float deltaTime)
+void Entity::move(sf::Vector2f direction, const float deltaTime, bool overridePhysics)
 {
 	if (direction.x || direction.y)
 	{
-		if (m_body)
+		if (m_body && !overridePhysics)
 		{
 			sf::Vector2f movement = direction * m_speed;
 			m_body->SetLinearVelocity(b2Vec2(movement.x, movement.y));
 		}
 		else
-		{
-			m_position += direction * m_speed * deltaTime * 60.f * 0.5f;
-			m_sprite.setPosition(m_position);
-		}
+			setPosition(getPosition() + direction * m_speed * deltaTime * 60.f * 0.5f);
 
 		if (m_sprite.isAnimated())
 		{
@@ -84,7 +81,7 @@ void Entity::move(sf::Vector2f direction, const float deltaTime)
 		if (m_sprite.isAnimated())
 			m_sprite.setAnimation(4);
 
-		if (m_body)
+		if (m_body && !overridePhysics)
 			m_body->SetLinearVelocity(b2Vec2(0, 0));
 	}
 }

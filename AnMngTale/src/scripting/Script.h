@@ -53,8 +53,8 @@ public:
 
 	void load(const std::string& filepath, Camera* camera);
 
+	void play() { m_running = true; }
 	void pause() { m_running = false; }
-	void resume() { m_running = true; }
 	bool isEnd() { return m_end; }
 
 	int32_t output() { return m_output; }

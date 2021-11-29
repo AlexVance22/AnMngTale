@@ -18,7 +18,7 @@ template<>
 sf::Vector2<uint32_t> JsonToVec2(const rapidjson::Value& array);
 
 
-b2Vec2 JsonToB2Vec(const rapidjson::Value& array);
+b2Vec2 JsonToB2Vec(const rapidjson::Value& array, float scale);
 
 
 sf::FloatRect JsonToRect(const rapidjson::Value& array);

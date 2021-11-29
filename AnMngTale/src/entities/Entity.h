@@ -32,7 +32,7 @@ public:
 	sf::FloatRect getCollider() const;
 	void handlePhysics();
 
-	void move(sf::Vector2f direction, const float deltaTime);
+	void move(sf::Vector2f direction, const float deltaTime, bool overridePhysics = false);
 	void lock(bool locked);
 
 	void setPosition(sf::Vector2f position);

@@ -28,7 +28,7 @@ public:
 	}
 	void setDamping(float damping)
 	{
-		m_dampSpeed = 1.0f / damping;
+		m_dampSpeed = 1.f / damping;
 	}
 	
 	void update(const float deltaTime);

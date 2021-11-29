@@ -266,7 +266,8 @@ void Script::load(const std::string& filepath, Camera* camera)
 	MNG_ASSERT_SLIM(camera);
 	p_camera = camera;
 
-	m_running = true;
+	for (auto [_, dir] : m_directions)
+		dir = sf::Vector2f(0, 0);
 }
 
 
@@ -319,13 +320,14 @@ void Script::update(const float deltaTime)
 
 				m_end = m_stream.eof();
 			}
+			m_running = false;
 		}
 		else
 		{
 			m_delay -= deltaTime;
 
 			for (size_t i = 0; i < s_entities.size(); i++)
-				s_entities[i]->move(m_directions[(uint32_t)i], deltaTime);
+				s_entities[i]->move(m_directions[(uint32_t)i], deltaTime, true);
 		}
 	}
 }
