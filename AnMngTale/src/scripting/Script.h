@@ -42,8 +42,9 @@ private:
 
 public:
 	static void pushEntity(Entity* entity_ptr, const std::string& handle);
-	static void reset();
 	static void compile(const std::string& filepath);
+	static void reset();
+
 	static std::string suffix(const std::string& in);
 
 public:

@@ -44,11 +44,9 @@ protected:
 
 	std::unordered_map<std::string, BoxTrigger> m_triggers;
 	std::vector<std::unique_ptr<Entity>> m_entities;
-	std::vector<Entity*> m_entitySprites;
 	Player* m_player = nullptr;
 
 	std::vector<ParticleSystem> m_particles;
-
 	std::vector<Script> m_scripts;
 
 	std::stack<Menu> m_overlays;

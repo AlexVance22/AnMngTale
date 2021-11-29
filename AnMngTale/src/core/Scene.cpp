@@ -357,7 +357,6 @@ void Scene::loadEntities(const rapidjson::Value& data)
 			//entity->simulate(body);
 		}
 
-		m_entitySprites.push_back(entity.get());
 		Script::pushEntity(entity.get(), e["script-handle"].GetString());
 		m_entities.push_back(std::move(entity));
 	}
@@ -541,7 +540,7 @@ void Scene::update(const float deltaTime)
 
 		m_physWorld->Step(deltaTime, 6, 2);
 
-		std::sort(m_entitySprites.begin(), m_entitySprites.end(), [](const Entity* left, const Entity* right)
+		std::sort(m_entities.begin(), m_entities.end(), [](const std::unique_ptr<Entity>& left, const std::unique_ptr<Entity>& right)
 			{
 				return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
 			});
@@ -595,7 +594,7 @@ void Scene::render(sf::RenderTarget* target)
 
 	for (const auto& sp : m_backgroundSprites)
 		m_postfx.draw(sp.sprite, sp.states);
-	for (const auto& e : m_entitySprites)
+	for (const auto& e : m_entities)
 		m_postfx.draw(*e);
 	for (const auto& sp : m_foregroundSprites)
 		m_postfx.draw(sp.sprite, sp.states);

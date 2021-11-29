@@ -57,6 +57,7 @@ const std::unordered_map<std::string, Script::Op> Script::s_opMap{
 	{ "view", Op::VIEW },
 	{ "speak", Op::SPEAK },
 	{ "anim", Op::ANIM },
+	{ "particle", Op::PARTICLE }
 };
 
 std::vector<Entity*> Script::s_entities{};
@@ -202,12 +203,6 @@ void Script::pushEntity(Entity* entity_ptr, const std::string& handle)
 #endif
 }
 
-void Script::reset()
-{
-	s_entities.clear();
-	s_handles.clear();
-}
-
 void Script::compile(const std::string& filepath)
 {
 #ifdef RECOMPILE
@@ -244,6 +239,13 @@ void Script::compile(const std::string& filepath)
 	s_handles.clear();
 #endif
 }
+
+void Script::reset()
+{
+	s_entities.clear();
+	s_handles.clear();
+}
+
 
 std::string Script::suffix(const std::string& in)
 {

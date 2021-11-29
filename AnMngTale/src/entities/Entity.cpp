@@ -3,7 +3,6 @@
 
 
 const float Entity::s_unitScalar = 1.f / (float)sqrt(2);
-
 const float Entity::s_invScale = 30.f;
 const float Entity::s_physScale = 1.f / Entity::s_invScale;
 
@@ -32,6 +31,13 @@ void Entity::simulate(b2Body* body, sf::FloatRect collider)
 #endif
 }
 
+sf::FloatRect Entity::getCollider() const
+{
+	return sf::FloatRect(m_position.x + m_colliderOffset.x - m_colliderSize.x * 0.5f,
+						 m_position.y + m_colliderOffset.y - m_colliderSize.y * 0.5f,
+						 m_colliderSize.x, m_colliderSize.y);
+}
+
 void Entity::handlePhysics()
 {
 	if (m_body)
@@ -42,13 +48,6 @@ void Entity::handlePhysics()
 		m_debugCollider.setPosition(getPosition() + m_colliderOffset - m_colliderSize * 0.5f);
 #endif
 	}
-}
-
-sf::FloatRect Entity::getCollider() const
-{
-	return sf::FloatRect(m_position.x + m_colliderOffset.x - m_colliderSize.x * 0.5f,
-						 m_position.y + m_colliderOffset.y - m_colliderSize.y * 0.5f,
-						 m_colliderSize.x, m_colliderSize.y);
 }
 
 
@@ -90,6 +89,11 @@ void Entity::move(sf::Vector2f direction, const float deltaTime)
 	}
 }
 
+void Entity::lock(bool locked)
+{
+	m_locked = locked;
+}
+
 
 void Entity::setPosition(sf::Vector2f position)
 {
@@ -119,12 +123,6 @@ void Entity::setSize(sf::Vector2f size)
 const sf::Vector2f& Entity::getSize() const
 {
 	return m_size;
-}
-
-
-void Entity::lock(bool locked)
-{
-	m_locked = locked;
 }
 
 
