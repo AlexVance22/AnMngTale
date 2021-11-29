@@ -1,3 +1,6 @@
+lock player true
+wait 3.0
+lock player false
 move c1 1.0 0.0
 wait 1.5
 move c1 1.0 -1.0

@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vec)
 }
 
 
-const char* freadall(const std::string& filepath)
+[[nodiscard]] const char* freadall(const std::string& filepath)
 {
 	std::ifstream f(filepath, std::ios::binary);
 	MNG_ASSERT_SLIM(f.is_open());
@@ -153,9 +153,9 @@ void Scene::loadGraphics(const rapidjson::Value& data)
 
 void Scene::loadPhysics(const rapidjson::Value& data)
 {
-	const auto& statics = data["statics"];
-
 	m_physWorld = std::make_unique<b2World>(b2Vec2(0, 0));
+
+	const auto& statics = data["statics"];
 
 	for (const auto& box : statics["boxes"].GetArray())
 	{
@@ -420,7 +420,7 @@ void Scene::loadParticles(const rapidjson::Value& data)
 void Scene::loadScripts(const rapidjson::Value& data)
 {
 	m_scripts.resize(data.Size());
-	for (size_t i = 0; i < data.Size(); i++)
+	for (rapidjson::SizeType i = 0; i < data.Size(); i++)
 	{
 		Script::compile(data[i]["raw"].GetString());
 		m_scripts[i].load(data[i]["bin"].GetString(), &m_camera);
@@ -429,13 +429,36 @@ void Scene::loadScripts(const rapidjson::Value& data)
 }
 
 
-void Scene::reloadResources()
+void Scene::reloadResources(bool clear)
 {
+	if (clear)
+	{
+		m_player = nullptr;
+		m_physWorld.reset();
+
+		m_textures.clear();
+		m_shaders.clear();
+		m_triggers.clear();
+
+		m_backgroundSprites.clear();
+		m_foregroundSprites.clear();
+		m_entities.clear();
+		m_particles.clear();
+		m_scripts.clear();
+
+#if MNG_DEBUG
+		d_debugChainColliders.clear();
+		d_debugBoxColliders.clear();
+#endif
+	}
+
 	Script::reset();
 
 	const std::string filepath = "config/saves/save" + std::to_string(0) + "/" + m_name + ".json";
 	rapidjson::Document doc;
 	loadjson(doc, filepath);
+
+	m_textures["loadingscreen"].loadFromFile("res/textures/loading.png");
 
 	loadCamera(doc["camera"]);
 	loadGraphics(doc["graphics"]);
@@ -444,14 +467,6 @@ void Scene::reloadResources()
 	loadEntities(doc["entities"]);
 	loadParticles(doc["particles"]);
 	loadScripts(doc["scripts"]);
-
-	/*
-	render(&m_fadeTarget);
-	for (int i = 0; i < 10; i++)
-	{
-
-	}
-	*/
 }
 
 
@@ -473,7 +488,7 @@ void Scene::baseEvents(const sf::Event& event)
 			break;
 		case sf::Keyboard::R:
 #ifdef _DEBUG
-			reloadResources();
+			reloadResources(true);
 #endif
 			break;
 		}
@@ -618,6 +633,9 @@ void Scene::render(sf::RenderTarget* target)
 			m_overlays.top().render(&m_postfx);
 
 		m_postfx.render(target);
+
+		for (const auto& p : m_particles)
+			target->draw(p);
 	}
 	else
 	{
@@ -626,7 +644,6 @@ void Scene::render(sf::RenderTarget* target)
 		if (!m_overlays.empty())
 			m_overlays.top().render(target);
 
-		target->setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
 		for (const auto& p : m_particles)
 			target->draw(p);
 	}

@@ -157,6 +157,7 @@
 
   "entities": [
     {
+      "script-handle": "player",
       "type": "player",
       "camera-target": true,
       "pos": [ 250, 150 ],
@@ -178,6 +179,7 @@
       }
     },
     {
+      "script-handle": "0",
       "type": "static",
       "camera-target": false,
       "pos": [ 153, -1356 ],
@@ -187,6 +189,7 @@
       "physics": null
     },
     {
+      "script-handle": "0",
       "type": "static",
       "camera-target": false,
       "pos": [ -59, -1067 ],
@@ -196,6 +199,7 @@
       "physics": null
     },
     {
+      "script-handle": "0",
       "type": "static",
       "camera-target": false,
       "pos": [ -246, -608 ],
@@ -205,6 +209,7 @@
       "physics": null
     },
     {
+      "script-handle": "0",
       "type": "static",
       "camera-target": false,
       "pos": [ -46, -152 ],
@@ -214,6 +219,7 @@
       "physics": null
     },
     {
+      "script-handle": "0",
       "type": "static",
       "camera-target": false,
       "pos": [ -46, -117 ],
@@ -222,5 +228,13 @@
       "anim": null,
       "physics": null
     }
+  ],
+
+  "particles": [
+
+  ],
+
+  "scripts": [
+
   ]
 }

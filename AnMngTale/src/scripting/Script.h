@@ -12,7 +12,7 @@ private:
 	static const std::unordered_map<std::string, Op> s_opMap;
 	static std::vector<Entity*> s_entities;
 	static std::vector<std::string> s_handles;
-	Camera* p_camera = nullptr;
+	Camera*	p_camera = nullptr;
 
 	std::unordered_map<uint32_t, sf::Vector2f> m_directions;
 

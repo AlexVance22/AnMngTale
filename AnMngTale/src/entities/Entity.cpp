@@ -89,6 +89,9 @@ void Entity::move(sf::Vector2f direction, const float deltaTime, bool overridePh
 void Entity::lock(bool locked)
 {
 	m_locked = locked;
+
+	if (m_body)
+		m_body->SetLinearVelocity(b2Vec2(0, 0));
 }
 
 

@@ -70,9 +70,9 @@ void Courtyard::impl(const float deltaTime)
 
 Courtyard::Courtyard() : Scene("courtyard")
 {
-	m_triggers["entrance"].onCollide.bind([&]() { m_nextScene = new Floor300(); m_quit = true; });
-	m_triggers["basketball"].onCollide.bind([&]() { m_nextScene = new Basketball(); m_quit = true; });
-	m_triggers["aulayard"].onCollide.bind([&]() { m_nextScene = new AulaYard(); m_quit = true; });
+	m_triggers["entrance"].onCollide.bind(&Scene::loadScene<Floor300>, this);
+	m_triggers["basketball"].onCollide.bind(&Scene::loadScene<Basketball>, this);
+	m_triggers["aulayard"].onCollide.bind(&Scene::loadScene<AulaYard>, this);
 
 	//{ 312, 200 }, { 240, 135 }
 	//{ 390, 202 }, { 240, 135 }

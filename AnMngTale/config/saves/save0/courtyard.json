@@ -66,8 +66,7 @@
       "box-triggers": [
         {
           "name": "entrance",
-          "rect": [ 321, 34, 75, 20 ],
-          "script": null
+          "rect": [ 321, 34, 75, 20 ]
         },
         {
           "name": "basketball",
@@ -79,7 +78,7 @@
         },
         {
           "name": "interact",
-          "rect": [ 0, 160, 495, 60 ]
+          "rect": [ 0, 160, 495, 20 ]
         }
       ]
     }
@@ -130,12 +129,12 @@
       "script-handle": "c1",
       "type": "character",
       "camera-target": false,
-      "pos": [ 150, 90 ],
+      "pos": [ 120, 80 ],
       "size": [ 20, 50 ],
       "texture": "chronodox",
       "locked": false,
       "anim": {
-        "frames": [ 4, 8 ],
+        "frames": [ 4, 5 ],
         "framerate": 4
       },
       "physics": null

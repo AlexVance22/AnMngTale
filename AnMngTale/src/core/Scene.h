@@ -13,7 +13,7 @@
 #include "scripting/Script.h"
 
 
-const char* freadall(const std::string& filepath);
+[[nodiscard]] const char* freadall(const std::string& filepath);
 
 void loadjson(rapidjson::Document& doc, const std::string& filepath);
 
@@ -82,7 +82,7 @@ protected:
 	void loadParticles(const rapidjson::Value& data);
 	void loadScripts(const rapidjson::Value& data);
 
-	void reloadResources();
+	void reloadResources(bool clear = false);
 
 	void baseEvents(const sf::Event& event);
 	virtual void handleEvents() = 0;
@@ -94,6 +94,20 @@ public:
 
 	bool quit() const { return m_quit; }
 	Scene* nextScene() { return m_nextScene; }
+
+	template<typename S>
+	void loadScene()
+	{
+		m_postfx.setEnabled("blur", true);
+		render();
+		m_postfx.setEnabled("blur", false);
+
+		p_window->draw(sf::Sprite(m_textures["loadingscreen"]));
+		p_window->display();
+
+		m_nextScene = new S();
+		m_quit = true;
+	}
 
 	virtual void update(const float deltaTime);
 	virtual void render(sf::RenderTarget* target = nullptr);
