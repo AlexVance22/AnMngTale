@@ -1,6 +1,8 @@
 #include "PCH.h"
 #include "Floor300.h"
 
+#include "entities/Player.h"
+
 
 void Floor300::loadFlags()
 {

@@ -1,8 +1,2 @@
-lock 0 true
-out 0
-wait 0.1
-lock 0 false
-move 1 1.5 0.0
-wait 2.8
-move 1 0 -1.5
-wait 3.0
+move c1 1.5 0.0
+wait 1.5

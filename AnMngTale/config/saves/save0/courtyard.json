@@ -100,6 +100,7 @@
 
   "entities": [
     {
+      "script-handle": "player",
       "type": "player",
       "camera-target": true,
       "pos": [ 250, 150 ],
@@ -121,6 +122,7 @@
       }
     },
     {
+      "script-handle": "c1",
       "type": "character",
       "camera-target": false,
       "pos": [ 150, 90 ],
@@ -134,6 +136,7 @@
       "physics": null
     },
     {
+      "script-handle": "0",
       "type": "static",
       "camera-target": false,
       "pos": [ -87, 145 ],
@@ -146,5 +149,9 @@
 
   "particles": [
 
+  ],
+
+  "scripts": [
+    "res/scripts/courtyard1.txt"
   ]
 }

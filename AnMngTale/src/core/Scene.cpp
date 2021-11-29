@@ -265,7 +265,7 @@ void Scene::loadEntities(const rapidjson::Value& data)
 			MNG_ASSERT_SLIM(!m_player);
 			entity = std::make_unique<Player>();
 			entity->lock(e["locked"].IsTrue());
-			m_player = entity.get();
+			m_player = dynamic_cast<Player*>(entity.get());
 		}
 		else if (strncmp(type, "character", 32) == 0)
 			entity = std::make_unique<Entity>();
@@ -281,9 +281,15 @@ void Scene::loadEntities(const rapidjson::Value& data)
 
 		const auto& anim = e["anim"];
 		if (anim.IsNull())
-			entity->setSprite(m_textures[e["texture"].GetString()], sf::Vector2u(1, 1), 0);
+			entity->m_sprite.setTexture(m_textures[e["texture"].GetString()]);
 		else
-			entity->setSprite(m_textures[e["texture"].GetString()], JsonToVec2<uint32_t>(anim["frames"]), anim["framerate"].GetFloat());
+		{
+			entity->m_sprite.setTexture(m_textures[e["texture"].GetString()]);
+			entity->m_sprite.animate(anim["frames"][0].GetUint(), anim["frames"][1].GetUint());
+			entity->m_sprite.setFrameRate(anim["framerate"].GetFloat());
+			entity->m_sprite.setLoop(true);
+			entity->m_sprite.setIsPlaying(true);
+		}
 
 		if (e["camera-target"].IsTrue())
 			m_camera.setDynamicTarget(&entity->getPosition());
@@ -351,6 +357,8 @@ void Scene::loadEntities(const rapidjson::Value& data)
 			//entity->simulate(body);
 		}
 
+		m_entitySprites.push_back(entity.get());
+		Script::pushEntity(entity.get(), e["script-handle"].GetString());
 		m_entities.push_back(std::move(entity));
 	}
 }
@@ -405,6 +413,15 @@ void Scene::loadParticles(const rapidjson::Value& data)
 	}
 }
 
+void Scene::loadScripts(const rapidjson::Value& data)
+{
+	for (const auto& s : data.GetArray())
+	{
+		Script::compile(s.GetString());
+		m_scripts.emplace_back(Script::suffix(s.GetString()), &m_camera);
+	}
+}
+
 
 void Scene::reloadResources()
 {
@@ -418,6 +435,7 @@ void Scene::reloadResources()
 	loadSounds(doc["soundtrack"]);
 	loadEntities(doc["entities"]);
 	loadParticles(doc["particles"]);
+	loadScripts(doc["scripts"]);
 
 	/*
 	render(&m_fadeTarget);
@@ -471,6 +489,8 @@ Scene::Scene(const std::string& scenename)
 	d_tUserlogic("Logic:     NA", d_debugFont, 18)
 #endif
 {
+	Script::reset();
+
 	reloadResources();
 
 	m_postfx.loadShader("res/shaders/blur.frag", "blur");
@@ -512,13 +532,16 @@ void Scene::update(const float deltaTime)
 		for (auto& a : m_foregroundSprites)
 			a.sprite.update(deltaTime);
 
+		for(auto& s : m_scripts)
+			s.update(deltaTime);
+
 		impl(deltaTime);
 
 		PROFILE_DEBUG_ONLY_STEP();
 
 		m_physWorld->Step(deltaTime, 6, 2);
 
-		std::sort(m_entities.begin(), m_entities.end(), [](const std::unique_ptr<Entity>& left, const std::unique_ptr<Entity>& right)
+		std::sort(m_entitySprites.begin(), m_entitySprites.end(), [](const Entity* left, const Entity* right)
 			{
 				return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
 			});
@@ -572,7 +595,7 @@ void Scene::render(sf::RenderTarget* target)
 
 	for (const auto& sp : m_backgroundSprites)
 		m_postfx.draw(sp.sprite, sp.states);
-	for (const auto& e : m_entities)
+	for (const auto& e : m_entitySprites)
 		m_postfx.draw(*e);
 	for (const auto& sp : m_foregroundSprites)
 		m_postfx.draw(sp.sprite, sp.states);

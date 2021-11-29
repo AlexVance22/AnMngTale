@@ -26,10 +26,6 @@ protected:
 public:
 	Entity();
 
-	void setSprite(const sf::Texture& texture, sf::Vector2u spriteSheetSize, float framerate);
-	void setAnimation(uint32_t anim);
-	sf::FloatRect getTextureBounds();
-
 	void simulate(b2Body* body, sf::FloatRect collider);
 	void handlePhysics();
 	sf::FloatRect getCollider() const;
@@ -45,4 +41,8 @@ public:
 
 	virtual void update(const float deltaTime);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+
+	friend class Scene;
+	friend class Script;
 };

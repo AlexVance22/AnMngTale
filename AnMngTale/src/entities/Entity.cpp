@@ -18,26 +18,6 @@ Entity::Entity()
 }
 
 
-void Entity::setSprite(const sf::Texture& texture, sf::Vector2u spriteSheetSize, float framerate)
-{
-	m_sprite.setTexture(texture);
-	m_sprite.animate(spriteSheetSize.x, spriteSheetSize.y);
-	m_sprite.setFrameRate(framerate);
-	m_sprite.setLoop(true);
-	m_sprite.setIsPlaying(true);
-}
-
-void Entity::setAnimation(uint32_t anim)
-{
-	m_sprite.setAnimation(anim);
-}
-
-sf::FloatRect Entity::getTextureBounds()
-{
-	return m_sprite.getGlobalBounds();
-}
-
-
 void Entity::simulate(b2Body* body, sf::FloatRect collider)
 {
 	m_body = body;
@@ -83,28 +63,27 @@ void Entity::move(sf::Vector2f direction, const float deltaTime)
 		}
 		else
 		{
-			m_position += direction * m_speed * deltaTime * 60.f;
+			m_position += direction * m_speed * deltaTime * 60.f * 0.5f;
 			m_sprite.setPosition(m_position);
 		}
 
-		if (direction.x)
+		if (m_sprite.isAnimated())
 		{
 			if (direction.x > 0)
 				m_sprite.setAnimation(0);
-			else
+			else if (direction.x < 0)
 				m_sprite.setAnimation(2);
-		}
-		if (direction.y)
-		{
+
 			if (direction.y > 0)
 				m_sprite.setAnimation(1);
-			else
+			else if (direction.y < 0)
 				m_sprite.setAnimation(3);
 		}
 	}
 	else
 	{
-		m_sprite.setAnimation(4);
+		if (m_sprite.isAnimated())
+			m_sprite.setAnimation(4);
 
 		if (m_body)
 			m_body->SetLinearVelocity(b2Vec2(0, 0));

@@ -29,6 +29,7 @@ public:
 	void setAnimation(uint32_t anim);
 
 	bool isPlaying() { return m_playing && m_animated; }
+	bool isAnimated() { return m_animated; }
 
 	void update(const float deltaTime);
 };

@@ -63,5 +63,9 @@
       "color": [ 255, 100, 0, 255 ],
       "texture": null
     }
+  ],
+
+  "scripts": [
+
   ]
 }

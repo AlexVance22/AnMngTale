@@ -10,6 +10,8 @@
 
 #include "graphics/ParticleSystem.h"
 
+#include "scripting/Script.h"
+
 
 const char* freadall(const std::string& filepath);
 
@@ -42,9 +44,12 @@ protected:
 
 	std::unordered_map<std::string, BoxTrigger> m_triggers;
 	std::vector<std::unique_ptr<Entity>> m_entities;
-	Entity* m_player = nullptr;
+	std::vector<Entity*> m_entitySprites;
+	Player* m_player = nullptr;
 
 	std::vector<ParticleSystem> m_particles;
+
+	std::vector<Script> m_scripts;
 
 	std::stack<Menu> m_overlays;
 	Scene* m_nextScene = nullptr;
@@ -77,6 +82,7 @@ protected:
 	void loadSounds(const rapidjson::Value& data);
 	void loadEntities(const rapidjson::Value& data);
 	void loadParticles(const rapidjson::Value& data);
+	void loadScripts(const rapidjson::Value& data);
 
 	void reloadResources();
 
