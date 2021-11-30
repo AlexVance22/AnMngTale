@@ -133,7 +133,6 @@
       ],
 
       "box-triggers": [
-
       ]
     }
   },
@@ -236,10 +235,8 @@
   ],
 
   "particles": [
-
   ],
 
   "scripts": [
-
   ]
 }

@@ -16,15 +16,13 @@ public:
 
 private:
 	sf::Vertex m_line[2];
-
-	sf::IntRect m_buttonBounds;
-
 	sf::RectangleShape shape;
+	sf::IntRect m_buttonBounds;
 
 	float* m_target = nullptr;
 	float m_value = 0.f;
 	float m_scale = 1.f;
-	int m_width = 0;
+	uint32_t m_width = 0U;
 	bool m_held = false;
 
 private:
@@ -36,13 +34,16 @@ public:
 		return std::make_shared<Slider>();
 	}
 
+	void setRawValue(float val);
+	float getRawValue() const;
+
 	void setScaleTarget(float& target, float scale);
 	void setLayout(sf::Vector2i position, sf::Vector2i size) override;
 
 	void load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts);
+		const std::unordered_map<std::string, sf::Font>& fonts) override;
 	void loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset);
+		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset) override;
 
 	void handleEvent(const sf::Event& event) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -92,13 +92,13 @@
         "text": "Music"
       },
 
-      "sound-vol": {
+      "effect-vol": {
         "type": "slider",
         "preset": "menu-slider",
         "position": [ 800, 450 ]
       },
 
-      "svol-label": {
+      "evol-label": {
         "type": "label",
         "preset": "menu-label",
         "position": [ 800, 400 ],

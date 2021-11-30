@@ -3,10 +3,6 @@
 
 struct Data
 {
-	static float masterVolume;
-	static float musicVolume;
-	static float soundVolume;
-
 	static std::string language;
 	static uint32_t activeFile;
 

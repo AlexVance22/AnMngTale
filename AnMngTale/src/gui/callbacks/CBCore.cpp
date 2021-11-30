@@ -5,7 +5,6 @@
 #include "gui/gui.h"
 
 #include "global/AudioManager.h"
-#include "global/Data.h"
 
 #include "scenes/outside/Courtyard.h"
 #include "scenes/MainMenu.h"
@@ -42,15 +41,18 @@ void pushOptionsMenu(sf::RenderWindow* window, std::stack<Menu>* menus)
 
 	auto gvol = menus->top().getWidget<gui::Slider>("global-vol");
 	auto mvol = menus->top().getWidget<gui::Slider>("music-vol");
-	auto svol = menus->top().getWidget<gui::Slider>("sound-vol");
+	auto evol = menus->top().getWidget<gui::Slider>("effect-vol");
+	//auto svol = menus->top().getWidget<gui::Slider>("sound-vol");
 
-	gvol->setScaleTarget(Data::masterVolume, 100.f);
-	mvol->setScaleTarget(Data::musicVolume, 100.f);
-	svol->setScaleTarget(Data::soundVolume, 100.f);
+	gvol->setRawValue(AudioManager::getGlobalVolume() * 0.01f);
+	mvol->setRawValue(AudioManager::getMusicVolume() * 0.01f);
+	evol->setRawValue(AudioManager::getEffectVolume() * 0.01f);
+	//svol->setRawValue(AudioManager::getSoundVolume() * 0.01f);
 
-	gvol->onValueChange.bind([]() {	sf::Listener::setGlobalVolume(Data::masterVolume); });
-	mvol->onValueChange.bind([]() { AudioManager::track.setVolume(Data::musicVolume); });
-	svol->onValueChange.bind([]() { AudioManager::setEffectVolume(Data::soundVolume); });
+	gvol->onValueChange.bind([](gui::Slider* ptr) { AudioManager::setGlobalVolume(ptr->getRawValue() * 100.f); }, gvol.get());
+	mvol->onValueChange.bind([](gui::Slider* ptr) { AudioManager::setMusicVolume(ptr->getRawValue() * 100.f); }, mvol.get());
+	evol->onValueChange.bind([](gui::Slider* ptr) { AudioManager::setEffectVolume(ptr->getRawValue() * 100.f); }, evol.get());
+	//svol->onValueChange.bind([](gui::Slider* ptr) { AudioManager::setSoundVolume(ptr->getRawValue() * 100.f); }, svol.get());
 
 	auto lang = menus->top().getWidget<gui::Button>("language");
 	auto back = menus->top().getWidget<gui::Button>("back");

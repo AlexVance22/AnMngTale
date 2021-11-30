@@ -22,11 +22,17 @@
     }
   },
 
-  "soundtrack": {
-    "reset": true,
-    "name": "birds",
-    "type": "effect",
-    "file": "res/sounds/effects/birds.wav"
+  "sounds": {
+    "track": null,
+
+    "effects": [
+      {
+        "name": "birds",
+        "file": "res/sounds/effects/birds.wav",
+        "force-reset": false,
+        "rand-start": true
+      }
+    ]
   },
 
   "camera": {
@@ -40,5 +46,11 @@
   },
 
   "entities": [
+  ],
+
+  "particles": [
+  ],
+
+  "scripts": [
   ]
 }

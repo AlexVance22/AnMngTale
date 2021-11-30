@@ -63,10 +63,12 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 {
 	m_window.setVerticalSyncEnabled(true);
 	Scene::p_window = &m_window;
-	srand(std::time(nullptr));
+	srand((uint32_t)time(nullptr));
+
+	m_scene = new MainMenu();
 
 #ifndef MNG_DIST
-	m_scene = new Courtyard();
+	//m_scene = new Courtyard();
 #else
 	m_scene = new MainMenu();
 #endif
