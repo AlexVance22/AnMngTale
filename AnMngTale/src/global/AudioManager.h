@@ -9,8 +9,6 @@ private:
 
 	static std::vector<std::string> s_nameCache;
 
-	static float s_gvol;
-	static float s_mvol;
 	static float s_evol;
 	static float s_svol;
 

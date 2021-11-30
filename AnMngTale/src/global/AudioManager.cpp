@@ -11,8 +11,6 @@ std::unordered_map<std::string, sf::Music> AudioManager::s_effects;
 
 std::vector<std::string> AudioManager::s_nameCache;
 
-float AudioManager::s_gvol = 100.f;
-float AudioManager::s_mvol = 100.f;
 float AudioManager::s_evol = 100.f;
 float AudioManager::s_svol = 100.f;
 
@@ -95,14 +93,14 @@ bool AudioManager::hasEffect(const std::string& name)
 
 void AudioManager::setGlobalVolume(float volume)
 {
-	s_gvol = volume - 100 * (int)(volume * 0.01f);
-	sf::Listener::setGlobalVolume(s_gvol);
+	float vol = volume - 100 * (int)(volume * 0.01f);
+	sf::Listener::setGlobalVolume(vol);
 }
 
 void AudioManager::setMusicVolume(float volume)
 {
-	s_mvol = volume - 100 * (int)(volume * 0.01f);
-	track.setVolume(s_mvol);
+	float vol = volume - 100 * (int)(volume * 0.01f);
+	track.setVolume(vol);
 }
 
 void AudioManager::setEffectVolume(float volume)
@@ -120,12 +118,12 @@ void AudioManager::setSoundVolume(float volume)
 
 float AudioManager::getGlobalVolume()
 {
-	return s_gvol;
+	return sf::Listener::getGlobalVolume();
 }
 
 float AudioManager::getMusicVolume()
 {
-	return s_mvol;
+	return track.getVolume();
 }
 
 float AudioManager::getEffectVolume()
