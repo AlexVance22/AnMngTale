@@ -98,7 +98,7 @@
   },
 
   "camera": {
-    "pos": [ 190, 190 ],
+    "pos": [ 10, 115 ],
     "size": [ 480, 270 ],
     "static-target": [ 190, 190 ],
     "constrain": false,

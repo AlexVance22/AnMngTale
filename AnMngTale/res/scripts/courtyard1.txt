@@ -1,5 +1,7 @@
 lock player true
+view 220.0 120.0
 wait 3.0
+track player
 lock player false
 move c1 1.0 0.0
 wait 1.5
