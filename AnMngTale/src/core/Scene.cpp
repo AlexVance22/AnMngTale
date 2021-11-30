@@ -242,20 +242,36 @@ void Scene::loadPhysics(const rapidjson::Value& data)
 
 void Scene::loadSounds(const rapidjson::Value& data)
 {
-	if (data["reset"].IsTrue())
+	const auto& track = data["track"];
+	if (track.IsNull())
 	{
-		AudioManager::clearEffects();
 		AudioManager::track.stop();
-
-		const char* type = data["type"].GetString();
-
-		if (strncmp(type, "music", 32) == 0)
-			AudioManager::initTrack(data["file"].GetString(), true);
-		else if (strncmp(type, "effect", 32) == 0)
-			AudioManager::addEffectLayer(data["name"].GetString(), data["file"].GetString(), true).play();
-		else
-			MNG_ASSERT_MSG(false, "Invalid track type");
+		AudioManager::trackTitle = "";
 	}
+	else if (AudioManager::trackTitle != track["title"].GetString() || track["force-reset"].IsTrue())
+	{
+		MNG_ASSERT_BASIC(AudioManager::track.openFromFile(track["file"].GetString()));
+		AudioManager::track.setVolume(AudioManager::getMusicVolume());
+		AudioManager::track.setLoop(true);
+		AudioManager::track.play();
+		AudioManager::trackTitle = track["title"].GetString();
+	}
+
+	for (const auto& e : data["effects"].GetArray())
+	{
+		sf::Music& effect = AudioManager::addEffect(e["name"].GetString(), e["file"].GetString(), e["force-reset"].IsTrue());
+		effect.setLoop(true);
+
+		if (e["rand-start"].IsTrue())
+		{
+			const int offsetms = rand() % effect.getDuration().asMilliseconds();
+			effect.setPlayingOffset(sf::milliseconds(offsetms));
+		}
+
+		effect.play();
+	}
+
+	AudioManager::clearNonPersisting();
 }
 
 void Scene::loadEntities(const rapidjson::Value& data)
@@ -463,7 +479,7 @@ void Scene::reloadResources(bool clear)
 	loadCamera(doc["camera"]);
 	loadGraphics(doc["graphics"]);
 	loadPhysics(doc["physics"]);
-	loadSounds(doc["soundtrack"]);
+	loadSounds(doc["sounds"]);
 	loadEntities(doc["entities"]);
 	loadParticles(doc["particles"]);
 	loadScripts(doc["scripts"]);

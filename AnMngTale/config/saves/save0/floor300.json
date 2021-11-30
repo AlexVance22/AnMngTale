@@ -138,10 +138,15 @@
     }
   },
 
-  "soundtrack": {
-    "reset": true,
-    "type": "music",
-    "file": "res/sounds/songs/Recruit.wav"
+  "sounds": {
+    "track": {
+      "title": "Recruit",
+      "file": "res/sounds/songs/Recruit.wav",
+      "force-reset": false
+    },
+
+    "effects": [
+    ]
   },
 
   "camera": {

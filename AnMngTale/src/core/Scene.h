@@ -8,9 +8,9 @@
 #include "entities/Entity.h"
 #include "physics/BoxTrigger.h"
 
-#include "graphics/ParticleSystem.h"
-
 #include "scripting/Script.h"
+
+#include "graphics/ParticleSystem.h"
 
 
 const char* freadall(const std::string& filepath);

@@ -32,10 +32,15 @@
     }
   },
 
-  "soundtrack": {
-    "reset": true,
-    "type": "music",
-    "file": "res/sounds/songs/Enter.wav"
+  "sounds": {
+    "track": {
+      "title": "Enter",
+      "file": "res/sounds/songs/Enter.wav",
+      "force-reset": false
+    },
+
+    "effects": [
+    ]
   },
 
   "camera": {
