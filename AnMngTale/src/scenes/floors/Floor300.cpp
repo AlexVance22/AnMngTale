@@ -28,21 +28,6 @@ void Floor300::dumpFlags()
 }
 
 
-void Floor300::handleEvents()
-{
-	sf::Event event;
-	while (p_window->pollEvent(event))
-	{
-		baseEvents(event);
-
-		switch (event.type)
-		{
-		case sf::Event::KeyPressed:
-			break;
-		}
-	}
-}
-
 void Floor300::impl(const float deltaTime)
 {
 	sf::Vector2f playerRelTex = (m_player->getPosition() + m_player->getSize() * 0.5f) - m_topLayerPos;

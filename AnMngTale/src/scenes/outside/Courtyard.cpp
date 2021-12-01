@@ -39,21 +39,6 @@ void Courtyard::dumpFlags()
 }
 
 
-void Courtyard::handleEvents()
-{
-	sf::Event event;
-	while (p_window->pollEvent(event))
-	{
-		baseEvents(event);
-
-		switch (event.type)
-		{
-		case sf::Event::KeyPressed:
-			break;
-		}
-	}
-}
-
 void Courtyard::impl(const float deltaTime)
 {
 	switch (m_state)

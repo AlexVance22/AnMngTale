@@ -25,6 +25,8 @@ private:
 	bool m_masterQuit = false;
 	Scene* m_nextScene = nullptr;
 
+	bool m_blocking = true;
+
 public:
 	Menu(sf::RenderWindow* window, std::stack<Menu>* menus, const std::string& filepath);
 	Menu(sf::RenderWindow* window, std::stack<Menu>* menus);
@@ -47,8 +49,10 @@ public:
 	bool getQuit() { return m_quit; }
 	bool getMasterQuit() { return m_masterQuit; }
 	Scene* getNextScene() { return m_nextScene; }
+
+	bool isBlocking() { return m_blocking; }
 	
-	void handleEvents();
+	void handleEvent(const sf::Event& event);
 	void update(const float deltaTime);
 	void render(sf::RenderTarget* target = nullptr);
 };

@@ -79,7 +79,6 @@ sf::RenderTexture Scene::m_fadeTarget;
 
 void Scene::handleGui(const float deltaTime)
 {
-	m_overlays.top().handleEvents();
 	m_overlays.top().update(deltaTime);
 
 	if (m_overlays.top().getNextScene())
@@ -94,6 +93,50 @@ void Scene::handleGui(const float deltaTime)
 	}
 	else if (m_overlays.top().getQuit())
 		m_overlays.pop();
+}
+
+void Scene::handleGame(const float deltaTime)
+{
+	PROFILE_DEBUG_ONLY_BEGIN(false, MICROSECONDS);
+
+	for (auto& a : m_backgroundSprites)
+		a.sprite.update(deltaTime);
+	for (auto& e : m_entities)
+		e->update(deltaTime);
+	for (auto& a : m_foregroundSprites)
+		a.sprite.update(deltaTime);
+
+	for (auto& s : m_scripts)
+		s.update(deltaTime);
+
+	impl(deltaTime);
+
+	PROFILE_DEBUG_ONLY_STEP();
+
+	m_physWorld->Step(deltaTime, 6, 2);
+
+	std::sort(m_entities.begin(), m_entities.end(), [](const std::unique_ptr<Entity>& left, const std::unique_ptr<Entity>& right)
+		{
+			return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
+		});
+
+	m_camera.update(deltaTime);
+
+	if (m_player)
+	{
+		const sf::FloatRect collider = m_player->getCollider();
+
+		for (auto [_, t] : m_triggers)
+			t.triggerOnIntersects(collider);
+	}
+
+	PROFILE_DEBUG_ONLY_STEP();
+
+#ifdef MNG_DEBUG
+	const auto& times = __prof.data();
+	d_tPhysics.setString("Physics:   " + f_to_string(times[0] * 0.001f, 3) + "ms");
+	d_tUserlogic.setString("Logic:     " + f_to_string(times[1] * 0.001f, 3) + "ms");
+#endif
 }
 
 
@@ -486,7 +529,30 @@ void Scene::reloadResources(bool clear)
 }
 
 
-void Scene::baseEvents(const sf::Event& event)
+void Scene::handleEvents()
+{
+	sf::Event event;
+	while (p_window->pollEvent(event))
+	{
+		if (m_overlays.empty())
+		{
+			handleEventDefault(event);
+			handleEventSpecial(event);
+		}
+		else
+		{
+			if (!m_overlays.top().isBlocking())
+			{
+				handleEventDefault(event);
+				handleEventSpecial(event);
+			}
+
+			m_overlays.top().handleEvent(event);
+		}
+	}
+}
+
+void Scene::handleEventDefault(const sf::Event& event)
 {
 	switch (event.type)
 	{
@@ -515,6 +581,11 @@ void Scene::baseEvents(const sf::Event& event)
 #endif
 		break;
 	}
+}
+
+void Scene::handleEventSpecial(const sf::Event& event)
+{
+
 }
 
 
@@ -558,52 +629,23 @@ void Scene::update(const float deltaTime)
 	for (auto& p : m_particles)
 		p.update(deltaTime);
 
+	handleEvents();
+
 	if (m_overlays.empty())
 	{
-		handleEvents();
-
-		for (auto& a : m_backgroundSprites)
-			a.sprite.update(deltaTime);
-		for (auto& e : m_entities)
-			e->update(deltaTime);
-		for (auto& a : m_foregroundSprites)
-			a.sprite.update(deltaTime);
-
-		for(auto& s : m_scripts)
-			s.update(deltaTime);
-
-		impl(deltaTime);
-
-		PROFILE_DEBUG_ONLY_STEP();
-
-		m_physWorld->Step(deltaTime, 6, 2);
-
-		std::sort(m_entities.begin(), m_entities.end(), [](const std::unique_ptr<Entity>& left, const std::unique_ptr<Entity>& right)
-			{
-				return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
-			});
-
-		m_camera.update(deltaTime);
-
-		if (m_player)
-		{
-			const sf::FloatRect collider = m_player->getCollider();
-
-			for (auto [_, t] : m_triggers)
-				t.triggerOnIntersects(collider);
-		}
+		handleGame(deltaTime);
 
 		PROFILE_DEBUG_ONLY_STEP();
 
 #ifdef MNG_DEBUG
-		const auto& times = __prof.data();
-		d_tUpdate.setString("Update:    " + f_to_string((times[0] + times[1]) * 0.001f, 3) + "ms");
-		d_tPhysics.setString("Physics:   " + f_to_string(times[0] * 0.001f, 3) + "ms");
-		d_tUserlogic.setString("Logic:     " + f_to_string(times[1] * 0.001f, 3) + "ms");
+		d_tUpdate.setString("Update:    " + f_to_string(__prof.data()[0] * 0.001f, 3) + "ms");
 #endif
 	}
 	else
 	{
+		if (!m_overlays.top().isBlocking())
+			handleGame(deltaTime);
+
 		handleGui(deltaTime);
 
 		PROFILE_DEBUG_ONLY_STEP();
@@ -611,8 +653,15 @@ void Scene::update(const float deltaTime)
 #ifdef MNG_DEBUG
 		const std::string t = f_to_string(__prof.data()[0] * 0.001f, 3) + "ms";
 		d_tUpdate.setString("Update:    " + t);
-		d_tPhysics.setString("Physics:   NA");
-		d_tUserlogic.setString("Logic:     " + t);
+
+		if (!m_overlays.empty())
+		{
+			if (m_overlays.top().isBlocking())
+			{
+				d_tUserlogic.setString("Logic:     " + t);
+				d_tPhysics.setString("Physics:   NA");
+			}
+		}
 #endif
 	}
 

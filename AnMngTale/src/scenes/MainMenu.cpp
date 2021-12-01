@@ -22,11 +22,6 @@ void MainMenu::dumpFlags()
 }
 
 
-void MainMenu::handleEvents()
-{
-
-}
-
 void MainMenu::impl(const float deltaTime)
 {
 	m_quit = true;

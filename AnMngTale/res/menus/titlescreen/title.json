@@ -12,7 +12,9 @@
     [ "cambria", "res/fonts/cambria.ttf" ]
   ],
 
-  "view": [1920, 1080],
+  "view": [ 1920, 1080 ],
+
+  "blocking": true,
 
   "presets": {
 

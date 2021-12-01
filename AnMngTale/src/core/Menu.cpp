@@ -33,6 +33,8 @@ void Menu::loadFromFile(const std::string& filepath)
 	m_view.setSize(vSize);
 	m_view.setCenter(vSize * 0.5f);
 
+	m_blocking = doc["blocking"].IsTrue();
+
 	for (const auto& s : doc["sounds"].GetArray())
 		AudioManager::addSound(s[0].GetString(), s[1].GetString());
 
@@ -47,18 +49,14 @@ void Menu::loadFromFile(const std::string& filepath)
 }
 
 
-void Menu::handleEvents()
+void Menu::handleEvent(const sf::Event& event)
 {
-	sf::Event event;
-	while (p_window->pollEvent(event))
-	{
-		m_widgets->handleEvent(event);
+	m_widgets->handleEvent(event);
 
-		if (event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::Escape)
-				m_quit = true;
-		}
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape)
+			m_quit = true;
 	}
 }
 

@@ -72,6 +72,7 @@ protected:
 
 protected:
 	void handleGui(const float deltaTime);
+	void handleGame(const float deltaTime);
 
 	//void loadFlags(const rapidjson::Value& data);
 	void loadCamera(const rapidjson::Value& data);
@@ -84,8 +85,9 @@ protected:
 
 	void reloadResources(bool clear = false);
 
-	void baseEvents(const sf::Event& event);
-	virtual void handleEvents() = 0;
+	void handleEvents();
+	void handleEventDefault(const sf::Event& event);
+	virtual void handleEventSpecial(const sf::Event& event);
 	virtual void impl(const float deltaTime) = 0;
 
 public:

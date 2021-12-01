@@ -10,7 +10,6 @@ private:
 	void manageFlags();
 	void dumpFlags();
 
-	void handleEvents() override;
 	void impl(const float deltaTime) override;
 
 public:

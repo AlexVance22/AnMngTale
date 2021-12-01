@@ -13,6 +13,8 @@
 
   "view": [ 1920, 1080 ],
 
+  "blocking": true,
+
   "presets": {
 
     "button": {
