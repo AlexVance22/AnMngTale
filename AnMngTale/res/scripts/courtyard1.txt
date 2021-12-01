@@ -1,11 +1,14 @@
 lock player true
 view 220.0 120.0
-wait 3.0
-track player
-lock player false
+wait 2.0
+speak 0
+lock player true
+track c1
 move c1 1.0 0.0
 wait 1.5
 move c1 1.0 -1.0
 wait 0.5
 move c1 0.0 -1.0
-wait 1.5
+wait 1.0
+lock player false
+track player

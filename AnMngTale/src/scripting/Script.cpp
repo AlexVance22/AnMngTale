@@ -1,12 +1,15 @@
 #include "PCH.h"
 #include "Script.h"
 
+#include "core/Scene.h"
 #include "core/Asserts.h"
 #include "core/Profiler.h"
 
 #include "entities/Entity.h"
 #include "entities/Player.h"
 #include "graphics/Camera.h"
+
+#include "gui/callbacks/CBCore.h"
 
 
 #ifdef MNG_DEBUG
@@ -167,17 +170,22 @@ void Script::opTrack()
 {
 	uint32_t entity;
 	fread(m_stream, entity);
-	p_camera->setDynamicTarget(&s_entities[entity]->getPosition());
+	p_scene->m_camera.setDynamicTarget(&s_entities[entity]->getPosition());
 }
 void Script::opView()
 {
 	sf::Vector2f pos;
 	fread(m_stream, pos);
-	p_camera->setStaticTarget(pos);
+	p_scene->m_camera.setStaticTarget(pos);
 }
 void Script::opSpeak()
 {
+	uint32_t page;
+	fread(m_stream, page);
 
+	pushDialogue(p_scene->p_window, &p_scene->m_overlays, p_scene->m_dialogue[page]);
+
+	m_speaking = true;
 }
 void Script::opAnim()
 {
@@ -253,18 +261,18 @@ std::string Script::suffix(const std::string& in)
 }
 
 
-Script::Script(const std::string& filepath, Camera* camera)
+Script::Script(const std::string& filepath, Scene* scene)
 {
-	load(filepath, camera);
+	load(filepath, scene);
 }
 
-void Script::load(const std::string& filepath, Camera* camera)
+void Script::load(const std::string& filepath, Scene* scene)
 {
 	m_stream.open(filepath, std::ios::binary);
 	MNG_ASSERT_SLIM(m_stream.is_open());
 
-	MNG_ASSERT_SLIM(camera);
-	p_camera = camera;
+	MNG_ASSERT_SLIM(scene);
+	p_scene = scene;
 
 	for (auto [_, dir] : m_directions)
 		dir = sf::Vector2f(0, 0);
@@ -277,7 +285,12 @@ void Script::update(const float deltaTime)
 
 	if (m_running)
 	{
-		if (m_delay < 0)
+		if (m_speaking)
+		{
+			if (p_scene->m_overlays.empty())
+				m_speaking = false;
+		}
+		else if (m_delay < 0)
 		{
 			while (!m_end)
 			{
@@ -312,6 +325,15 @@ void Script::update(const float deltaTime)
 					break;
 				case Op::VIEW:
 					opView();
+					break;
+				case Op::SPEAK:
+					opSpeak();
+					return;
+				case Op::ANIM:
+					opAnim();
+					break;
+				case Op::PARTICLE:
+					opParticle();
 					break;
 				default:
 					//opInv();

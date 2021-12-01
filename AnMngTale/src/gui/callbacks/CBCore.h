@@ -10,3 +10,6 @@ void pushFileMenu(sf::RenderWindow* window, std::stack<Menu>* menus, bool* saveD
 void pushOptionsMenu(sf::RenderWindow* window, std::stack<Menu>* menus);
 
 void popGame(std::stack<Menu>* menus);
+
+
+void pushDialogue(sf::RenderWindow* window, std::stack<Menu>* menus, const std::vector<std::string>& text);

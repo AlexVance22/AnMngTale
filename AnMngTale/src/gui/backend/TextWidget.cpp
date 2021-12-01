@@ -5,7 +5,7 @@
 namespace gui
 {
 
-void TextWidget::calculateTextPosition()
+void TextWidget::centerTextPosition()
 {
 	m_text.setPosition(m_boundingBox.left + m_boundingBox.width / 2 - m_text.getLocalBounds().width / 2,
 					   m_boundingBox.top + m_boundingBox.height / 2 - m_text.getLocalBounds().height / 2 - 5);
@@ -21,20 +21,40 @@ void TextWidget::setLayout(sf::Vector2i position, sf::Vector2i size)
 	m_boundingBox.width = size.x;
 	m_boundingBox.height = size.y;
 
-	calculateTextPosition();
+	if (m_centered)
+		centerTextPosition();
 }
 
 void TextWidget::setFont(const sf::Font& font, uint32_t size)
 {
 	m_text.setFont(font);
 	m_text.setCharacterSize(size);
-	calculateTextPosition();
+
+	if (m_centered)
+		centerTextPosition();
 }
 
 void TextWidget::setString(const std::string& text)
 {
 	m_text.setString(text);
-	calculateTextPosition();
+
+	if (m_centered)
+		centerTextPosition();
+}
+
+
+void TextWidget::setTextCentered(bool centered)
+{
+	m_centered = centered;
+
+	if (m_centered)
+		centerTextPosition();
+}
+
+void TextWidget::setTextPosition(sf::Vector2f position)
+{
+	if (!m_centered) 
+		m_text.setPosition(position);
 }
 
 

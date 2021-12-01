@@ -158,7 +158,6 @@
   ],
 
   "particles": [
-
   ],
 
   "scripts": [
@@ -167,5 +166,9 @@
       "bin": "res/scripts/courtyard1.mng",
       "trigger": "interact"
     }
+  ],
+
+  "dialogue": [
+    "config/courtyarddia.json"
   ]
 }

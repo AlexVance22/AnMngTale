@@ -35,8 +35,6 @@ protected:
 	AreaState m_state;
 	const std::string m_name;
 
-	//static const std::unordered_map<AreaState, const char*> stateToStr;
-
 	std::unordered_map<std::string, sf::Texture> m_textures;
 	std::unordered_map<std::string, sf::Shader> m_shaders;
 	std::vector<MatSprite> m_backgroundSprites;
@@ -46,6 +44,7 @@ protected:
 	std::vector<std::unique_ptr<Entity>> m_entities;
 	Player* m_player = nullptr;
 
+	std::vector<std::vector<std::string>> m_dialogue;
 	std::vector<ParticleSystem> m_particles;
 	std::vector<Script> m_scripts;
 
@@ -55,6 +54,8 @@ protected:
 
 	std::unique_ptr<b2World> m_physWorld;
 	const static float s_physScale;
+
+	static sf::RenderTexture m_fadeBuffer;
 
 	Camera m_camera;
 	PostFX m_postfx;
@@ -68,12 +69,16 @@ protected:
 	sf::Text d_tPhysics, d_tUserlogic;
 #endif
 
-	static sf::RenderTexture m_fadeTarget;
-
 protected:
 	void handleGui(const float deltaTime);
 	void handleGame(const float deltaTime);
 
+	void handleEvents();
+	void handleEventDefault(const sf::Event& event);
+	virtual void handleEventSpecial(const sf::Event& event);
+	virtual void impl(const float deltaTime) = 0;
+
+private:
 	//void loadFlags(const rapidjson::Value& data);
 	void loadCamera(const rapidjson::Value& data);
 	void loadGraphics(const rapidjson::Value& data);
@@ -81,14 +86,12 @@ protected:
 	void loadSounds(const rapidjson::Value& data);
 	void loadEntities(const rapidjson::Value& data);
 	void loadParticles(const rapidjson::Value& data);
+	void loadDialogue(const rapidjson::Value& data);
 	void loadScripts(const rapidjson::Value& data);
 
 	void reloadResources(bool clear = false);
 
-	void handleEvents();
-	void handleEventDefault(const sf::Event& event);
-	virtual void handleEventSpecial(const sf::Event& event);
-	virtual void impl(const float deltaTime) = 0;
+	void pushMenu(const std::string& filepath);
 
 public:
 	Scene(const std::string& scenename);
@@ -113,4 +116,6 @@ public:
 
 	virtual void update(const float deltaTime);
 	virtual void render(sf::RenderTarget* target = nullptr);
+
+	friend class Script;
 };

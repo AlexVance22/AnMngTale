@@ -67,3 +67,15 @@ void popGame(std::stack<Menu>* menus)
 {
 	menus->top().setNextScene<MainMenu>();
 }
+
+
+void pushDialogue(sf::RenderWindow* window, std::stack<Menu>* menus, const std::vector<std::string>& text)
+{
+	menus->emplace(window, menus, "res/menus/dialayer.json");
+
+	auto d = menus->top().getWidget<gui::Dialogue>("popup");
+
+	d->setText(text);
+	d->setPlaySpeed(40.f);
+	d->onFinish.bind(&Menu::scheduleQuit, &menus->top());
+}

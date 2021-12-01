@@ -3,6 +3,7 @@
 class Entity;
 class Camera;
 class Player;
+class Scene;
 
 
 class Script
@@ -12,13 +13,14 @@ private:
 	static const std::unordered_map<std::string, Op> s_opMap;
 	static std::vector<Entity*> s_entities;
 	static std::vector<std::string> s_handles;
-	Camera*	p_camera = nullptr;
+	Scene* p_scene = nullptr;
 
 	std::unordered_map<uint32_t, sf::Vector2f> m_directions;
 
 	float m_delay = 0.f;
 	bool m_running = false;
 	bool m_end = false;
+	bool m_speaking = false;
 	int32_t m_output = -1;
 
 	std::ifstream m_stream;
@@ -49,9 +51,9 @@ public:
 
 public:
 	Script() = default;
-	Script(const std::string& filepath, Camera* camera);
+	Script(const std::string& filepath, Scene* scene);
 
-	void load(const std::string& filepath, Camera* camera);
+	void load(const std::string& filepath, Scene* scene);
 
 	void play() { m_running = true; }
 	void pause() { m_running = false; }

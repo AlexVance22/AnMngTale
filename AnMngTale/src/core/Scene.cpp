@@ -62,90 +62,9 @@ void dumpjson(const rapidjson::Document& doc, const std::string& filepath)
 }
 
 
-/*
-const std::unordered_map<Scene::AreaState, const char*> Scene::stateToStr{ 
-	{ AreaState::INTRO, "intro" },
-	{ AreaState::DEFAULT, "default" },
-	{ AreaState::EXPO, "expo" },
-	{ AreaState::BUILD, "build" },
-	{ AreaState::CLIMAX, "climax" },
-};
-*/
-
 sf::RenderWindow* Scene::p_window;
 const float Scene::s_physScale = 1.f / 30.f;
-sf::RenderTexture Scene::m_fadeTarget;
-
-
-void Scene::handleGui(const float deltaTime)
-{
-	m_overlays.top().update(deltaTime);
-
-	if (m_overlays.top().getNextScene())
-	{
-		m_nextScene = m_overlays.top().getNextScene();
-		m_quit = true;
-	}
-	else if (m_overlays.top().getMasterQuit())
-	{
-		while (!m_overlays.empty())
-			m_overlays.pop();
-	}
-	else if (m_overlays.top().getQuit())
-	{
-		m_overlays.pop();
-
-		if (m_overlays.empty())
-		{
-			if (m_player)
-				m_player->lock(false);
-		}
-	}
-}
-
-void Scene::handleGame(const float deltaTime)
-{
-	PROFILE_DEBUG_ONLY_BEGIN(false, MICROSECONDS);
-
-	for (auto& a : m_backgroundSprites)
-		a.sprite.update(deltaTime);
-	for (auto& e : m_entities)
-		e->update(deltaTime);
-	for (auto& a : m_foregroundSprites)
-		a.sprite.update(deltaTime);
-
-	for (auto& s : m_scripts)
-		s.update(deltaTime);
-
-	impl(deltaTime);
-
-	PROFILE_DEBUG_ONLY_STEP();
-
-	m_physWorld->Step(deltaTime, 6, 2);
-
-	std::sort(m_entities.begin(), m_entities.end(), [](const std::unique_ptr<Entity>& left, const std::unique_ptr<Entity>& right)
-		{
-			return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
-		});
-
-	m_camera.update(deltaTime);
-
-	if (m_player)
-	{
-		const sf::FloatRect collider = m_player->getCollider();
-
-		for (auto [_, t] : m_triggers)
-			t.triggerOnIntersects(collider);
-	}
-
-	PROFILE_DEBUG_ONLY_STEP();
-
-#ifdef MNG_DEBUG
-	const auto& times = __prof.data();
-	d_tPhysics.setString("Physics:   " + f_to_string(times[0] * 0.001f, 3) + "ms");
-	d_tUserlogic.setString("Logic:     " + f_to_string(times[1] * 0.001f, 3) + "ms");
-#endif
-}
+sf::RenderTexture Scene::m_fadeBuffer;
 
 
 void Scene::loadCamera(const rapidjson::Value& data)
@@ -484,13 +403,27 @@ void Scene::loadParticles(const rapidjson::Value& data)
 	}
 }
 
+void Scene::loadDialogue(const rapidjson::Value& data)
+{
+	for (const auto& f : data.GetArray())
+	{
+		auto& vec = m_dialogue.emplace_back();
+
+		rapidjson::Document doc;
+		loadjson(doc, f.GetString());
+
+		for (const auto& str : doc.GetArray())
+			vec.emplace_back(str.GetString());
+	}
+}
+
 void Scene::loadScripts(const rapidjson::Value& data)
 {
 	m_scripts.resize(data.Size());
 	for (rapidjson::SizeType i = 0; i < data.Size(); i++)
 	{
 		Script::compile(data[i]["raw"].GetString());
-		m_scripts[i].load(data[i]["bin"].GetString(), &m_camera);
+		m_scripts[i].load(data[i]["bin"].GetString(), this);
 		m_triggers[data[i]["trigger"].GetString()].onCollide.bind(&Script::play, &m_scripts[i]);
 	}
 }
@@ -534,6 +467,84 @@ void Scene::reloadResources(bool clear)
 	loadEntities(doc["entities"]);
 	loadParticles(doc["particles"]);
 	loadScripts(doc["scripts"]);
+	loadDialogue(doc["dialogue"]);
+}
+
+
+void Scene::pushMenu(const std::string& filepath)
+{
+	m_overlays.emplace(p_window, &m_overlays, filepath);
+}
+
+
+void Scene::handleGui(const float deltaTime)
+{
+	m_overlays.top().update(deltaTime);
+
+	if (m_overlays.top().getNextScene())
+	{
+		m_nextScene = m_overlays.top().getNextScene();
+		m_quit = true;
+	}
+	else if (m_overlays.top().getMasterQuit())
+	{
+		while (!m_overlays.empty())
+			m_overlays.pop();
+	}
+	else if (m_overlays.top().getQuit())
+	{
+		m_overlays.pop();
+
+		if (m_overlays.empty())
+		{
+			if (m_player)
+				m_player->lock(false);
+		}
+	}
+}
+
+void Scene::handleGame(const float deltaTime)
+{
+	PROFILE_DEBUG_ONLY_BEGIN(false, MICROSECONDS);
+
+	for (auto& a : m_backgroundSprites)
+		a.sprite.update(deltaTime);
+	for (auto& e : m_entities)
+		e->update(deltaTime);
+	for (auto& a : m_foregroundSprites)
+		a.sprite.update(deltaTime);
+
+	for (auto& s : m_scripts)
+		s.update(deltaTime);
+
+	impl(deltaTime);
+
+	PROFILE_DEBUG_ONLY_STEP();
+
+	m_physWorld->Step(deltaTime, 6, 2);
+
+	std::sort(m_entities.begin(), m_entities.end(), [](const std::unique_ptr<Entity>& left, const std::unique_ptr<Entity>& right)
+		{
+			return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
+		});
+
+	m_camera.update(deltaTime);
+
+	if (m_player)
+	{
+		const sf::FloatRect collider = m_player->getCollider();
+
+		for (auto [_, t] : m_triggers)
+			t.triggerOnIntersects(collider);
+	}
+
+	PROFILE_DEBUG_ONLY_STEP();
+
+#ifdef MNG_DEBUG
+	const auto& times = __prof.data();
+	d_tPhysics.setString("Physics:   " + f_to_string(times[0] * 0.001f, 3) + "ms");
+	d_tUserlogic.setString("Logic:     " + f_to_string(times[1] * 0.001f, 3) + "ms");
+#endif
 }
 
 
@@ -568,13 +579,13 @@ void Scene::handleEventDefault(const sf::Event& event)
 		switch (event.key.code)
 		{
 		case sf::Keyboard::Escape:
-			m_overlays.emplace(p_window, &m_overlays, "res/menus/quit.json");
+			pushMenu("res/menus/quit.json");
 			m_overlays.top().getWidget<gui::Button>("quit")->onClick.bind(&popGame, &m_overlays);
 			m_overlays.top().getWidget<gui::Button>("options")->onClick.bind(&pushOptionsMenu, p_window, &m_overlays);
 			m_overlays.top().getWidget<gui::Button>("resume")->onClick.bind(&Menu::scheduleQuit, &m_overlays.top());
 			break;
 		case sf::Keyboard::E:
-			m_overlays.emplace(p_window, &m_overlays, "res/menus/agenda.json");
+			pushMenu("res/menus/agenda.json");
 			break;
 		case sf::Keyboard::R:
 #ifdef _DEBUG

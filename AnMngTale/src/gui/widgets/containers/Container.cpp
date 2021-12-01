@@ -88,10 +88,7 @@ void Container::loadPreset(const rapidjson::Value& data, const std::unordered_ma
 		else if (strncmp(type, "dialogue", 32) == 0)
 		{
 			auto dia = gui::Dialogue::create();
-			if (data["preset"].IsNull())
-				dia->load(data, textures, fonts);
-			else
-				dia->loadPreset(data, textures, fonts, presets["dialogue"][data["preset"].GetString()]);
+			dia->load(data, textures, fonts);
 			m_widgets[name] = dia;
 		}
 		else if (strncmp(type, "container", 32) == 0)

@@ -1,0 +1,42 @@
+{
+  "sounds": [
+  ],
+
+  "textures": [
+    [ "background", "res/textures/gui/dialogue.png" ]
+  ],
+
+  "fonts": [
+    [ "pixel", "res/fonts/equipmentpro.ttf" ]
+  ],
+
+  "view": [ 1920, 1080 ],
+
+  "blocking": false,
+  "blurred": false,
+
+  "presets": {
+  },
+
+  "root": {
+
+    "color": [ 0, 0, 0, 0 ],
+    "texture": null,
+    "font": "cambria",
+    "pos": [ 0, 0 ],
+    "size": [ 1920, 1080 ],
+
+    "children": {
+
+      "popup": {
+        "type": "dialogue",
+        "position": [ 0, 830 ],
+        "size": [ 1200, 250 ],
+        "font": "pixel",
+        "fontsize": 30,
+        "fontcolor": [ 0, 0, 0, 255 ],
+        "texture": "background"
+      }
+    }
+  }
+}
