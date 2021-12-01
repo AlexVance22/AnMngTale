@@ -65,10 +65,9 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 	Scene::p_window = &m_window;
 	srand((uint32_t)time(nullptr));
 
-	m_scene = new MainMenu();
-
 #ifndef MNG_DIST
-	//m_scene = new Courtyard();
+	m_scene = new Courtyard();
+	//m_scene = new MainMenu();
 #else
 	m_scene = new MainMenu();
 #endif

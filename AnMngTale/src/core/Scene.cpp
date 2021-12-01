@@ -92,7 +92,15 @@ void Scene::handleGui(const float deltaTime)
 			m_overlays.pop();
 	}
 	else if (m_overlays.top().getQuit())
+	{
 		m_overlays.pop();
+
+		if (m_overlays.empty())
+		{
+			if (m_player)
+				m_player->lock(false);
+		}
+	}
 }
 
 void Scene::handleGame(const float deltaTime)
@@ -643,6 +651,9 @@ void Scene::update(const float deltaTime)
 	}
 	else
 	{
+		if (m_player)
+			m_player->lock(true);
+
 		if (!m_overlays.top().isBlocking())
 			handleGame(deltaTime);
 

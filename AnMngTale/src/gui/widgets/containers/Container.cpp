@@ -47,6 +47,7 @@ void Container::loadPreset(const rapidjson::Value& data, const std::unordered_ma
 	}
 	else
 	{
+		MNG_ASSERT_SLIM(textures.find(tex.GetString()) != textures.end());
 		m_background.setTexture(textures.at(tex.GetString()));
 		m_block.setFillColor(sf::Color(0, 0, 0, 0));
 	}
