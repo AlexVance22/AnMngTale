@@ -79,18 +79,7 @@ protected:
 	virtual void impl(const float deltaTime) = 0;
 
 private:
-	//void loadFlags(const rapidjson::Value& data);
-	void loadCamera(const rapidjson::Value& data);
-	void loadGraphics(const rapidjson::Value& data);
-	void loadPhysics(const rapidjson::Value& data);
-	void loadSounds(const rapidjson::Value& data);
-	void loadEntities(const rapidjson::Value& data);
-	void loadParticles(const rapidjson::Value& data);
-	void loadDialogue(const rapidjson::Value& data);
-	void loadScripts(const rapidjson::Value& data);
-
 	void reloadResources(bool clear = false);
-
 	void pushMenu(const std::string& filepath);
 
 public:
@@ -117,5 +106,7 @@ public:
 	virtual void update(const float deltaTime);
 	virtual void render(sf::RenderTarget* target = nullptr);
 
+
+	friend class Deserialiser;
 	friend class Script;
 };

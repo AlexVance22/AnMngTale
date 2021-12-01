@@ -4,6 +4,7 @@
   "graphics": {
     "textures": [
       [ "background", "res/textures/locations/outside/main.png" ],
+      [ "door-top", "res/textures/locations/outside/door-top.png" ],
       [ "wall", "res/textures/locations/outside/wall0.png" ],
 
       [ "chronodox", "res/textures/characters/chronodox.png" ],
@@ -18,6 +19,13 @@
         "pos": [ -1812, -120 ],
         "anim": null,
         "layer": "bg",
+        "shader": null
+      },
+      {
+        "texture": "door-top",
+        "pos": [ 322, -120 ],
+        "anim": null,
+        "layer": "fg",
         "shader": null
       }
     ]

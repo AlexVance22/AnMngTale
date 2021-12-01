@@ -11,8 +11,7 @@ class Script
 private:
 	enum class Op { WAIT = 0, PAUSE, OUT, PLACE, MOVE, STOP, LOCK, TRACK, VIEW, SPEAK, ANIM, PARTICLE };
 	static const std::unordered_map<std::string, Op> s_opMap;
-	static std::vector<Entity*> s_entities;
-	static std::vector<std::string> s_handles;
+	std::vector<Entity*> m_entities;
 	Scene* p_scene = nullptr;
 
 	std::unordered_map<uint32_t, sf::Vector2f> m_directions;
@@ -26,7 +25,7 @@ private:
 	std::ifstream m_stream;
 
 private:
-	static void writeToken(std::ofstream& out, char* token);
+	static void writeToken(std::ofstream& out, char* token, const std::vector<std::string>& handles);
 
 	void opInv();
 	void opWait();
@@ -43,11 +42,7 @@ private:
 	void opParticle();
 
 public:
-	static void pushEntity(Entity* entity_ptr, const std::string& handle);
-	static void compile(const std::string& filepath);
-	static void reset();
-
-	static std::string suffix(const std::string& in);
+	static void compile(const std::string& filepath, const std::vector<std::string>& handles);
 
 public:
 	Script() = default;

@@ -44,6 +44,6 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 
-	friend class Scene;
+	friend class Deserialiser;
 	friend class Script;
 };

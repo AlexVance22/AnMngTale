@@ -34,8 +34,8 @@
 
   "sounds": {
     "track": {
-      "title": "Enter",
-      "file": "res/sounds/songs/Enter.wav",
+      "title": "Title",
+      "file": "res/sounds/songs/Title.wav",
       "force-reset": false
     },
 
