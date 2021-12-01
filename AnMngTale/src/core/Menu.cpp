@@ -34,6 +34,7 @@ void Menu::loadFromFile(const std::string& filepath)
 	m_view.setCenter(vSize * 0.5f);
 
 	m_blocking = doc["blocking"].IsTrue();
+	m_blurred = doc["blurred"].IsTrue();
 
 	for (const auto& s : doc["sounds"].GetArray())
 		AudioManager::addSound(s[0].GetString(), s[1].GetString());

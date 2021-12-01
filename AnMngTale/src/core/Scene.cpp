@@ -624,12 +624,12 @@ void Scene::update(const float deltaTime)
 {
 	PROFILE_DEBUG_ONLY_BEGIN(false, MICROSECONDS);
 
-	m_postfx.setEnabled("blur", !m_overlays.empty());
-
 	for (auto& p : m_particles)
 		p.update(deltaTime);
 
 	handleEvents();
+
+	m_postfx.setEnabled("blur", false);
 
 	if (m_overlays.empty())
 	{
@@ -645,6 +645,9 @@ void Scene::update(const float deltaTime)
 	{
 		if (!m_overlays.top().isBlocking())
 			handleGame(deltaTime);
+
+		if (m_overlays.top().isBlurred())
+			m_postfx.setEnabled("blur", true);
 
 		handleGui(deltaTime);
 

@@ -26,6 +26,7 @@ private:
 	Scene* m_nextScene = nullptr;
 
 	bool m_blocking = true;
+	bool m_blurred = false;
 
 public:
 	Menu(sf::RenderWindow* window, std::stack<Menu>* menus, const std::string& filepath);
@@ -51,6 +52,7 @@ public:
 	Scene* getNextScene() { return m_nextScene; }
 
 	bool isBlocking() { return m_blocking; }
+	bool isBlurred() { return m_blurred; }
 	
 	void handleEvent(const sf::Event& event);
 	void update(const float deltaTime);
