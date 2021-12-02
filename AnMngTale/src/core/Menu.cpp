@@ -1,6 +1,7 @@
 #include "PCH.h"
 #include "Menu.h"
 
+#include "core/Scene.h"
 #include "core/Asserts.h"
 #include "core/Profiler.h"
 #include "core/JsonCasts.h"
@@ -13,14 +14,15 @@
 void loadjson(rapidjson::Document& doc, const std::string& filepath);
 
 
-Menu::Menu(sf::RenderWindow* window, std::stack<Menu>* menus, const std::string& filepath) : p_window(window), p_menus(menus)
+Menu::Menu(sf::RenderWindow* window, std::stack<Menu>* overlays, const std::string& filepath) : p_window(window), p_overlays(overlays)
 {
 	loadFromFile(filepath);
 }
 
-Menu::Menu(sf::RenderWindow* window, std::stack<Menu>* menus)
-	: p_window(window), p_menus(menus)
-{};
+Menu::Menu(sf::RenderWindow* window, std::stack<Menu>* overlays) : p_window(window), p_overlays(overlays)
+{
+
+}
 
 
 void Menu::loadFromFile(const std::string& filepath)
@@ -50,6 +52,39 @@ void Menu::loadFromFile(const std::string& filepath)
 }
 
 
+Obj<Scene>&& Menu::getNextScene()
+{
+	return std::move(m_nextScene);
+}
+
+
+void Menu::scheduleQuit()
+{
+	m_quitTop = true;
+}
+
+bool Menu::getQuitTop()
+{
+	return m_quitTop;
+}
+
+bool Menu::getQuitAll()
+{
+	return m_quitAll;
+}
+
+
+bool Menu::isBlocking()
+{ 
+	return m_blocking;
+}
+
+bool Menu::isBlurred()
+{
+	return m_blurred;
+}
+
+
 void Menu::handleEvent(const sf::Event& event)
 {
 	m_widgets->handleEvent(event);
@@ -57,7 +92,7 @@ void Menu::handleEvent(const sf::Event& event)
 	if (event.type == sf::Event::KeyPressed)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
-			m_quit = true;
+			m_quitTop = true;
 	}
 }
 

@@ -108,12 +108,15 @@ void Scene::handleGui(const float deltaTime)
 		m_nextScene = m_overlays.top().getNextScene();
 		m_quit = true;
 	}
-	else if (m_overlays.top().getMasterQuit())
+	else if (m_overlays.top().getQuitAll())
 	{
 		while (!m_overlays.empty())
 			m_overlays.pop();
+
+		if (m_player)
+			m_player->lock(false);
 	}
-	else if (m_overlays.top().getQuit())
+	else if (m_overlays.top().getQuitTop())
 	{
 		m_overlays.pop();
 
@@ -258,6 +261,17 @@ Scene::Scene(const std::string& scenename)
 	d_tPhysics.setFillColor(sf::Color(0, 0, 0));
 	d_tUserlogic.setFillColor(sf::Color(0, 0, 0));
 #endif
+}
+
+
+bool Scene::quit() const
+{
+	return m_quit;
+}
+
+Obj<Scene>&& Scene::nextScene()
+{
+	return std::move(m_nextScene);
 }
 
 

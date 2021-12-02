@@ -6,7 +6,7 @@ class Scene;
 class Deserialiser
 {
 private:
-	Scene* p_scene = nullptr;
+	Scene* p_scene;
 
 	std::vector<std::string> m_entityHandles;
 

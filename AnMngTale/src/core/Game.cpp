@@ -35,17 +35,9 @@ void Game::update()
 	if (m_scene->quit())
 	{
 		if (m_scene->nextScene())
-		{
-			Scene* const buffer = m_scene->nextScene();
-			delete m_scene;
-			m_scene = buffer;
-		}
+			m_scene = m_scene->nextScene();
 		else
-		{
-			delete m_scene;
-			m_scene = nullptr;
 			m_window.close();
-		}
 	}
 }
 
@@ -66,10 +58,10 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 	srand((uint32_t)time(nullptr));
 
 #ifndef MNG_DIST
-	m_scene = new Courtyard();
-	//m_scene = new MainMenu();
+	m_scene = std::make_unique<Courtyard>();
+	//m_scene = std::make_unique<MainMenu>();
 #else
-	m_scene = new MainMenu();
+	m_scene = std::make_unique<MainMenu>();
 #endif
 }
 

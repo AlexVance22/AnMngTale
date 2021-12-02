@@ -48,8 +48,8 @@ protected:
 	std::vector<ParticleSystem> m_particles;
 	std::vector<Script> m_scripts;
 
+	Obj<Scene> m_nextScene = nullptr;
 	std::stack<Menu> m_overlays;
-	Scene* m_nextScene = nullptr;
 	bool m_quit = false;
 
 	std::unique_ptr<b2World> m_physWorld;
@@ -86,10 +86,10 @@ public:
 	Scene(const std::string& scenename);
 	virtual ~Scene() = default;
 
-	bool quit() const { return m_quit; }
-	Scene* nextScene() { return m_nextScene; }
+	bool quit() const;
+	Obj<Scene>&& nextScene();
 
-	template<typename S>
+	template<typename S, typename std::enable_if_t<std::is_base_of<Scene, S>::value>* = nullptr>
 	void loadScene()
 	{
 		m_postfx.setEnabled("blur", true);
@@ -99,7 +99,7 @@ public:
 		p_window->draw(sf::Sprite(m_textures["loadingscreen"]));
 		p_window->display();
 
-		m_nextScene = new S();
+		m_nextScene = std::make_unique<S>();
 		m_quit = true;
 	}
 

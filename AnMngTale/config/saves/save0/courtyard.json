@@ -177,6 +177,6 @@
   ],
 
   "dialogue": [
-    "config/courtyarddia.json"
+    "config/dialogue/courtyard1.json"
   ]
 }

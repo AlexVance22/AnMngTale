@@ -9,7 +9,7 @@ private:
 	sf::RenderWindow m_window;
 	sf::Clock m_clock;
 
-	Scene* m_scene;
+	Obj<Scene> m_scene;
 
 	void update();
 	void render();

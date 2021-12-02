@@ -16,21 +16,21 @@ private:
 	std::unordered_map<std::string, sf::Font> m_fonts;
 
 	sf::RenderWindow* p_window = nullptr;
-	std::stack<Menu>* p_menus;
+	std::stack<Menu>* p_overlays;
 	gui::Root::Ptr m_widgets;
 
 	sf::View m_view;
 
-	bool m_quit = false;
-	bool m_masterQuit = false;
-	Scene* m_nextScene = nullptr;
+	bool m_quitTop = false;
+	bool m_quitAll = false;
+	Obj<Scene> m_nextScene = nullptr;
 
 	bool m_blocking = true;
 	bool m_blurred = false;
 
 public:
-	Menu(sf::RenderWindow* window, std::stack<Menu>* menus, const std::string& filepath);
-	Menu(sf::RenderWindow* window, std::stack<Menu>* menus);
+	Menu(sf::RenderWindow* window, std::stack<Menu>* overlays, const std::string& filepath);
+	Menu(sf::RenderWindow* window, std::stack<Menu>* overlays);
 
 	void loadFromFile(const std::string& filepath);
 
@@ -40,19 +40,19 @@ public:
 		return gui::cast<_Widget>(m_widgets->get(name));
 	}
 
-	template<typename S>
+	template<typename S, typename std::enable_if_t<std::is_base_of<Scene, S>::value>* = nullptr>
 	void setNextScene()
 	{
-		m_nextScene = new S();
+		m_nextScene = std::make_unique<S>();
 	}
-	void scheduleQuit() { m_quit = true; }
+	Obj<Scene>&& getNextScene();
 
-	bool getQuit() { return m_quit; }
-	bool getMasterQuit() { return m_masterQuit; }
-	Scene* getNextScene() { return m_nextScene; }
+	void scheduleQuit();
+	bool getQuitTop();
+	bool getQuitAll();
 
-	bool isBlocking() { return m_blocking; }
-	bool isBlurred() { return m_blurred; }
+	bool isBlocking();
+	bool isBlurred();
 	
 	void handleEvent(const sf::Event& event);
 	void update(const float deltaTime);
