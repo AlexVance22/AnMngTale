@@ -4,6 +4,8 @@
 #include "gui/gui.h"
 #include "gui/callbacks/CBCore.h"
 
+#include "io/JsonUtils.h"
+
 
 void MainMenu::loadFlags()
 {

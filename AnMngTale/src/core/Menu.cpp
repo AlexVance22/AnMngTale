@@ -4,14 +4,10 @@
 #include "core/Scene.h"
 #include "core/Asserts.h"
 #include "core/Profiler.h"
-#include "core/JsonCasts.h"
 
 #include "gui/gui.h"
-
+#include "io/JsonUtils.h"
 #include "global/AudioManager.h"
-
-
-void loadjson(rapidjson::Document& doc, const std::string& filepath);
 
 
 Menu::Menu(sf::RenderWindow* window, std::stack<Menu>* overlays, const std::string& filepath) : p_window(window), p_overlays(overlays)

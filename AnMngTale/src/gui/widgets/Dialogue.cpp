@@ -2,10 +2,8 @@
 #include "Dialogue.h"
 
 #include "core/Asserts.h"
-#include "core/JsonCasts.h"
 
-
-void loadjson(rapidjson::Document& doc, const std::string& filepath);
+#include "io/JsonUtils.h"
 
 
 namespace gui

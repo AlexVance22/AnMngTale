@@ -16,7 +16,7 @@ private:
 	std::unordered_map<std::string, sf::Font> m_fonts;
 
 	sf::RenderWindow* p_window = nullptr;
-	std::stack<Menu>* p_overlays;
+	std::stack<Menu>* p_overlays = nullptr;
 	gui::Root::Ptr m_widgets;
 
 	sf::View m_view;
@@ -34,7 +34,7 @@ public:
 
 	void loadFromFile(const std::string& filepath);
 
-	template<typename _Widget>
+	template<typename _Widget, typename std::enable_if_t<std::is_base_of<gui::Widget, _Widget>::value>* = nullptr>
 	std::shared_ptr<_Widget> getWidget(const std::string& name)
 	{
 		return gui::cast<_Widget>(m_widgets->get(name));

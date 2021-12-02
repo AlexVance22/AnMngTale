@@ -4,20 +4,11 @@
 
 #include "graphics/Camera.h"
 #include "graphics/PostFX.h"
-
-#include "entities/Entity.h"
-#include "physics/BoxTrigger.h"
-
-#include "scripting/Script.h"
-
 #include "graphics/ParticleSystem.h"
 
-
-const char* freadall(const std::string& filepath);
-
-void loadjson(rapidjson::Document& doc, const std::string& filepath);
-
-void dumpjson(const rapidjson::Document& doc, const std::string& filepath);
+#include "entities/Entity.h"
+#include "scripting/Script.h"
+#include "physics/BoxTrigger.h"
 
 
 class Scene

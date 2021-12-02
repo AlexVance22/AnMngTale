@@ -1,5 +1,41 @@
 #include "PCH.h"
-#include "JsonCasts.h"
+#include "JsonUtils.h"
+
+#include "core/Asserts.h"
+
+
+const char* freadall(const std::string& filepath)
+{
+	std::ifstream f(filepath, std::ios::binary);
+	MNG_ASSERT_SLIM(f.is_open());
+	f.seekg(0, std::ios::end);
+	size_t size = f.tellg();
+	f.seekg(0, std::ios::beg);
+	char* buf = new char[size + 1];
+	f.read(buf, size);
+	f.close();
+	buf[size] = '\0';
+
+	return buf;
+}
+
+void loadjson(rapidjson::Document& doc, const std::string& filepath)
+{
+	const char* source = freadall(filepath);
+	MNG_ASSERT_BASIC(!doc.Parse(source).HasParseError());
+	delete[] source;
+}
+
+void dumpjson(const rapidjson::Document& doc, const std::string& filepath)
+{
+	std::ofstream stream(filepath, std::ios::trunc);
+	MNG_ASSERT_SLIM(stream.is_open());
+	rapidjson::StringBuffer sb;
+	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
+	doc.Accept(writer);
+	stream.write(sb.GetString(), sb.GetLength());
+	stream.close();
+}
 
 
 template<>

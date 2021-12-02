@@ -1,11 +1,12 @@
 #include "PCH.h"
 #include "Courtyard.h"
 
-#include "gui/gui.h"
-
 #include "scenes/floors/Floor300.h"
 #include "scenes/outside/Basketball.h"
 #include "scenes/outside/AulaYard.h"
+
+#include "gui/gui.h"
+#include "io/JsonUtils.h"
 
 
 void Courtyard::loadFlags()
@@ -41,15 +42,7 @@ void Courtyard::dumpFlags()
 
 void Courtyard::impl(const float deltaTime)
 {
-	switch (m_state)
-	{
-	case AreaState::INTRO:
-		//if (seq->getSignal() == 0)
-			//menus.push(new NameSelect(&menus));
-		break;
-	case AreaState::DEFAULT:
-		break;
-	}
+
 }
 
 

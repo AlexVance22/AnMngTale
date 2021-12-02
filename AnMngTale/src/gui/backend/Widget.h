@@ -43,7 +43,7 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
-template<typename _Widget>
+template<typename _Widget, typename std::enable_if_t<std::is_base_of<gui::Widget, _Widget>::value>* = nullptr>
 std::shared_ptr<_Widget> cast(Widget::Ptr ptr)
 {
 	return std::dynamic_pointer_cast<_Widget>(ptr);

@@ -3,14 +3,12 @@
 
 #include "core/Scene.h"
 #include "core/Asserts.h"
-#include "core/Profiler.h"
 
 #include "entities/Entity.h"
 #include "entities/Player.h"
 #include "graphics/Camera.h"
 
 #include "gui/callbacks/CBCore.h"
-
 
 #ifdef MNG_DEBUG
 	#define RECOMPILE

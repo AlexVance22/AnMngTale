@@ -4,13 +4,14 @@
 #include "core/Asserts.h"
 #include "core/Profiler.h"
 
-#include "gui/widgets/Button.h"
 #include "gui/callbacks/CBCore.h"
 
 #include "entities/Player.h"
 
-#include "serialisation/Deserialiser.h"
+#include "io/Deserialiser.h"
 
+
+#ifdef MNG_DEBUG
 
 std::string f_to_string(float val, uint32_t prec)
 {
@@ -25,39 +26,7 @@ std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vec)
 	return stream << '[' << vec.x << ", " << vec.y << ']';
 }
 
-
-const char* freadall(const std::string& filepath)
-{
-	std::ifstream f(filepath, std::ios::binary);
-	MNG_ASSERT_SLIM(f.is_open());
-	f.seekg(0, std::ios::end);
-	size_t size = f.tellg();
-	f.seekg(0, std::ios::beg);
-	char* buf = new char[size + 1];
-	f.read(buf, size);
-	f.close();
-	buf[size] = '\0';
-
-	return buf;
-}
-
-void loadjson(rapidjson::Document& doc, const std::string& filepath)
-{
-	const char* source = freadall(filepath);
-	MNG_ASSERT_BASIC(!doc.Parse(source).HasParseError());
-	delete[] source;
-}
-
-void dumpjson(const rapidjson::Document& doc, const std::string& filepath)
-{
-	std::ofstream stream(filepath, std::ios::trunc);
-	MNG_ASSERT_SLIM(stream.is_open());
-	rapidjson::StringBuffer sb;
-	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
-	doc.Accept(writer);
-	stream.write(sb.GetString(), sb.GetLength());
-	stream.close();
-}
+#endif
 
 
 sf::RenderWindow* Scene::p_window;
@@ -204,14 +173,12 @@ void Scene::handleEventDefault(const sf::Event& event)
 		switch (event.key.code)
 		{
 		case sf::Keyboard::Escape:
-			pushMenu("res/menus/quit.json");
-			m_overlays.top().getWidget<gui::Button>("quit")->onClick.bind(&popGame, &m_overlays);
-			m_overlays.top().getWidget<gui::Button>("options")->onClick.bind(&pushOptionsMenu, p_window, &m_overlays);
-			m_overlays.top().getWidget<gui::Button>("resume")->onClick.bind(&Menu::scheduleQuit, &m_overlays.top());
+			pushQuitMenu(p_window, &m_overlays);
 			break;
 		case sf::Keyboard::E:
-			pushMenu("res/menus/agenda.json");
+			pushAgenda(p_window, &m_overlays);
 			break;
+
 		case sf::Keyboard::R:
 #ifdef _DEBUG
 			reloadResources(true);
@@ -219,6 +186,7 @@ void Scene::handleEventDefault(const sf::Event& event)
 			break;
 		}
 		break;
+
 	case sf::Event::MouseButtonPressed:
 #ifdef _DEBUG
 		std::cout << p_window->mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), m_camera) << '\n';
