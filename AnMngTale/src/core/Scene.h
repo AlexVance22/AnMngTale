@@ -10,6 +10,8 @@
 #include "scripting/Script.h"
 #include "physics/BoxTrigger.h"
 
+#include "gui/DialogueHandler.h"
+
 
 class Scene
 {
@@ -28,6 +30,7 @@ protected:
 
 	std::unordered_map<std::string, sf::Texture> m_textures;
 	std::unordered_map<std::string, sf::Shader> m_shaders;
+	std::unordered_map<std::string, sf::Font> m_fonts;
 	std::vector<MatSprite> m_backgroundSprites;
 	std::vector<MatSprite> m_foregroundSprites;
 
@@ -35,9 +38,11 @@ protected:
 	std::vector<std::unique_ptr<Entity>> m_entities;
 	Player* m_player = nullptr;
 
-	std::vector<std::vector<std::string>> m_dialogue;
 	std::vector<ParticleSystem> m_particles;
 	std::vector<Script> m_scripts;
+
+	std::vector<std::vector<std::string>> m_dialogueText;
+	DialogueHandler m_dialogue;
 
 	Obj<Scene> m_nextScene = nullptr;
 	std::stack<Menu> m_overlays;

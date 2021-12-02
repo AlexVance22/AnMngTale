@@ -178,9 +178,7 @@ void Script::opSpeak()
 	uint32_t page;
 	fread(m_stream, page);
 
-	pushDialogue(p_scene->p_window, &p_scene->m_overlays, p_scene->m_dialogue[page]);
-
-	m_speaking = true;
+	p_scene->m_dialogue.begin(p_scene->m_dialogueText[page]);
 }
 void Script::opAnim()
 {
@@ -259,12 +257,7 @@ void Script::update(const float deltaTime)
 
 	if (m_running)
 	{
-		if (m_speaking)
-		{
-			if (p_scene->m_overlays.empty())
-				m_speaking = false;
-		}
-		else if (m_delay < 0)
+		if (m_delay < 0 && !p_scene->m_dialogue.isPlaying())
 		{
 			while (!m_end)
 			{

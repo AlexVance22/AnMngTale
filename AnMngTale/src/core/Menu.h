@@ -27,6 +27,7 @@ private:
 
 	bool m_blocking = true;
 	bool m_blurred = false;
+	bool m_quitOnEsc = true;
 
 public:
 	Menu(sf::RenderWindow* window, std::stack<Menu>* overlays, const std::string& filepath);

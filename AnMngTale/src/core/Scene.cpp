@@ -113,6 +113,8 @@ void Scene::handleGame(const float deltaTime)
 
 	impl(deltaTime);
 
+	m_dialogue.update(deltaTime);
+
 	PROFILE_DEBUG_ONLY_STEP();
 
 	m_physWorld->Step(deltaTime, 6, 2);
@@ -154,19 +156,21 @@ void Scene::handleEvents()
 		}
 		else
 		{
+			m_overlays.top().handleEvent(event);
+
 			if (!m_overlays.top().isBlocking())
 			{
 				handleEventDefault(event);
 				handleEventSpecial(event);
 			}
-
-			m_overlays.top().handleEvent(event);
 		}
 	}
 }
 
 void Scene::handleEventDefault(const sf::Event& event)
 {
+	m_dialogue.handleEvent(event);
+
 	switch (event.type)
 	{
 	case sf::Event::KeyPressed:
@@ -323,6 +327,9 @@ void Scene::render(sf::RenderTarget* target)
 
 	if (m_postfx.guiIncluded)
 	{
+		m_postfx.setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
+		m_postfx.draw(m_dialogue);
+
 		if (!m_overlays.empty())
 			m_overlays.top().render(&m_postfx);
 
@@ -334,6 +341,9 @@ void Scene::render(sf::RenderTarget* target)
 	else
 	{
 		m_postfx.render(target);
+
+		target->setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
+		target->draw(m_dialogue);
 
 		if (!m_overlays.empty())
 			m_overlays.top().render(target);

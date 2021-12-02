@@ -340,7 +340,7 @@ void Deserialiser::loadDialogue(const rapidjson::Value& data)
 {
 	for (const auto& f : data.GetArray())
 	{
-		auto& vec = p_scene->m_dialogue.emplace_back();
+		auto& vec = p_scene->m_dialogueText.emplace_back();
 
 		rapidjson::Document doc;
 		loadjson(doc, f.GetString());
@@ -348,6 +348,14 @@ void Deserialiser::loadDialogue(const rapidjson::Value& data)
 		for (const auto& str : doc.GetArray())
 			vec.emplace_back(str.GetString());
 	}
+
+	MNG_ASSERT_BASIC(p_scene->m_fonts["pixel"].loadFromFile("res/fonts/equipmentpro.ttf"));
+	p_scene->m_dialogue.m_text.setFont(p_scene->m_fonts["pixel"]);
+
+	MNG_ASSERT_BASIC(p_scene->m_textures["dialogue"].loadFromFile("res/textures/gui/dialogue.png"));
+	p_scene->m_dialogue.m_background.setTexture(p_scene->m_textures["dialogue"]);
+
+	p_scene->m_dialogue.setPlaySpeed(40.f);
 }
 
 void Deserialiser::loadScripts(const rapidjson::Value& data)

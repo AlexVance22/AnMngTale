@@ -19,7 +19,6 @@ private:
 	float m_delay = 0.f;
 	bool m_running = false;
 	bool m_end = false;
-	bool m_speaking = false;
 	int32_t m_output = -1;
 
 	std::ifstream m_stream;

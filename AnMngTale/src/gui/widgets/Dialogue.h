@@ -12,6 +12,8 @@ class Dialogue : public TextWidget
 public:
 	using Ptr = std::shared_ptr<Dialogue>;
 
+	Callback onFinish;
+
 private:
 	const std::vector<std::string>* m_alltext;
 
@@ -31,15 +33,13 @@ public:
 		return std::make_shared<Dialogue>();
 	}
 
-	Callback onFinish;
-
-	void setPlaySpeed(float charPerSec);
-	void setText(const std::vector<std::string>& text);
-
 	void load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
 		const std::unordered_map<std::string, sf::Font>& fonts);
 	void loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
 		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset);
+
+	void setPlaySpeed(float charPerSec);
+	void setText(const std::vector<std::string>& text);
 
 	void handleEvent(const sf::Event& event);
 	void update(const float deltaTime);

@@ -15,6 +15,7 @@
 
   "blocking": true,
   "blurred": true,
+  "quit-on-esc": true,
 
   "presets": {
 

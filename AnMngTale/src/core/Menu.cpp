@@ -33,6 +33,7 @@ void Menu::loadFromFile(const std::string& filepath)
 
 	m_blocking = doc["blocking"].IsTrue();
 	m_blurred = doc["blurred"].IsTrue();
+	m_quitOnEsc = doc["quit-on-esc"].IsTrue();
 
 	for (const auto& s : doc["sounds"].GetArray())
 		AudioManager::addSound(s[0].GetString(), s[1].GetString());
@@ -88,7 +89,7 @@ void Menu::handleEvent(const sf::Event& event)
 	if (event.type == sf::Event::KeyPressed)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
-			m_quitTop = true;
+			m_quitTop = m_quitOnEsc;
 	}
 }
 
