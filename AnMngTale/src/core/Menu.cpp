@@ -10,14 +10,14 @@
 #include "global/AudioManager.h"
 
 
-Menu::Menu(sf::RenderWindow* window, std::stack<Menu>* overlays, const std::string& filepath) : p_window(window), p_overlays(overlays)
+Menu::Menu()
 {
-	loadFromFile(filepath);
+
 }
 
-Menu::Menu(sf::RenderWindow* window, std::stack<Menu>* overlays) : p_window(window), p_overlays(overlays)
+Menu::Menu(const std::string& filepath)
 {
-
+	loadFromFile(filepath);
 }
 
 
@@ -33,7 +33,6 @@ void Menu::loadFromFile(const std::string& filepath)
 
 	m_blocking = doc["blocking"].IsTrue();
 	m_blurred = doc["blurred"].IsTrue();
-	m_quitOnEsc = doc["quit-on-esc"].IsTrue();
 
 	for (const auto& s : doc["sounds"].GetArray())
 		AudioManager::addSound(s[0].GetString(), s[1].GetString());
@@ -45,7 +44,7 @@ void Menu::loadFromFile(const std::string& filepath)
 		MNG_ASSERT_BASIC(m_fonts[f[0].GetString()].loadFromFile(f[1].GetString()));
 
 	m_widgets = gui::Root::create();
-	m_widgets->loadPreset(doc["root"], m_textures, m_fonts, doc["presets"]);
+	m_widgets->load(doc["root"], m_textures, m_fonts, doc["presets"]);
 }
 
 
@@ -89,7 +88,7 @@ void Menu::handleEvent(const sf::Event& event)
 	if (event.type == sf::Event::KeyPressed)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
-			m_quitTop = m_quitOnEsc;
+			m_quitTop = true;
 	}
 }
 
@@ -100,10 +99,6 @@ void Menu::update(const float deltaTime)
 
 void Menu::render(sf::RenderTarget* target)
 {
-	if (!target)
-		target = p_window;
-
 	target->setView(m_view);
-
 	target->draw(*m_widgets);
 }

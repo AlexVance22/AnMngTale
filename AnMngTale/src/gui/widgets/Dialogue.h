@@ -24,8 +24,8 @@ private:
 	float m_totaltime = 0.f;
 
 private:
-	bool isEndOfPage();
-	bool isEndOfScript();
+	bool isEndOfPage() const;
+	bool isEndOfScript() const;
 
 public:
 	static Ptr create()
@@ -33,10 +33,8 @@ public:
 		return std::make_shared<Dialogue>();
 	}
 
-	void load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts);
-	void loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset);
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts) override;
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset) override {}
 
 	void setPlaySpeed(float charPerSec);
 	void setText(const std::vector<std::string>& text);

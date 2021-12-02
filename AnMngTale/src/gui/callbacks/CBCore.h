@@ -1,15 +1,15 @@
 #pragma once
 
-class Menu;
+class MenuStack;
 
 
-void pushQuitMenu(sf::RenderWindow* window, std::stack<Menu>* menus);
+void pushQuitMenu(MenuStack* menus, bool playerLocked);
 
-void pushOptionsMenu(sf::RenderWindow* window, std::stack<Menu>* menus);
+void pushOptionsMenu(MenuStack* menus);
 
-void pushFileMenu(sf::RenderWindow* window, std::stack<Menu>* menus, bool* saveData);
+void pushFileMenu(MenuStack* menus, bool* saveData);
 
 
-void pushAgenda(sf::RenderWindow* window, std::stack<Menu>* menus);
+void pushAgenda(MenuStack* menus);
 
-void pushDialogue(sf::RenderWindow* window, std::stack<Menu>* menus, const std::vector<std::string>& text);
+void pushDialogue(MenuStack* menus, const std::vector<std::string>& text);

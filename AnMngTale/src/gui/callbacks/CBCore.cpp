@@ -1,7 +1,7 @@
 #include "PCH.h"
 #include "CBCore.h"
 
-#include "core/Menu.h"
+#include "core/MenuStack.h"
 #include "gui/gui.h"
 
 #include "global/AudioManager.h"
@@ -10,29 +10,29 @@
 #include "scenes/outside/Courtyard.h"
 
 
-void gameStart(std::stack<Menu>* menus, uint8_t save)
+void gameStart(MenuStack* menus, uint8_t save)
 {
 	menus->top().setNextScene<Courtyard>();
 }
 
-void gameEnd(std::stack<Menu>* menus)
+void gameEnd(MenuStack* menus)
 {
 	menus->top().setNextScene<MainMenu>();
 }
 
 
-void pushQuitMenu(sf::RenderWindow* window, std::stack<Menu>* menus)
+void pushQuitMenu(MenuStack* menus, bool playerLocked)
 {
-	menus->emplace(window, menus, "res/menus/quit.json");
+	menus->push("res/menus/quit.json", playerLocked);
 
 	menus->top().getWidget<gui::Button>("resume")->onClick.bind(&Menu::scheduleQuit, &menus->top());
-	menus->top().getWidget<gui::Button>("options")->onClick.bind(&pushOptionsMenu, window, menus);
+	menus->top().getWidget<gui::Button>("options")->onClick.bind(&pushOptionsMenu, menus);
 	menus->top().getWidget<gui::Button>("quit")->onClick.bind(&gameEnd, menus);
 }
 
-void pushOptionsMenu(sf::RenderWindow* window, std::stack<Menu>* menus)
+void pushOptionsMenu(MenuStack* menus)
 {
-	menus->emplace(window, menus, "res/menus/titlescreen/options.json");
+	menus->push("res/menus/titlescreen/options.json");
 
 	auto gvol = menus->top().getWidget<gui::Slider>("global-vol");
 	auto mvol = menus->top().getWidget<gui::Slider>("music-vol");
@@ -58,9 +58,9 @@ void pushOptionsMenu(sf::RenderWindow* window, std::stack<Menu>* menus)
 	back->onClick.bind(&Menu::scheduleQuit, &menus->top());
 }
 
-void pushFileMenu(sf::RenderWindow* window, std::stack<Menu>* menus, bool* saveData)
+void pushFileMenu(MenuStack* menus, bool* saveData)
 {
-	menus->emplace(window, menus, "res/menus/titlescreen/files.json");
+	menus->push("res/menus/titlescreen/files.json");
 
 	auto f1 = menus->top().getWidget<gui::Button>("0");
 	auto f2 = menus->top().getWidget<gui::Button>("1");
@@ -79,14 +79,14 @@ void pushFileMenu(sf::RenderWindow* window, std::stack<Menu>* menus, bool* saveD
 }
 
 
-void pushAgenda(sf::RenderWindow* window, std::stack<Menu>* menus)
+void pushAgenda(MenuStack* menus)
 {
-	menus->emplace(window, menus, "res/menus/agenda.json");
+	menus->push("res/menus/agenda.json");
 }
 
-void pushDialogue(sf::RenderWindow* window, std::stack<Menu>* menus, const std::vector<std::string>& text)
+void pushDialogue(MenuStack* menus, const std::vector<std::string>& text)
 {
-	menus->emplace(window, menus, "res/menus/dialayer.json");
+	menus->push("res/menus/dialayer.json");
 
 	auto d = menus->top().getWidget<gui::Dialogue>("popup");
 

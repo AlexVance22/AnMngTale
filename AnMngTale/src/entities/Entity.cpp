@@ -94,6 +94,11 @@ void Entity::lock(bool locked)
 		m_body->SetLinearVelocity(b2Vec2(0, 0));
 }
 
+bool Entity::isLocked() const
+{
+	return m_locked;
+}
+
 
 void Entity::setPosition(sf::Vector2f position)
 {

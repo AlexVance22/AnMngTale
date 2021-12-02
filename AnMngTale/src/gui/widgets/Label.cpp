@@ -7,8 +7,7 @@
 namespace gui
 {
 
-void Label::load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts)
+void Label::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts)
 {
 	m_text.setString(data["text"].GetString());
 	const auto& pos = data["position"];
@@ -20,8 +19,7 @@ void Label::load(const rapidjson::Value& data, const std::unordered_map<std::str
 	setFont(fonts.at(data["font"].GetString()), data["fontsize"].GetUint());
 }
 
-void Label::loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset)
+void Label::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset)
 {
 	m_text.setString(data["text"].GetString());
 	const auto& pos = data["position"];

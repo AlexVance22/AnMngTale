@@ -2,23 +2,16 @@
 
 #include "gui/widgets/containers/Container.h"
 
-
-//#define BEGIN_MENU(stack, window, filepath) stack.push(std::make_shared<Menu>(window, stack, filepath))
-//#define PUSH_MENU(filepath) p_menus->push(std::make_shared<Menu>(p_window, p_menus, filepath))
-
-
 class Scene;
+
 
 class Menu
 {
 private:
-	std::unordered_map<std::string, sf::Texture> m_textures;
-	std::unordered_map<std::string, sf::Font> m_fonts;
+	TextureMap m_textures;
+	FontMap m_fonts;
 
-	sf::RenderWindow* p_window = nullptr;
-	std::stack<Menu>* p_overlays = nullptr;
 	gui::Root::Ptr m_widgets;
-
 	sf::View m_view;
 
 	bool m_quitTop = false;
@@ -27,11 +20,10 @@ private:
 
 	bool m_blocking = true;
 	bool m_blurred = false;
-	bool m_quitOnEsc = true;
 
 public:
-	Menu(sf::RenderWindow* window, std::stack<Menu>* overlays, const std::string& filepath);
-	Menu(sf::RenderWindow* window, std::stack<Menu>* overlays);
+	Menu();
+	Menu(const std::string& filepath);
 
 	void loadFromFile(const std::string& filepath);
 

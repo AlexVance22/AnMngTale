@@ -62,12 +62,6 @@ void Scene::reloadResources(bool clear)
 }
 
 
-void Scene::pushMenu(const std::string& filepath)
-{
-	m_overlays.emplace(p_window, &m_overlays, filepath);
-}
-
-
 void Scene::handleGui(const float deltaTime)
 {
 	m_overlays.top().update(deltaTime);
@@ -83,17 +77,14 @@ void Scene::handleGui(const float deltaTime)
 			m_overlays.pop();
 
 		if (m_player)
-			m_player->lock(false);
+			m_player->lock(m_overlays.getCachedLock());
 	}
 	else if (m_overlays.top().getQuitTop())
 	{
 		m_overlays.pop();
 
-		if (m_overlays.empty())
-		{
-			if (m_player)
-				m_player->lock(false);
-		}
+		if (m_player && m_overlays.empty())
+			m_player->lock(m_overlays.getCachedLock());
 	}
 }
 
@@ -111,9 +102,9 @@ void Scene::handleGame(const float deltaTime)
 	for (auto& s : m_scripts)
 		s.update(deltaTime);
 
-	impl(deltaTime);
-
 	m_dialogue.update(deltaTime);
+
+	impl(deltaTime);
 
 	PROFILE_DEBUG_ONLY_STEP();
 
@@ -177,10 +168,10 @@ void Scene::handleEventDefault(const sf::Event& event)
 		switch (event.key.code)
 		{
 		case sf::Keyboard::Escape:
-			pushQuitMenu(p_window, &m_overlays);
+			pushQuitMenu(&m_overlays, m_player ? m_player->isLocked() : false);
 			break;
 		case sf::Keyboard::E:
-			pushAgenda(p_window, &m_overlays);
+			pushAgenda(&m_overlays);
 			break;
 
 		case sf::Keyboard::R:
@@ -325,11 +316,11 @@ void Scene::render(sf::RenderTarget* target)
 		m_postfx.draw(rect);
 #endif
 
+	m_postfx.setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
+	m_postfx.draw(m_dialogue);
+
 	if (m_postfx.guiIncluded)
 	{
-		m_postfx.setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
-		m_postfx.draw(m_dialogue);
-
 		if (!m_overlays.empty())
 			m_overlays.top().render(&m_postfx);
 
@@ -341,9 +332,6 @@ void Scene::render(sf::RenderTarget* target)
 	else
 	{
 		m_postfx.render(target);
-
-		target->setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
-		target->draw(m_dialogue);
 
 		if (!m_overlays.empty())
 			m_overlays.top().render(target);

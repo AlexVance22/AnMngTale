@@ -21,22 +21,15 @@ private:
 	void onMouseExit() override;
 
 public:
-	Button() = default;
-
 	static Ptr create()
 	{
 		return std::make_shared<Button>();
 	}
 
-	void setSound(const sf::SoundBuffer& buffer)
-	{
-		m_sound.setBuffer(buffer);
-	}
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts) override;
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset) override;
 
-	void load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts);
-	void loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset);
+	void setSound(const sf::SoundBuffer& buffer);
 
 	void handleEvent(const sf::Event& event);
 };

@@ -30,14 +30,7 @@ Widget::Ptr Container::get(const std::string& name)
 }
 
 
-void Container::load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts)
-{
-
-}
-
-void Container::loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& presets)
+void Container::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& presets)
 {
 	const auto& tex = data["texture"];
 	if (tex.IsNull())
@@ -65,7 +58,7 @@ void Container::loadPreset(const rapidjson::Value& data, const std::unordered_ma
 			if (data["preset"].IsNull())
 				btn->load(data, textures, fonts);
 			else
-				btn->loadPreset(data, textures, fonts, presets["button"][data["preset"].GetString()]);
+				btn->load(data, textures, fonts, presets["button"][data["preset"].GetString()]);
 			m_widgets[name] = btn;
 		}
 		else if (strncmp(type, "label", 32) == 0)
@@ -74,7 +67,7 @@ void Container::loadPreset(const rapidjson::Value& data, const std::unordered_ma
 			if (data["preset"].IsNull())
 				lbl->load(data, textures, fonts);
 			else
-				lbl->loadPreset(data, textures, fonts, presets["label"][data["preset"].GetString()]);
+				lbl->load(data, textures, fonts, presets["label"][data["preset"].GetString()]);
 			m_widgets[name] = lbl;
 		}
 		else if (strncmp(type, "slider", 32) == 0)
@@ -83,7 +76,7 @@ void Container::loadPreset(const rapidjson::Value& data, const std::unordered_ma
 			if (data["preset"].IsNull())
 				slr->load(data, textures, fonts);
 			else
-				slr->loadPreset(data, textures, fonts, presets["slider"][data["preset"].GetString()]);
+				slr->load(data, textures, fonts, presets["slider"][data["preset"].GetString()]);
 			m_widgets[name] = slr;
 		}
 		else if (strncmp(type, "dialogue", 32) == 0)
@@ -95,7 +88,7 @@ void Container::loadPreset(const rapidjson::Value& data, const std::unordered_ma
 		else if (strncmp(type, "container", 32) == 0)
 		{
 			auto cnt = gui::Container::create();
-			cnt->loadPreset(data, textures, fonts, presets);
+			cnt->load(data, textures, fonts, presets);
 			m_widgets[name] = cnt;
 		}
 		else

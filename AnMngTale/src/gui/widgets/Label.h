@@ -20,10 +20,8 @@ public:
 		return std::make_shared<Label>();
 	}
 
-	void load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts);
-	void loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset);
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts) override;
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset) override;
 };
 
 }

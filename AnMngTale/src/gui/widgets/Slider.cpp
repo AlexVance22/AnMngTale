@@ -19,6 +19,23 @@ void Slider::slide(int x)
 }
 
 
+void Slider::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts)
+{
+	const auto& pos = data["position"];
+	const auto& size = data["size"];
+	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
+			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+}
+
+void Slider::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset)
+{
+	const auto& pos = data["position"];
+	const auto& size = preset["size"];
+	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
+			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+}
+
+
 void Slider::setRawValue(float val)
 {
 	const float clamped = std::clamp(val, 0.f, 1.f);
@@ -64,25 +81,6 @@ void Slider::setLayout(sf::Vector2i position, sf::Vector2i size)
 	m_boundingBox = sf::IntRect(position, size);
 
 	m_width = m_boundingBox.width - (int)(m_boundingBox.width * 0.06f) + 1;
-}
-
-
-void Slider::load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts)
-{
-	const auto& pos = data["position"];
-	const auto& size = data["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
-}
-
-void Slider::loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset)
-{
-	const auto& pos = data["position"];
-	const auto& size = preset["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
 }
 
 

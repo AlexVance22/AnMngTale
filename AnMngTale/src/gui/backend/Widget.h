@@ -2,6 +2,9 @@
 
 #include "graphics/Sprite.h"
 
+using TextureMap = std::unordered_map<std::string, sf::Texture>;
+using FontMap = std::unordered_map<std::string, sf::Font>;
+
 
 namespace gui
 {
@@ -25,18 +28,16 @@ protected:
 	virtual void onMouseExit();
 
 public:
-	virtual void load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts) = 0;
-	virtual void loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset) = 0;
+	virtual void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts) = 0;
+	virtual void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset) = 0;
 
 	virtual void setLayout(sf::Vector2i position, sf::Vector2i size);
 
-	void setEnabled(bool enabled) { m_enabled = enabled; }
-	bool isEnabled() { return m_enabled; }
+	void setEnabled(bool enabled);
+	bool isEnabled() const;
 
-	void setVisible(bool visible) { m_visible = visible; }
-	bool isVisible() { return m_visible; }
+	void setVisible(bool visible);
+	bool isVisible() const;
 
 	virtual void handleEvent(const sf::Event& event) = 0;
 	virtual void update(const float deltaTime);

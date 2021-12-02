@@ -34,16 +34,14 @@ public:
 		return std::make_shared<Slider>();
 	}
 
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts) override;
+	void load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset) override;
+
 	void setRawValue(float val);
 	float getRawValue() const;
 
 	void setScaleTarget(float& target, float scale);
 	void setLayout(sf::Vector2i position, sf::Vector2i size) override;
-
-	void load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts) override;
-	void loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-		const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset) override;
 
 	void handleEvent(const sf::Event& event) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

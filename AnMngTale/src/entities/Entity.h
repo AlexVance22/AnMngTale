@@ -34,6 +34,7 @@ public:
 
 	void move(sf::Vector2f direction, const float deltaTime, bool overridePhysics = false);
 	void lock(bool locked);
+	bool isLocked() const;
 
 	void setPosition(sf::Vector2f position);
 	const sf::Vector2f& getPosition() const;

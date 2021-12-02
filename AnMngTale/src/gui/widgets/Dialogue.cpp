@@ -9,33 +9,18 @@
 namespace gui
 {
 
-bool Dialogue::isEndOfPage()
+bool Dialogue::isEndOfPage() const
 {
 	return m_charindex == (*m_alltext)[m_pageindex].size() - 1;
 }
 
-bool Dialogue::isEndOfScript()
+bool Dialogue::isEndOfScript() const
 {
 	return m_pageindex == m_alltext->size();
 }
 
 
-void Dialogue::setPlaySpeed(float charPerSec)
-{
-	m_chartime = 1.f / charPerSec;
-	m_totaltime = m_chartime;
-}
-
-void Dialogue::setText(const std::vector<std::string>& text)
-{
-	m_alltext = &text;
-
-	m_text.setString((*m_alltext)[0][0]);
-}
-
-
-void Dialogue::load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts)
+void Dialogue::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts)
 {
 	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(data["size"]));
 
@@ -51,10 +36,18 @@ void Dialogue::load(const rapidjson::Value& data, const std::unordered_map<std::
 	m_background.setTexture(textures.at(data["texture"].GetString()));
 }
 
-void Dialogue::loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset)
-{
 
+void Dialogue::setPlaySpeed(float charPerSec)
+{
+	m_chartime = 1.f / charPerSec;
+	m_totaltime = m_chartime;
+}
+
+void Dialogue::setText(const std::vector<std::string>& text)
+{
+	m_alltext = &text;
+
+	m_text.setString((*m_alltext)[0][0]);
 }
 
 

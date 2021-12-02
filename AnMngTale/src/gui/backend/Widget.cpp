@@ -27,6 +27,28 @@ void Widget::setLayout(sf::Vector2i position, sf::Vector2i size)
 }
 
 
+void Widget::setEnabled(bool enabled)
+{
+	m_enabled = enabled;
+}
+
+bool Widget::isEnabled() const
+{
+	return m_enabled;
+}
+
+
+void Widget::setVisible(bool visible)
+{
+	m_visible = visible;
+}
+
+bool Widget::isVisible() const
+{
+	return m_visible;
+}
+
+
 void Widget::update(const float deltaTime)
 {
 	m_background.update(deltaTime);

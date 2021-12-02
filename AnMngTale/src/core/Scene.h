@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/Menu.h"
+#include "core/MenuStack.h"
 
 #include "graphics/Camera.h"
 #include "graphics/PostFX.h"
@@ -45,7 +45,7 @@ protected:
 	DialogueHandler m_dialogue;
 
 	Obj<Scene> m_nextScene = nullptr;
-	std::stack<Menu> m_overlays;
+	MenuStack m_overlays;
 	bool m_quit = false;
 
 	std::unique_ptr<b2World> m_physWorld;
@@ -76,7 +76,6 @@ protected:
 
 private:
 	void reloadResources(bool clear = false);
-	void pushMenu(const std::string& filepath);
 
 public:
 	Scene(const std::string& scenename);

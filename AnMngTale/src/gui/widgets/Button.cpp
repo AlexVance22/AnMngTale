@@ -26,8 +26,7 @@ void Button::onMouseExit()
 }
 
 
-void Button::load(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts)
+void Button::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts)
 {
 	m_text.setString(data["text"].GetString());
 
@@ -47,8 +46,7 @@ void Button::load(const rapidjson::Value& data, const std::unordered_map<std::st
 	m_background.setFrameRate(50.f);
 }
 
-void Button::loadPreset(const rapidjson::Value& data, const std::unordered_map<std::string, sf::Texture>& textures,
-	const std::unordered_map<std::string, sf::Font>& fonts, const rapidjson::Value& preset)
+void Button::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset)
 {
 	m_text.setString(data["text"].GetString());
 
@@ -66,6 +64,12 @@ void Button::loadPreset(const rapidjson::Value& data, const std::unordered_map<s
 	m_background.setTexture(textures.at(preset["texture"].GetString()));
 	m_background.animate(preset["animlen"].GetUint(), 2);
 	m_background.setFrameRate(50.f);
+}
+
+
+void Button::setSound(const sf::SoundBuffer& buffer)
+{
+	m_sound.setBuffer(buffer);
 }
 
 
