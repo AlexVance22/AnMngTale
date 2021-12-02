@@ -35,7 +35,10 @@ void Game::update()
 	if (m_scene->quit())
 	{
 		if (m_scene->nextScene())
+		{
 			m_scene = m_scene->nextScene();
+			m_scene->fadein();
+		}
 		else
 			m_window.close();
 	}
@@ -55,11 +58,12 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 {
 	m_window.setVerticalSyncEnabled(true);
 	Scene::p_window = &m_window;
+	Scene::m_fadeBuffer.create(1920, 1080);
 	srand((uint32_t)time(nullptr));
 
 #ifndef MNG_DIST
-	m_scene = std::make_unique<Courtyard>();
-	//m_scene = std::make_unique<MainMenu>();
+	//m_scene = std::make_unique<Courtyard>();
+	m_scene = std::make_unique<MainMenu>();
 #else
 	m_scene = std::make_unique<MainMenu>();
 #endif

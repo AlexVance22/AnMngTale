@@ -26,8 +26,7 @@ void Menu::loadFromFile(const std::string& filepath)
 	rapidjson::Document doc;
 	loadjson(doc, filepath);
 
-	const auto& vSizeData = doc["view"];
-	const sf::Vector2f vSize = JsonToVec2<float>(vSizeData);
+	const sf::Vector2f vSize = JsonToVec2<float>(doc["view"]);
 	m_view.setSize(vSize);
 	m_view.setCenter(vSize * 0.5f);
 
@@ -48,7 +47,12 @@ void Menu::loadFromFile(const std::string& filepath)
 }
 
 
-Obj<Scene>&& Menu::getNextScene()
+bool Menu::hasNextScene() const
+{
+	return m_hasNextScene;
+}
+
+std::future<Obj<Scene>>&& Menu::getNextScene()
 {
 	return std::move(m_nextScene);
 }

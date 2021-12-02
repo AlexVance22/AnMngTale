@@ -13,11 +13,29 @@ void Camera::setStaticTarget(sf::Vector2f target)
 	m_staticTarget = target;
 }
 
+void Camera::moveToTarget()
+{
+	if (m_dynamicTarget)
+		setCenter(*m_dynamicTarget);
+	else
+		setCenter(m_staticTarget);
+}
+
 
 void Camera::setConstraints(sf::Vector2f constraintMin, sf::Vector2f constraintMax)
 {
 	m_constraintMin = constraintMin;
 	m_constraintMax = constraintMax;
+}
+
+void Camera::enableConstraints(bool enable)
+{
+	m_constraintEnabled = enable;
+}
+
+void Camera::setDamping(float damping)
+{
+	m_dampSpeed = 1.f / damping;
 }
 
 

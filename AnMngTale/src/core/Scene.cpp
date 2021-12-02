@@ -30,8 +30,8 @@ std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vec)
 
 
 sf::RenderWindow* Scene::p_window;
-const float Scene::s_physScale = 1.f / 30.f;
 sf::RenderTexture Scene::m_fadeBuffer;
+const float Scene::s_physScale = 1.f / 30.f;
 
 
 void Scene::reloadResources(bool clear)
@@ -66,10 +66,12 @@ void Scene::handleGui(const float deltaTime)
 {
 	m_overlays.top().update(deltaTime);
 
-	if (m_overlays.top().getNextScene())
+	if (m_overlays.top().hasNextScene())
 	{
-		m_nextScene = m_overlays.top().getNextScene();
+		auto next = m_overlays.top().getNextScene();
 		m_quit = true;
+		fadeout();
+		m_nextScene = std::move(next.get());
 	}
 	else if (m_overlays.top().getQuitAll())
 	{
@@ -208,6 +210,9 @@ Scene::Scene(const std::string& scenename)
 {
 	reloadResources();
 
+	m_camera.moveToTarget();
+	m_camera.update(0);
+
 	m_postfx.loadShader("res/shaders/blur.frag", "blur");
 	m_postfx.setEnabled("blur", false);
 
@@ -235,6 +240,35 @@ bool Scene::quit() const
 Obj<Scene>&& Scene::nextScene()
 {
 	return std::move(m_nextScene);
+}
+
+
+void Scene::fadeout()
+{
+	render(&m_fadeBuffer);
+	m_fadeBuffer.display();
+	sf::Sprite sp(m_fadeBuffer.getTexture());
+
+	for (int i = 15; i >= 0; i--)
+	{
+		sp.setColor(sf::Color(16 * i, 16 * i, 16 * i, 255));
+		p_window->draw(sp);
+		p_window->display();
+	}
+}
+
+void Scene::fadein()
+{
+	render(&m_fadeBuffer);
+	m_fadeBuffer.display();
+	sf::Sprite sp(m_fadeBuffer.getTexture());
+
+	for (int i = 0; i < 16; i++)
+	{
+		sp.setColor(sf::Color(16 * i, 16 * i, 16 * i, 255));
+		p_window->draw(sp);
+		p_window->display();
+	}
 }
 
 

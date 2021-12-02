@@ -20,16 +20,11 @@ public:
 
 	void setDynamicTarget(const sf::Vector2f* target);
 	void setStaticTarget(sf::Vector2f target);
+	void moveToTarget();
 
 	void setConstraints(sf::Vector2f constraintMin, sf::Vector2f constraintMax);
-	void enableConstraints(bool enable)
-	{
-		m_constraintEnabled = enable;
-	}
-	void setDamping(float damping)
-	{
-		m_dampSpeed = 1.f / damping;
-	}
+	void enableConstraints(bool enable);
+	void setDamping(float damping);
 	
 	void update(const float deltaTime);
 

@@ -16,6 +16,7 @@ void Deserialiser::loadCamera(const rapidjson::Value& data)
 	p_scene->m_camera.reset(sf::FloatRect(JsonToVec2<float>(data["pos"]), JsonToVec2<float>(data["size"])));
 	p_scene->m_camera.setConstraints(JsonToVec2<float>(constr[0]), JsonToVec2<float>(constr[1]));
 	p_scene->m_camera.enableConstraints(data["constrain"].IsTrue());
+	p_scene->m_camera.setStaticTarget(JsonToVec2<float>(data["static-target"]));
 	p_scene->m_camera.setDamping(5.f);
 }
 
@@ -381,8 +382,6 @@ void Deserialiser::run()
 	const std::string filepath = "config/saves/save" + std::to_string(0) + "/" + p_scene->m_name + ".json";
 	rapidjson::Document doc;
 	loadjson(doc, filepath);
-
-	p_scene->m_textures["loadingscreen"].loadFromFile("res/textures/loading.png");
 
 	loadCamera(doc["camera"]);
 	loadGraphics(doc["graphics"]);

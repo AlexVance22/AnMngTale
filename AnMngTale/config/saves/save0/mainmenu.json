@@ -11,7 +11,7 @@
     "sprites": [
       {
         "texture": "background",
-        "pos": [ 0, -0 ],
+        "pos": [ 0, 0 ],
         "anim": null,
         "layer": "bg",
         "shader": null
@@ -46,7 +46,7 @@
   "camera": {
     "pos": [ 0, 0 ],
     "size": [ 1920, 1080 ],
-    "static-target": [ 0, 0 ],
+    "static-target": [ 960, 540 ],
     "constrain": false,
     "constraints": [
       [ 960, 540 ],

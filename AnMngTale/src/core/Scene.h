@@ -17,6 +17,7 @@ class Scene
 {
 public:
 	static sf::RenderWindow* p_window;
+	static sf::RenderTexture m_fadeBuffer;
 
 	struct MatSprite {
 		Sprite sprite;
@@ -51,8 +52,6 @@ protected:
 	std::unique_ptr<b2World> m_physWorld;
 	const static float s_physScale;
 
-	static sf::RenderTexture m_fadeBuffer;
-
 	Camera m_camera;
 	PostFX m_postfx;
 
@@ -84,18 +83,16 @@ public:
 	bool quit() const;
 	Obj<Scene>&& nextScene();
 
+	void fadeout();
+	void fadein();
+
 	template<typename S, typename std::enable_if_t<std::is_base_of<Scene, S>::value>* = nullptr>
 	void loadScene()
 	{
-		m_postfx.setEnabled("blur", true);
-		render();
-		m_postfx.setEnabled("blur", false);
-
-		p_window->draw(sf::Sprite(m_textures["loadingscreen"]));
-		p_window->display();
-
-		m_nextScene = std::make_unique<S>();
+		std::future<Obj<Scene>> next = std::async(std::launch::async, []() -> Obj<Scene> { return std::make_unique<S>(); });
 		m_quit = true;
+		fadeout();
+		m_nextScene = std::move(next.get());
 	}
 
 	virtual void update(const float deltaTime);

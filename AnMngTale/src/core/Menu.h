@@ -16,7 +16,8 @@ private:
 
 	bool m_quitTop = false;
 	bool m_quitAll = false;
-	Obj<Scene> m_nextScene = nullptr;
+	bool m_hasNextScene = false;
+	std::future<Obj<Scene>> m_nextScene;
 
 	bool m_blocking = true;
 	bool m_blurred = false;
@@ -36,9 +37,11 @@ public:
 	template<typename S, typename std::enable_if_t<std::is_base_of<Scene, S>::value>* = nullptr>
 	void setNextScene()
 	{
-		m_nextScene = std::make_unique<S>();
+		m_nextScene = std::async(std::launch::async, []() -> Obj<Scene> { return std::make_unique<S>(); });
+		m_hasNextScene = true;
 	}
-	Obj<Scene>&& getNextScene();
+	bool hasNextScene() const;
+	std::future<Obj<Scene>>&& getNextScene();
 
 	void scheduleQuit();
 	bool getQuitTop();
