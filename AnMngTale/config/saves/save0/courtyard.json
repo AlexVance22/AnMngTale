@@ -154,7 +154,7 @@
       "physics": null
     },
     {
-      "script-handle": "0",
+      "script-handle": null,
       "type": "static",
       "camera-target": false,
       "pos": [ -87, 145 ],

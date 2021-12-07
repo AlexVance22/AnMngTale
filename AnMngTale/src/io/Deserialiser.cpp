@@ -282,7 +282,10 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 			//entity->simulate(body);
 		}
 
-		m_entityHandles.push_back(e["script-handle"].GetString());
+		if (!e["script-handle"].IsNull())
+			m_entityHandles.push_back(e["script-handle"].GetString());
+		else
+			m_entityHandles.push_back("0");
 		p_scene->m_entities.push_back(std::move(entity));
 	}
 }
@@ -342,7 +345,7 @@ void Deserialiser::loadDialogue(const rapidjson::Value& data)
 	if (!data.IsNull())
 	{
 		rapidjson::Document doc;
-		loadjson(doc, std::string("config/dialogue/eng/") + data.GetString());
+		loadjson(doc, std::string("res/dialogue/eng/") + data.GetString());
 
 		for (const auto& p : doc.GetArray())
 		{
