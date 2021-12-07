@@ -57,7 +57,8 @@ const std::unordered_map<std::string, Script::Op> Script::s_opMap{
 	{ "view", Op::VIEW },
 	{ "speak", Op::SPEAK },
 	{ "anim", Op::ANIM },
-	{ "particle", Op::PARTICLE }
+	{ "particle", Op::PARTICLE },
+	{ "camvel", Op::CAMVEL }
 };
 
 
@@ -125,6 +126,9 @@ void Script::opWait()
 void Script::opPause()
 {
 	m_running = false;
+
+	for (auto& [_, dir] : m_directions)
+		dir = sf::Vector2f(0, 0);
 }
 void Script::opOut()
 {
@@ -192,6 +196,13 @@ void Script::opParticle()
 {
 
 }
+void Script::opCamvel()
+{
+	float vel;
+	fread(m_stream, vel);
+
+	p_scene->m_camera.setDamping(vel);
+}
 
 
 void Script::compile(const std::string& filepath, const std::vector<std::string>& handles)
@@ -253,12 +264,12 @@ void Script::load(const std::string& filepath, Scene* scene)
 
 void Script::update(const float deltaTime)
 {
-	m_output = -1;
-
 	if (m_running)
 	{
 		if (m_delay < 0 && !p_scene->m_dialogue.isPlaying())
 		{
+			m_output = -1;
+
 			while (!m_end)
 			{
 				char opcode = -1;
@@ -301,6 +312,9 @@ void Script::update(const float deltaTime)
 					break;
 				case Op::PARTICLE:
 					opParticle();
+					break;
+				case Op::CAMVEL:
+					opCamvel();
 					break;
 				default:
 					//opInv();

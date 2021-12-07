@@ -31,6 +31,7 @@ public:
 
 	void setPlaySpeed(float charPerSec);
 	void begin(const std::vector<std::string>& text);
+	void stop();
 
 	void handleEvent(const sf::Event& event);
 	void update(const float deltaTime);

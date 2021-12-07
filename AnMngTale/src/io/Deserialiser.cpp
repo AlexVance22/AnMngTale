@@ -339,24 +339,27 @@ void Deserialiser::loadParticles(const rapidjson::Value& data)
 
 void Deserialiser::loadDialogue(const rapidjson::Value& data)
 {
-	for (const auto& f : data.GetArray())
+	if (!data.IsNull())
 	{
-		auto& vec = p_scene->m_dialogueText.emplace_back();
-
 		rapidjson::Document doc;
-		loadjson(doc, f.GetString());
+		loadjson(doc, std::string("config/dialogue/eng/") + data.GetString());
 
-		for (const auto& str : doc.GetArray())
-			vec.emplace_back(str.GetString());
+		for (const auto& p : doc.GetArray())
+		{
+			auto& vec = p_scene->m_dialogueText.emplace_back();
+
+			for (const auto& str : p.GetArray())
+				vec.emplace_back(str.GetString());
+		}
+
+		MNG_ASSERT_BASIC(p_scene->m_fonts["pixel"].loadFromFile("res/fonts/equipmentpro.ttf"));
+		p_scene->m_dialogue.m_text.setFont(p_scene->m_fonts["pixel"]);
+
+		MNG_ASSERT_BASIC(p_scene->m_textures["dialogue"].loadFromFile("res/textures/gui/dialogue.png"));
+		p_scene->m_dialogue.m_background.setTexture(p_scene->m_textures["dialogue"]);
+
+		p_scene->m_dialogue.setPlaySpeed(40.f);
 	}
-
-	MNG_ASSERT_BASIC(p_scene->m_fonts["pixel"].loadFromFile("res/fonts/equipmentpro.ttf"));
-	p_scene->m_dialogue.m_text.setFont(p_scene->m_fonts["pixel"]);
-
-	MNG_ASSERT_BASIC(p_scene->m_textures["dialogue"].loadFromFile("res/textures/gui/dialogue.png"));
-	p_scene->m_dialogue.m_background.setTexture(p_scene->m_textures["dialogue"]);
-
-	p_scene->m_dialogue.setPlaySpeed(40.f);
 }
 
 void Deserialiser::loadScripts(const rapidjson::Value& data)
@@ -366,7 +369,9 @@ void Deserialiser::loadScripts(const rapidjson::Value& data)
 	{
 		Script::compile(data[i]["raw"].GetString(), m_entityHandles);
 		p_scene->m_scripts[i].load(data[i]["bin"].GetString(), p_scene);
-		p_scene->m_triggers[data[i]["trigger"].GetString()].onCollide.bind(&Script::play, &p_scene->m_scripts[i]);
+
+		for (const auto& t : data[i]["trigger"].GetArray())
+			p_scene->m_triggers[t.GetString()].onCollide.bind(&Script::play, &p_scene->m_scripts[i]);
 	}
 }
 

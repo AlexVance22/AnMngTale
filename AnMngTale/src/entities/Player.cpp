@@ -2,6 +2,12 @@
 #include "Player.h"
 
 
+Player::Player()
+{
+	m_speed = 4.f;
+}
+
+
 void Player::update(const float deltaTime)
 {
 	m_sprite.update(deltaTime);

@@ -133,6 +133,14 @@
       ],
 
       "box-triggers": [
+        {
+          "name": "interact",
+          "rect": [ 87, 160, 376, 20 ]
+        },
+        {
+          "name": "stairs",
+          "rect": [ 240, -717, 223, 103 ]
+        }
       ]
     }
   },
@@ -164,7 +172,7 @@
       "script-handle": "player",
       "type": "player",
       "camera-target": true,
-      "pos": [ 250, 150 ],
+      "pos": [ 310, 190 ],
       "size": [ 14, 40 ],
       "texture": "player",
       "locked": false,
@@ -181,6 +189,20 @@
           "size": [ 14, 14 ]
         }
       }
+    },
+    {
+      "script-handle": "c1",
+      "type": "character",
+      "camera-target": false,
+      "pos": [ 300, 80 ],
+      "size": [ 20, 50 ],
+      "texture": "chronodox",
+      "locked": false,
+      "anim": {
+        "frames": [ 4, 5 ],
+        "framerate": 4
+      },
+      "physics": null
     },
     {
       "script-handle": "0",
@@ -238,8 +260,12 @@
   ],
 
   "scripts": [
+    {
+      "raw": "res/scripts/floor3001.txt",
+      "bin": "res/scripts/floor3001.mng",
+      "trigger": [ "interact", "stairs" ]
+    }
   ],
 
-  "dialogue": [
-  ]
+  "dialogue": "floor3001.json"
 }

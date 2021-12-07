@@ -9,7 +9,7 @@ class Scene;
 class Script
 {
 private:
-	enum class Op { WAIT = 0, PAUSE, OUT, PLACE, MOVE, STOP, LOCK, TRACK, VIEW, SPEAK, ANIM, PARTICLE };
+	enum class Op { WAIT = 0, PAUSE, OUT, PLACE, MOVE, STOP, LOCK, TRACK, VIEW, SPEAK, ANIM, PARTICLE, CAMVEL };
 	static const std::unordered_map<std::string, Op> s_opMap;
 	std::vector<Entity*> m_entities;
 	Scene* p_scene = nullptr;
@@ -39,6 +39,7 @@ private:
 	void opSpeak();
 	void opAnim();
 	void opParticle();
+	void opCamvel();
 
 public:
 	static void compile(const std::string& filepath, const std::vector<std::string>& handles);
@@ -51,9 +52,9 @@ public:
 
 	void play() { m_running = true; }
 	void pause() { m_running = false; }
-	bool isEnd() { return m_end; }
+	bool isEnd() const { return m_end; }
 
-	int32_t output() { return m_output; }
+	int32_t output() const { return m_output; }
 
 	void update(const float deltaTime);
 };

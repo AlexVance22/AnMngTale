@@ -63,7 +63,8 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 
 #ifndef MNG_DIST
 	//m_scene = std::make_unique<Courtyard>();
-	m_scene = std::make_unique<MainMenu>();
+	//m_scene = std::make_unique<MainMenu>();
+	m_scene = std::make_unique<Floor300>();
 #else
 	m_scene = std::make_unique<MainMenu>();
 #endif

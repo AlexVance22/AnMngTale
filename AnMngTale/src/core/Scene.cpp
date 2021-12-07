@@ -51,6 +51,8 @@ void Scene::reloadResources(bool clear)
 		m_particles.clear();
 		m_scripts.clear();
 
+		m_dialogue.stop();
+
 #if MNG_DEBUG
 		d_debugChainColliders.clear();
 		d_debugBoxColliders.clear();
@@ -123,7 +125,7 @@ void Scene::handleGame(const float deltaTime)
 	{
 		const sf::FloatRect collider = m_player->getCollider();
 
-		for (auto [_, t] : m_triggers)
+		for (auto& [_, t] : m_triggers)
 			t.triggerOnIntersects(collider);
 	}
 
@@ -173,7 +175,7 @@ void Scene::handleEventDefault(const sf::Event& event)
 			pushQuitMenu(&m_overlays, m_player ? m_player->isLocked() : false);
 			break;
 		case sf::Keyboard::E:
-			pushAgenda(&m_overlays);
+			//pushAgenda(&m_overlays);
 			break;
 
 		case sf::Keyboard::R:

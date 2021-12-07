@@ -36,9 +36,22 @@ void DialogueHandler::setPlaySpeed(float charPerSec)
 
 void DialogueHandler::begin(const std::vector<std::string>& text)
 {
+	stop();
+
 	m_alltext = &text;
 
-	m_text.setString((*m_alltext)[0][0]);
+	m_text.setString(text[0][0]);
+}
+
+void DialogueHandler::stop()
+{
+	m_alltext = nullptr;
+
+	m_text.setString("");
+
+	m_pageindex = 0;
+	m_charindex = 0;
+	m_totaltime = 0.f;
 }
 
 

@@ -19,7 +19,7 @@ protected:
 	sf::Vector2f m_colliderSize;
 
 	bool m_locked = false;
-	float m_speed = 4.f;
+	float m_speed = 3.f;
 
 #ifdef MNG_DEBUG
 	sf::RectangleShape m_debugCollider;

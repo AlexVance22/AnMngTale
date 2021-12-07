@@ -172,11 +172,9 @@
     {
       "raw": "res/scripts/courtyard1.txt",
       "bin": "res/scripts/courtyard1.mng",
-      "trigger": "interact"
+      "trigger": [ "interact" ]
     }
   ],
 
-  "dialogue": [
-    "config/dialogue/courtyard1.json"
-  ]
+  "dialogue": "courtyard1.json"
 }

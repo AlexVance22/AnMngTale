@@ -1,0 +1,26 @@
+lock player true
+camvel 200.0
+view -150.0 -1200.0
+speak 0
+camvel 20.0
+view 50.0 -50.0
+speak 1
+
+track player
+camvel 5.0
+out 0
+pause
+
+lock player false
+move c1 0.0 -1.0
+wait 7.5
+move c1 1.0 -1.0
+wait 1.5
+out 1
+pause
+
+lock player true
+speak 2
+lock player false
+move c1 1.0 0.0
+wait 2.0

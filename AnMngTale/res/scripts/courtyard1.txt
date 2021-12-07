@@ -4,11 +4,11 @@ wait 1.5
 speak 0
 track c1
 move c1 1.0 0.0
-wait 1.5
+wait 2.0
 move c1 1.0 -1.0
 wait 0.5
 move c1 0.0 -1.0
-wait 0.5
+wait 0.8
 lock player false
 track player
 wait 0.5
