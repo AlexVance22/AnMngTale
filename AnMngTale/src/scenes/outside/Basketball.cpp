@@ -7,11 +7,6 @@ void Basketball::loadFlags()
 
 }
 
-void Basketball::manageFlags()
-{
-
-}
-
 void Basketball::dumpFlags()
 {
 

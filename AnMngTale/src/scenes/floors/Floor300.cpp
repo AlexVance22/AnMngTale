@@ -9,11 +9,6 @@ void Floor300::loadFlags()
 
 }
 
-void Floor300::manageFlags()
-{
-
-}
-
 void Floor300::dumpFlags()
 {
 

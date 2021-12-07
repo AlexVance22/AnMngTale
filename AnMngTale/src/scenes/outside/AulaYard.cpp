@@ -7,11 +7,6 @@ void AulaYard::loadFlags()
 
 }
 
-void AulaYard::manageFlags()
-{
-
-}
-
 void AulaYard::dumpFlags()
 {
 

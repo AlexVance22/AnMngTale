@@ -41,8 +41,9 @@ Courtyard::Courtyard() : Scene("courtyard")
 	m_triggers["entrance"].onCollide.bind(&Scene::loadScene<Floor300>, this);
 	m_triggers["basketball"].onCollide.bind(&Scene::loadScene<Basketball>, this);
 	m_triggers["aulayard"].onCollide.bind(&Scene::loadScene<AulaYard>, this);
+}
 
-	//{ 312, 200 }, { 240, 135 }
-	//{ 390, 202 }, { 240, 135 }
-	//{ 200, 50 }, { 200, 50 }
+Courtyard::~Courtyard()
+{
+	dumpFlags();
 }

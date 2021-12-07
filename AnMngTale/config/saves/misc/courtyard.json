@@ -11,5 +11,11 @@
         ],
       
         "dialogue": "courtyard1.json"
+    },
+
+    {
+        "particles": [],
+        "scripts": [],
+        "dialogue": null
     }
 ]

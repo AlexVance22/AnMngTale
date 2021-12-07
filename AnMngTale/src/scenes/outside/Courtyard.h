@@ -13,4 +13,5 @@ private:
 
 public:
 	Courtyard();
+	~Courtyard();
 };

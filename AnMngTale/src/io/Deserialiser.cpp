@@ -383,6 +383,14 @@ Deserialiser::Deserialiser(Scene* scene) : p_scene(scene)
 }
 
 
+#define LOAD_MODULE(name, func) \
+	loadjson(doc, "config/saves/" name "/" + sname + ".json"); \
+	if (doc[m_state].IsUint()) \
+		func(doc[doc[m_state].GetUint()]); \
+	else \
+		func(doc[m_state])
+
+
 void Deserialiser::run()
 {
 	std::string sname = p_scene->m_name;
@@ -394,23 +402,24 @@ void Deserialiser::run()
 
 	p_scene->m_state = m_state;
 
-	loadjson(doc, "config/saves/camera/" + sname + ".json");
-	loadCamera(doc[m_state]);
-
-	loadjson(doc, "config/saves/graphics/" + sname + ".json");
-	loadGraphics(doc[m_state]);
-
-	loadjson(doc, "config/saves/physics/" + sname + ".json");
-	loadPhysics(doc[m_state]);
-
-	loadjson(doc, "config/saves/audio/" + sname + ".json");
-	loadSounds(doc[m_state]);
-
-	loadjson(doc, "config/saves/entities/" + sname + ".json");
-	loadEntities(doc[m_state]);
+	LOAD_MODULE("camera", loadCamera);
+	LOAD_MODULE("graphics", loadGraphics);
+	LOAD_MODULE("physics", loadPhysics);
+	LOAD_MODULE("audio", loadSounds);
+	LOAD_MODULE("entities", loadEntities);
 
 	loadjson(doc, "config/saves/misc/" + sname + ".json");
-	loadParticles(doc[m_state]["particles"]);
-	loadScripts(doc[m_state]["scripts"]);
-	loadDialogue(doc[m_state]["dialogue"]);
+
+	if (doc[m_state].IsUint())
+	{
+		loadParticles(doc[doc[m_state].GetUint()]["particles"]);
+		loadScripts(doc[doc[m_state].GetUint()]["scripts"]);
+		loadDialogue(doc[doc[m_state].GetUint()]["dialogue"]);
+	}
+	else
+	{
+		loadParticles(doc[m_state]["particles"]);
+		loadScripts(doc[m_state]["scripts"]);
+		loadDialogue(doc[m_state]["dialogue"]);
+	}
 }
