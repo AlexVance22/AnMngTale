@@ -25,9 +25,8 @@ public:
 	};
 
 protected:
-	enum class AreaState { INTRO, DEFAULT, EXPO, BUILD, CLIMAX };
-	AreaState m_state = AreaState::INTRO;
 	const std::string m_name;
+	uint32_t m_state = 0;
 
 	std::unordered_map<std::string, sf::Texture> m_textures;
 	std::unordered_map<std::string, sf::Shader> m_shaders;

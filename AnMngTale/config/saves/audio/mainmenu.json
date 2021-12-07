@@ -1,0 +1,11 @@
+[
+  {
+    "track": {
+      "title": "Title",
+      "file": "res/sounds/songs/Title.wav",
+      "force-reset": false
+    },
+
+    "effects": []
+  }
+]

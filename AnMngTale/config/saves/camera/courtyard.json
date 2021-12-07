@@ -1,0 +1,23 @@
+[
+    {
+        "pos": [ 10, 115 ],
+        "size": [ 480, 270 ],
+        "static-target": [ 190, 190 ],
+        "constrain": true,
+        "constraints": [
+            [ 190, 135 ],
+            [ 275, 190 ]
+        ]
+    },
+    
+    {
+        "pos": [ 10, 115 ],
+        "size": [ 480, 270 ],
+        "static-target": [ 190, 190 ],
+        "constrain": true,
+        "constraints": [
+            [ -1785, 80 ],
+            [ 2086, 3240 ]
+        ]
+    }
+]

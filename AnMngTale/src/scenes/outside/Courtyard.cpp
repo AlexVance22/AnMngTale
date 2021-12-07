@@ -17,26 +17,16 @@ void Courtyard::loadFlags()
 void Courtyard::dumpFlags()
 {
 	rapidjson::Document doc;
-	loadjson(doc, "config/saves/save0/scenes/courtyard.json");
+	loadjson(doc, "config/saves/state0.json");
 
 	switch (m_state)
 	{
-	case AreaState::INTRO: {
-		auto& constr = doc["camera"]["constraints"];
-		constr[0][0].SetInt(-1785);
-		constr[0][1].SetInt(80);
-		constr[1][0].SetInt(2086);
-		constr[1][1].SetInt(3240);
-
-		auto& boxes = doc["physics"]["statics"]["boxes"];
-		boxes.Erase(&boxes[5]);
-		boxes.Erase(&boxes[6]);
-
-		doc["state"].SetInt(doc["state"].GetInt() + 1);
-		break; }
+	case 0:
+		doc["courtyard"].SetUint(1);
+		break;
 	}
 
-	dumpjson(doc, "config/saves/save0/scenes/courtyard.json");
+	dumpjson(doc, "config/saves/state0.json");
 }
 
 

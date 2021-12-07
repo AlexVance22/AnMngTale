@@ -24,16 +24,16 @@ void Floor300::impl(const float deltaTime)
 {
 	switch (m_state)
 	{
-	case AreaState::INTRO:
+	case 0:
 		for (const auto& script : m_scripts)
 		{
 			if (script.output() == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-				m_triggers["interact"].reset();
+				m_triggers["interact1"].reset();
 			if (script.output() == 1)
-				m_triggers["stairs"].reset();
+				m_triggers["interact2"].reset();
 		}
 		break;
-	case AreaState::DEFAULT:
+	case 1:
 		break;
 	}
 

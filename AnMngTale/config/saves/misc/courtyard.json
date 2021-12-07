@@ -1,0 +1,15 @@
+[
+    {
+        "particles": [],
+      
+        "scripts": [
+            {
+                "raw": "res/scripts/courtyard1.txt",
+                "bin": "res/scripts/courtyard1.mng",
+                "trigger": [ "interact" ]
+            }
+        ],
+      
+        "dialogue": "courtyard1.json"
+    }
+]

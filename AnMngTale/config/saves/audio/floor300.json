@@ -1,0 +1,11 @@
+[
+    {
+        "track": {
+            "title": "Optimism",
+            "file": "res/sounds/songs/Optimism.wav",
+            "force-reset": false
+        },
+        
+        "effects": []
+    }
+]

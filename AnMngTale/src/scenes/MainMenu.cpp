@@ -11,10 +11,10 @@ void MainMenu::loadFlags()
 {
 	for (size_t i = 0; i < 3; i++)
 	{
-		std::string filepath = "config/saves/save" + std::to_string(i) + "/core.json";
+		std::string filepath = "config/saves/state" + std::to_string(i) + ".json";
 		rapidjson::Document doc;
 		loadjson(doc, filepath.c_str());
-		m_isActiveSave[i] = doc["active"].IsTrue();
+		m_isActiveSave[i] = doc["begun"].IsTrue();
 	}
 }
 

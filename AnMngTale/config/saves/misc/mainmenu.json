@@ -1,0 +1,20 @@
+[
+    {
+        "particles": [
+            {
+                "bounds": [ 0, 0, 1920, 1080 ],
+                "mode": "snow",
+                "gen-rate": 10,
+                "base-size": [ 2, 2 ],
+                "rand-size": [ 10, 10 ],
+                "shrink-rate": 0.5,
+                "color": [ 255, 100, 0, 255 ],
+                "texture": null
+            }
+        ],
+        
+        "scripts": [],
+        
+        "dialogue": null
+    }
+]

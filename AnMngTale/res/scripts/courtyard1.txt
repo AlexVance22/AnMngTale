@@ -2,6 +2,7 @@ lock player true
 view 220.0 120.0
 wait 1.5
 speak 0
+camvel 40.0
 track c1
 move c1 1.0 0.0
 wait 2.0
@@ -10,5 +11,6 @@ wait 0.5
 move c1 0.0 -1.0
 wait 0.8
 lock player false
+camvel 5.0
 track player
 wait 0.5

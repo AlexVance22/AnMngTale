@@ -8,6 +8,8 @@ class Deserialiser
 private:
 	Scene* p_scene;
 
+	uint32_t m_state;
+
 	std::vector<std::string> m_entityHandles;
 
 private:

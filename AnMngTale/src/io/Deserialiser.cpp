@@ -65,9 +65,7 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 {
 	p_scene->m_physWorld = std::make_unique<b2World>(b2Vec2(0, 0));
 
-	const auto& statics = data["statics"];
-
-	for (const auto& box : statics["boxes"].GetArray())
+	for (const auto& box : data["boxes"].GetArray())
 	{
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_staticBody;
@@ -96,7 +94,7 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 		body->CreateFixture(&fixtureDef);
 	}
 
-	for (const auto& chain : statics["chains"].GetArray())
+	for (const auto& chain : data["chains"].GetArray())
 	{
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_staticBody;
@@ -133,7 +131,7 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 		body->CreateFixture(&fixtureDef);
 	}
 
-	for (const auto& bt : statics["box-triggers"].GetArray())
+	for (const auto& bt : data["box-triggers"].GetArray())
 	{
 		p_scene->m_triggers[bt["name"].GetString()] = BoxTrigger(JsonToRect(bt["rect"]));
 
@@ -387,16 +385,32 @@ Deserialiser::Deserialiser(Scene* scene) : p_scene(scene)
 
 void Deserialiser::run()
 {
-	const std::string filepath = "config/saves/save" + std::to_string(0) + "/" + p_scene->m_name + ".json";
-	rapidjson::Document doc;
-	loadjson(doc, filepath);
+	std::string sname = p_scene->m_name;
 
-	loadCamera(doc["camera"]);
-	loadGraphics(doc["graphics"]);
-	loadPhysics(doc["physics"]);
-	loadSounds(doc["sounds"]);
-	loadEntities(doc["entities"]);
-	loadParticles(doc["particles"]);
-	loadScripts(doc["scripts"]);
-	loadDialogue(doc["dialogue"]);
+	rapidjson::Document doc;
+	loadjson(doc, "config/saves/state0.json");
+
+	m_state = doc[sname.c_str()].GetUint();
+
+	p_scene->m_state = m_state;
+
+	loadjson(doc, "config/saves/camera/" + sname + ".json");
+	loadCamera(doc[m_state]);
+
+	loadjson(doc, "config/saves/graphics/" + sname + ".json");
+	loadGraphics(doc[m_state]);
+
+	loadjson(doc, "config/saves/physics/" + sname + ".json");
+	loadPhysics(doc[m_state]);
+
+	loadjson(doc, "config/saves/audio/" + sname + ".json");
+	loadSounds(doc[m_state]);
+
+	loadjson(doc, "config/saves/entities/" + sname + ".json");
+	loadEntities(doc[m_state]);
+
+	loadjson(doc, "config/saves/misc/" + sname + ".json");
+	loadParticles(doc[m_state]["particles"]);
+	loadScripts(doc[m_state]["scripts"]);
+	loadDialogue(doc[m_state]["dialogue"]);
 }
