@@ -3,7 +3,7 @@
 
 #include "scenes/MainMenu.h"
 #include "scenes/outside/Courtyard.h"
-#include "scenes/floors/Floor300.h"
+#include "scenes/floors/Floor400.h"
 
 #include "global/Data.h"
 
@@ -62,9 +62,9 @@ Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 	srand((uint32_t)time(nullptr));
 
 #ifndef MNG_DIST
-	//m_scene = std::make_unique<Courtyard>();
+	m_scene = std::make_unique<Courtyard>();
 	//m_scene = std::make_unique<MainMenu>();
-	m_scene = std::make_unique<Floor300>();
+	//m_scene = std::make_unique<Floor400>();
 #else
 	m_scene = std::make_unique<MainMenu>();
 #endif

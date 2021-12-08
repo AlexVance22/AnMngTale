@@ -1,0 +1,41 @@
+#include "PCH.h"
+#include "Floor500.h"
+
+#include "entities/Player.h"
+
+
+void Floor500::loadFlags()
+{
+
+}
+
+void Floor500::dumpFlags()
+{
+
+}
+
+
+void Floor500::impl(const float deltaTime)
+{
+	switch (m_state)
+	{
+	case 0:
+		for (const auto& script : m_scripts)
+		{
+
+		}
+		break;
+	case 1:
+		break;
+	}
+
+	sf::Vector2f playerRelTex = (m_player->getPosition() + m_player->getSize() * 0.5f) - m_topLayerPos;
+	sf::Vector2f normalised(playerRelTex.x / m_topLayerSize.x, playerRelTex.y / m_topLayerSize.y);
+	m_shaders["xray"].setUniform("player_position", normalised);
+}
+
+
+Floor500::Floor500() : Scene("floor500")
+{
+
+}

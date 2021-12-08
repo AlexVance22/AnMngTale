@@ -27,6 +27,7 @@ public:
 protected:
 	const std::string m_name;
 	uint32_t m_state = 0;
+	bool m_progress = false;
 
 	std::unordered_map<std::string, sf::Texture> m_textures;
 	std::unordered_map<std::string, sf::Shader> m_shaders;
@@ -77,7 +78,7 @@ private:
 
 public:
 	Scene(const std::string& scenename);
-	virtual ~Scene() = default;
+	~Scene();
 
 	bool quit() const;
 	Obj<Scene>&& nextScene();

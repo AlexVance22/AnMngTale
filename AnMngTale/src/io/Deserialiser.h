@@ -13,6 +13,7 @@ private:
 	std::vector<std::string> m_entityHandles;
 
 private:
+	void loadAssets(const rapidjson::Value& data);
 	void loadCamera(const rapidjson::Value& data);
 	void loadGraphics(const rapidjson::Value& data);
 	void loadPhysics(const rapidjson::Value& data);

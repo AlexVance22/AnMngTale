@@ -1,0 +1,42 @@
+[
+    {
+        "textures": [
+            [ "background", "res/textures/locations/floor400/main_base.png" ],
+            [ "top", "res/textures/locations/floor400/main_top.png" ],
+
+            [ "glow", "res/textures/misc/door_glow.png" ],
+        
+            [ "chronodox", "res/textures/characters/chronodox.png" ],
+            [ "player", "res/textures/characters/player.png" ]
+        ],
+    
+        "shaders": [
+            {
+                "name": "xray",
+                "path": "res/shaders/xray.frag",
+                "type": 2,
+                "texture": true
+            }
+        ]
+    },
+
+    {
+        "textures": [
+            [ "background", "res/textures/locations/floor400/main_base.png" ],
+            [ "top", "res/textures/locations/floor400/main_top.png" ],
+
+            [ "glow", "res/textures/misc/door_glow.png" ],
+        
+            [ "player", "res/textures/characters/player.png" ]
+        ],
+    
+        "shaders": [
+            {
+                "name": "xray",
+                "path": "res/shaders/xray.frag",
+                "type": 2,
+                "texture": true
+            }
+        ]
+    }
+]

@@ -1,0 +1,21 @@
+[
+    {
+        "particles": [],
+
+        "scripts": [
+            {
+                "raw": "res/scripts/floor4001.txt",
+                "bin": "res/scripts/floor4001.mng",
+                "trigger": [ "interact1", "interact2" ]
+            }
+        ],
+
+        "dialogue": "floor4001.json"
+    },
+
+    {
+        "particles": [],
+        "scripts": [],
+        "dialogue": null
+    }
+]

@@ -1,0 +1,7 @@
+lock player true
+speak 0
+lock player false
+move c1 0.0 -1.0
+wait 7.0
+move c1 1.0 -1.0
+wait 1.0

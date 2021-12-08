@@ -1,0 +1,10 @@
+[
+    {
+        "textures": [
+            [ "background", "res/textures/locations/outside/cave.png" ],
+            [ "player", "res/textures/characters/player.png" ]
+        ],
+
+        "shaders": []
+    }
+]

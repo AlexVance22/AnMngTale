@@ -37,13 +37,6 @@
             "anim": null,
             "layer": "fg",
             "shader": "xray"
-        },
-        {
-            "texture": "glass",
-            "pos": [ 16, 211 ],
-            "anim": null,
-            "layer": "fg",
-            "shader": null
         }
     ],
 

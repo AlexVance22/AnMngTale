@@ -6,44 +6,31 @@
 #include "scenes/outside/AulaYard.h"
 
 #include "gui/gui.h"
-#include "io/JsonUtils.h"
-
-
-void Courtyard::loadFlags()
-{
-
-}
-
-void Courtyard::dumpFlags()
-{
-	rapidjson::Document doc;
-	loadjson(doc, "config/saves/state0.json");
-
-	switch (m_state)
-	{
-	case 0:
-		doc["courtyard"].SetUint(1);
-		break;
-	}
-
-	dumpjson(doc, "config/saves/state0.json");
-}
 
 
 void Courtyard::impl(const float deltaTime)
 {
-
+	switch (m_state)
+	{
+	case 0:
+		if (m_scripts[0].isEnd())
+			m_progress = true;
+		break;
+	}
 }
 
 
 Courtyard::Courtyard() : Scene("courtyard")
 {
-	m_triggers["entrance"].onCollide.bind(&Scene::loadScene<Floor300>, this);
-	m_triggers["basketball"].onCollide.bind(&Scene::loadScene<Basketball>, this);
-	m_triggers["aulayard"].onCollide.bind(&Scene::loadScene<AulaYard>, this);
-}
-
-Courtyard::~Courtyard()
-{
-	dumpFlags();
+	switch (m_state)
+	{
+	case 0:
+		m_triggers["entrance"].onCollide.bind(&Scene::loadScene<Floor300>, this);
+		break;
+	case 1:
+		m_triggers["entrance"].onCollide.bind(&Scene::loadScene<Floor300>, this);
+		m_triggers["basketball"].onCollide.bind(&Scene::loadScene<Basketball>, this);
+		m_triggers["aulayard"].onCollide.bind(&Scene::loadScene<AulaYard>, this);
+		break;
+	}
 }

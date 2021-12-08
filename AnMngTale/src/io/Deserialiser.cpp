@@ -9,6 +9,19 @@
 #include "global/AudioManager.h"
 
 
+void Deserialiser::loadAssets(const rapidjson::Value& data)
+{
+	for (const auto& tex : data["textures"].GetArray())
+		MNG_ASSERT_BASIC(p_scene->m_textures[tex[0].GetString()].loadFromFile(tex[1].GetString()));
+
+	for (const auto& sha : data["shaders"].GetArray())
+	{
+		MNG_ASSERT_BASIC(p_scene->m_shaders[sha["name"].GetString()].loadFromFile(sha["path"].GetString(), (sf::Shader::Type)sha["type"].GetUint()));
+		if (sha["texture"].IsTrue())
+			p_scene->m_shaders[sha["name"].GetString()].setUniform("texture", sf::Shader::CurrentTexture);
+	}
+}
+
 void Deserialiser::loadCamera(const rapidjson::Value& data)
 {
 	const auto& constr = data["constraints"];
@@ -22,16 +35,7 @@ void Deserialiser::loadCamera(const rapidjson::Value& data)
 
 void Deserialiser::loadGraphics(const rapidjson::Value& data)
 {
-	for (const auto& tex : data["textures"].GetArray())
-		MNG_ASSERT_BASIC(p_scene->m_textures[tex[0].GetString()].loadFromFile(tex[1].GetString()));
-	for (const auto& sha : data["shaders"].GetArray())
-	{
-		MNG_ASSERT_BASIC(p_scene->m_shaders[sha["name"].GetString()].loadFromFile(sha["path"].GetString(), (sf::Shader::Type)sha["type"].GetUint()));
-		if (sha["texture"].IsTrue())
-			p_scene->m_shaders[sha["name"].GetString()].setUniform("texture", sf::Shader::CurrentTexture);
-	}
-
-	for (const auto& spr : data["sprites"].GetArray())
+	for (const auto& spr : data.GetArray())
 	{
 		Scene::MatSprite* s = nullptr;
 		const char* layer = spr["layer"].GetString();
@@ -402,6 +406,7 @@ void Deserialiser::run()
 
 	p_scene->m_state = m_state;
 
+	LOAD_MODULE("assets", loadAssets);
 	LOAD_MODULE("camera", loadCamera);
 	LOAD_MODULE("graphics", loadGraphics);
 	LOAD_MODULE("physics", loadPhysics);

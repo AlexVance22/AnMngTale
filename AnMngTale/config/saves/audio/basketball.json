@@ -1,0 +1,14 @@
+[
+    {
+        "track": null,
+    
+        "effects": [
+            {
+                "name": "birds",
+                "file": "res/sounds/effects/birds.wav",
+                "force-reset": false,
+                "rand-start": true
+            }
+        ]
+    }
+]

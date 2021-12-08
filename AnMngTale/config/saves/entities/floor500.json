@@ -1,0 +1,26 @@
+[
+    [
+        {
+            "script-handle": "player",
+            "type": "player",
+            "camera-target": true,
+            "pos": [ 430, -530 ],
+            "size": [ 14, 40 ],
+            "texture": "player",
+            "locked": false,
+            "anim": {
+                "frames": [ 4, 5 ],
+                "framerate": 4
+            },
+            "physics": {
+                "offset": [ 7, 33 ],
+                "type": "dynamic",
+                "density": 2,
+                "shape": {
+                    "type": "box",
+                    "size": [ 14, 14 ]
+                }
+            }
+        }
+    ]
+]

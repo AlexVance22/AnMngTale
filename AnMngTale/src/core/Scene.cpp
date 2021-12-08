@@ -9,6 +9,7 @@
 #include "entities/Player.h"
 
 #include "io/Deserialiser.h"
+#include "io/JsonUtils.h"
 
 
 #ifdef MNG_DEBUG
@@ -179,7 +180,7 @@ void Scene::handleEventDefault(const sf::Event& event)
 			break;
 
 		case sf::Keyboard::R:
-#ifdef _DEBUG
+#ifdef MNG_DEBUG
 			reloadResources(true);
 #endif
 			break;
@@ -187,8 +188,8 @@ void Scene::handleEventDefault(const sf::Event& event)
 		break;
 
 	case sf::Event::MouseButtonPressed:
-#ifdef _DEBUG
-		std::cout << p_window->mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), m_camera) << '\n';
+#ifdef MNG_DEBUG
+			std::cout << p_window->mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), m_camera) << '\n';
 #endif
 		break;
 	}
@@ -231,6 +232,19 @@ Scene::Scene(const std::string& scenename)
 	d_tPhysics.setFillColor(sf::Color(0, 0, 0));
 	d_tUserlogic.setFillColor(sf::Color(0, 0, 0));
 #endif
+}
+
+Scene::~Scene()
+{
+	if (m_progress)
+	{
+		rapidjson::Document doc;
+		loadjson(doc, "config/saves/state0.json");
+
+		doc[m_name.c_str()].SetUint(m_state + 1);
+
+		dumpjson(doc, "config/saves/state0.json");
+	}
 }
 
 
