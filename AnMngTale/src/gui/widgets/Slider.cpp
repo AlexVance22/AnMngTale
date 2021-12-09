@@ -1,12 +1,16 @@
 #include "PCH.h"
 #include "Slider.h"
 
+#include "io/JsonUtils.h"
+
 
 namespace gui
 {
 
-void Slider::slide(int x)
+bool Slider::slide(int x)
 {
+	const float cache = m_value;
+
 	const int local = x - m_boundingBox.left;
 	const int clamped = std::clamp(local, 0, (int)m_width - 1);
 	m_value = (float)clamped / (float)m_width;
@@ -14,25 +18,21 @@ void Slider::slide(int x)
 	if (m_target)
 		*m_target = m_value * m_scale;
 
-	m_background.setPosition((float)(m_boundingBox.left + local), (float)m_boundingBox.top);
-	shape.setPosition((float)(m_boundingBox.left + local), (float)m_boundingBox.top);
+	m_background.setPosition((float)(m_boundingBox.left + clamped), (float)m_boundingBox.top);
+	shape.setPosition((float)(m_boundingBox.left + clamped), (float)m_boundingBox.top);
+
+	return cache != m_value;
 }
 
 
 void Slider::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts)
 {
-	const auto& pos = data["position"];
-	const auto& size = data["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(data["size"]));
 }
 
 void Slider::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset)
 {
-	const auto& pos = data["position"];
-	const auto& size = preset["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(preset["size"]));
 }
 
 
@@ -92,8 +92,8 @@ void Slider::handleEvent(const sf::Event& event)
 		if (m_boundingBox.contains(event.mouseButton.x, event.mouseButton.y))
 		{
 			m_held = true;
-			slide(event.mouseButton.x);
-			onValueChange();
+			if (slide(event.mouseButton.x))
+				onValueChange();
 		}
 		break;
 	case sf::Event::MouseButtonReleased:
@@ -102,8 +102,8 @@ void Slider::handleEvent(const sf::Event& event)
 	case sf::Event::MouseMoved:
 		if (m_held)
 		{
-			slide(event.mouseMove.x);
-			onValueChange();
+			if (slide(event.mouseMove.x))
+				onValueChange();
 		}
 		break;
 	}

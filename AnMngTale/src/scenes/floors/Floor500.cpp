@@ -4,28 +4,11 @@
 #include "entities/Player.h"
 
 
-void Floor500::loadFlags()
-{
-
-}
-
-void Floor500::dumpFlags()
-{
-
-}
-
-
 void Floor500::impl(const float deltaTime)
 {
 	switch (m_state)
 	{
 	case 0:
-		for (const auto& script : m_scripts)
-		{
-
-		}
-		break;
-	case 1:
 		break;
 	}
 

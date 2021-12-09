@@ -1,29 +1,50 @@
 #include "PCH.h"
 #include "Game.h"
 
+#include "Asserts.h"
+
+#include "global/AudioManager.h"
+#include "global/Data.h"
+
 #include "scenes/MainMenu.h"
 #include "scenes/outside/Courtyard.h"
 #include "scenes/floors/Floor400.h"
 
-#include "global/Data.h"
 
-#include "scripting/Script.h"
 
-#define OVERRIDE
-
-#ifdef MNG_DEBUG
+#ifndef MNG_DIST
 	#define SCREENSPACE sf::Style::Default
-#endif
-#ifdef MNG_RELEASE
-	#ifndef OVERRIDE
-		#define SCREENSPACE sf::Style::Fullscreen
-	#else
-		#define SCREENSPACE sf::Style::Default
-	#endif
-#endif
-#ifdef MNG_DIST
+#else
 	#define SCREENSPACE sf::Style::Fullscreen
 #endif
+
+
+void Game::loadSession()
+{
+	std::ifstream stream("config/startup.ini");
+	MNG_ASSERT_SLIM(stream.is_open());
+
+	float gvol, mvol, evol;
+	stream >> gvol >> mvol >> evol;
+
+	AudioManager::setGlobalVolume(gvol);
+	AudioManager::setMusicVolume(mvol);
+	AudioManager::setEffectVolume(evol);
+
+	stream >> Data::language;
+}
+
+void Game::dumpSession()
+{
+	std::ofstream stream("config/startup.ini");
+	MNG_ASSERT_SLIM(stream.is_open());
+
+	stream << AudioManager::getGlobalVolume() << '\n'
+			<< AudioManager::getMusicVolume() << '\n'
+			<< AudioManager::getEffectVolume() << '\n';
+
+	stream << Data::language;
+}
 
 
 void Game::update()
@@ -57,17 +78,27 @@ void Game::render()
 Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
 {
 	m_window.setVerticalSyncEnabled(true);
-	Scene::p_window = &m_window;
-	Scene::m_fadeBuffer.create(1920, 1080);
+
 	srand((uint32_t)time(nullptr));
 
+	Scene::m_fadeBuffer.create(1920, 1080);
+	Scene::p_window = &m_window;
+
+	loadSession();
+
+
 #ifndef MNG_DIST
-	m_scene = std::make_unique<Courtyard>();
-	//m_scene = std::make_unique<MainMenu>();
+	//m_scene = std::make_unique<Courtyard>();
+	m_scene = std::make_unique<MainMenu>();
 	//m_scene = std::make_unique<Floor400>();
 #else
 	m_scene = std::make_unique<MainMenu>();
 #endif
+}
+
+Game::~Game()
+{
+	dumpSession();
 }
 
 

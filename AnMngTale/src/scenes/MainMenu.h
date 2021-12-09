@@ -6,14 +6,11 @@
 class MainMenu : public Scene
 {
 private:
-	void loadFlags();
-	void dumpFlags();
+	bool m_isActiveSave[3] = { 0 };
 
+private:
 	void impl(const float deltaTime) override;
 
 public:
 	MainMenu();
-
-private:
-	bool m_isActiveSave[3] = { 0 };
 };

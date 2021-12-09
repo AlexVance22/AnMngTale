@@ -4,26 +4,13 @@
 #include "entities/Player.h"
 
 
-void Floor400::loadFlags()
-{
-
-}
-
-void Floor400::dumpFlags()
-{
-
-}
-
-
 void Floor400::impl(const float deltaTime)
 {
 	switch (m_state)
 	{
 	case 0:
-		for (const auto& script : m_scripts)
-		{
-			
-		}
+		if (m_scripts[0].output() == 0)
+			m_progress = true;
 		break;
 	case 1:
 		break;

@@ -72,6 +72,7 @@ void Scene::handleGui(const float deltaTime)
 	if (m_overlays.top().hasNextScene())
 	{
 		auto next = m_overlays.top().getNextScene();
+		m_progress = false;
 		m_quit = true;
 		fadeout();
 		m_nextScene = std::move(next.get());
@@ -239,11 +240,11 @@ Scene::~Scene()
 	if (m_progress)
 	{
 		rapidjson::Document doc;
-		loadjson(doc, "config/saves/state0.json");
+		loadjson(doc, "config/state0.json");
 
 		doc[m_name.c_str()].SetUint(m_state + 1);
 
-		dumpjson(doc, "config/saves/state0.json");
+		dumpjson(doc, "config/state0.json");
 	}
 }
 

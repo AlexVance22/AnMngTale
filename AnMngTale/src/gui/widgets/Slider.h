@@ -26,7 +26,7 @@ private:
 	bool m_held = false;
 
 private:
-	void slide(int x);
+	bool slide(int x);
 
 public:
 	static Ptr create()

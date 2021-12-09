@@ -388,7 +388,7 @@ Deserialiser::Deserialiser(Scene* scene) : p_scene(scene)
 
 
 #define LOAD_MODULE(name, func) \
-	loadjson(doc, "config/saves/" name "/" + sname + ".json"); \
+	loadjson(doc, "config/states/" name "/" + sname + ".json"); \
 	if (doc[m_state].IsUint()) \
 		func(doc[doc[m_state].GetUint()]); \
 	else \
@@ -400,7 +400,7 @@ void Deserialiser::run()
 	std::string sname = p_scene->m_name;
 
 	rapidjson::Document doc;
-	loadjson(doc, "config/saves/state0.json");
+	loadjson(doc, "config/state0.json");
 
 	m_state = doc[sname.c_str()].GetUint();
 
@@ -413,7 +413,7 @@ void Deserialiser::run()
 	LOAD_MODULE("audio", loadSounds);
 	LOAD_MODULE("entities", loadEntities);
 
-	loadjson(doc, "config/saves/misc/" + sname + ".json");
+	loadjson(doc, "config/states/misc/" + sname + ".json");
 
 	if (doc[m_state].IsUint())
 	{

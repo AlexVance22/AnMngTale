@@ -130,10 +130,6 @@
         ],
     
         "box-triggers": [
-            { 
-                "name": "library",
-                "rect": [ -14, -52, 50, -35 ]
-            },
             {
                 "name": "bathroom1",
                 "rect": [ 459, -960, 4, 86 ]
@@ -165,6 +161,13 @@
             {
                 "name": "basketball",
                 "rect": [ 459, -1450, 4, 86 ]
+            }
+        ],
+
+        "slope-triggers": [
+            { 
+                "name": "library",
+                "points": [ [ -14, -52 ], [ 50, -35 ] ]
             }
         ]
     }

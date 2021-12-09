@@ -11,11 +11,16 @@ private:
 
 	Obj<Scene> m_scene;
 
+private:
+	void loadSession();
+	void dumpSession();
+
 	void update();
 	void render();
 
 public:
 	Game();
+	~Game();
 
 	void run();
 };
