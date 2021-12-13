@@ -17,7 +17,9 @@
                 "type": 2,
                 "texture": true
             }
-        ]
+        ],
+
+        "fonts": []
     },
 
     {
@@ -37,6 +39,8 @@
                 "type": 2,
                 "texture": true
             }
-        ]
+        ],
+
+        "fonts": []
     }
 ]

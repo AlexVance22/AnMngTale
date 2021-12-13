@@ -9,9 +9,13 @@
 #include "scenes/MainMenu.h"
 #include "scenes/outside/Courtyard.h"
 
+#include "io/Deserialiser.h"
+
 
 void gameStart(MenuStack* menus, uint8_t save)
 {
+	Deserialiser::activeFile = save;
+
 	menus->top().setNextScene<Courtyard>();
 }
 

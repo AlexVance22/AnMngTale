@@ -7,9 +7,7 @@ class Deserialiser
 {
 private:
 	Scene* p_scene;
-
 	uint32_t m_state = 0;
-
 	std::vector<std::string> m_entityHandles;
 
 private:
@@ -22,6 +20,9 @@ private:
 	void loadParticles(const rapidjson::Value& data);
 	void loadDialogue(const rapidjson::Value& data);
 	void loadScripts(const rapidjson::Value& data);
+
+public:
+	static uint32_t activeFile;
 
 public:
 	Deserialiser(Scene* scene);

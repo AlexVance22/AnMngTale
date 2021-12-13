@@ -9,6 +9,9 @@
 #include "global/AudioManager.h"
 
 
+uint32_t Deserialiser::activeFile = 0;
+
+
 void Deserialiser::loadAssets(const rapidjson::Value& data)
 {
 	for (const auto& tex : data["textures"].GetArray())
@@ -400,7 +403,7 @@ void Deserialiser::run()
 	std::string sname = p_scene->m_name;
 
 	rapidjson::Document doc;
-	loadjson(doc, "config/state0.json");
+	loadjson(doc, "config/state" + std::to_string(activeFile) + ".json");
 
 	m_state = doc[sname.c_str()].GetUint();
 

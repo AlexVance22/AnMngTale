@@ -3,4 +3,3 @@
 
 
 std::string Data::language;
-uint32_t Data::activeFile;

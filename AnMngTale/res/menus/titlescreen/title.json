@@ -1,15 +1,32 @@
 {
-  "sounds": [
-    [ "mouse_hover", "res/sounds/mouse_hover.wav" ]
-  ],
-
   "textures": [
-    [ "menu", "res/textures/gui/menus/title.png" ],
-    [ "button", "res/textures/gui/widgets/button.png" ]
+    {
+      "name": "menu",
+      "file": "res/textures/gui/menus/title.png",
+      "shared": false
+
+    },
+    {
+      "name": "button",
+      "file": "res/textures/gui/widgets/button.png",
+      "shared": true
+    }
+  ],
+  
+  "sounds": [
+    {
+      "name": "mouse_hover",
+      "file": "res/sounds/mouse_hover.wav",
+      "shared": true
+    }
   ],
 
   "fonts": [
-    [ "cambria", "res/fonts/cambria.ttf" ]
+    {
+      "name": "cambria",
+      "file": "res/fonts/cambria.ttf",
+      "shared": true
+    }
   ],
 
   "view": [ 1920, 1080 ],

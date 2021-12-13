@@ -6,7 +6,9 @@
 class MenuStack
 {
 private:
-	std::unordered_map<std::string, sf::Texture> m_universalTextures;
+	TextureMap m_sharedTextures;
+	FontMap m_sharedFonts;
+
 	std::stack<Menu> m_stack;
 
 	bool m_cachePlayerLocked = false;

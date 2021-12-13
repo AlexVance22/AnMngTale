@@ -5,6 +5,8 @@
             [ "player", "res/textures/characters/player.png" ]
         ],
 
-        "shaders": []
+        "shaders": [],
+
+        "fonts": []
     }
 ]

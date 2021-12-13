@@ -1,0 +1,42 @@
+{
+  "sounds": [],
+
+  "textures": [
+    [ "background", "res/textures/gui/menus/agenda.png" ]
+    [ "button", "res/textures/gui/widgets/button.png" ]
+  ],
+  
+  "fonts": [
+    [ "cambria", "res/fonts/freestylescript.ttf" ]
+  ],
+  
+  "view": [ 480, 270 ],
+  
+  "blocking": false,
+  "blurred": true,
+  "quit-on-esc": true,
+  
+  "presets": {
+  
+    "label": {
+  
+      "entry": {
+        "font": "cambria",
+        "fontsize": 25
+      }
+    }
+  },
+  
+  "root": {
+  
+    "color": [ 0, 0, 0, 0 ],
+    "texture": "background",
+    "font": "cambria",
+    "pos": [ 0, 0 ],
+    "size": [ 480, 270 ],
+  
+    "children": {
+
+    }
+  }
+}

@@ -9,7 +9,9 @@
             [ "player", "res/textures/characters/player.png" ]
         ],
     
-        "shaders": []
+        "shaders": [],
+
+        "fonts": []
     },
 
     {
@@ -21,6 +23,8 @@
             [ "player", "res/textures/characters/player.png" ]
         ],
     
-        "shaders": []
+        "shaders": [],
+
+        "fonts": []
     }
 ]

@@ -1,6 +1,9 @@
 #include "PCH.h"
 #include "Floor400.h"
 
+#include "Floor300.h"
+#include "Floor500.h"
+
 #include "entities/Player.h"
 
 
@@ -24,5 +27,19 @@ void Floor400::impl(const float deltaTime)
 
 Floor400::Floor400() : Scene("floor400")
 {
+	switch (m_state)
+	{
+	case 0:
+		//m_triggers["classroom"].onCollide.bind(&Scene::loadScene<Classroom>, this);
+		break;
+	case 1:
+		//m_triggers["classroom"].onCollide.bind(&Scene::loadScene<Classroom>, this);
 
+		m_triggers["f300top"].onCollide.bind(&Scene::loadScene<Floor300>, this);
+		m_triggers["f300bot"].onCollide.bind(&Scene::loadScene<Floor300>, this);
+
+		m_triggers["f500top"].onCollide.bind(&Scene::loadScene<Floor500>, this);
+		m_triggers["f500bot"].onCollide.bind(&Scene::loadScene<Floor500>, this);
+		break;
+	}
 }

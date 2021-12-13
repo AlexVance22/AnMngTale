@@ -5,6 +5,8 @@
 
 #include "core/Asserts.h"
 
+#include "io/JsonUtils.h"
+
 
 namespace gui
 {
@@ -30,15 +32,13 @@ void Button::load(const rapidjson::Value& data, const TextureMap& textures, cons
 {
 	m_text.setString(data["text"].GetString());
 
-	const auto& pos = data["position"];
-	const auto& size = data["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(data["size"]));
 
 	MNG_ASSERT_SLIM(fonts.find(data["font"].GetString()) != fonts.end());
 	setFont(fonts.at(data["font"].GetString()), data["fontsize"].GetUint());
 
-	m_sound.setBuffer(AudioManager::getSound(data["sound"].GetString()));
+	if (!data["sound"].IsNull())
+		m_sound.setBuffer(AudioManager::getSound(data["sound"].GetString()));
 
 	MNG_ASSERT_SLIM(textures.find(data["texture"].GetString()) != textures.end());
 	m_background.setTexture(textures.at(data["texture"].GetString()));
@@ -50,15 +50,13 @@ void Button::load(const rapidjson::Value& data, const TextureMap& textures, cons
 {
 	m_text.setString(data["text"].GetString());
 
-	const auto& pos = data["position"];
-	const auto& size = preset["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(preset["size"]));
 
 	MNG_ASSERT_SLIM(fonts.find(preset["font"].GetString()) != fonts.end());
 	setFont(fonts.at(preset["font"].GetString()), preset["fontsize"].GetUint());
 
-	m_sound.setBuffer(AudioManager::getSound(preset["sound"].GetString()));
+	if (!preset["sound"].IsNull())
+		m_sound.setBuffer(AudioManager::getSound(preset["sound"].GetString()));
 
 	MNG_ASSERT_SLIM(textures.find(preset["texture"].GetString()) != textures.end());
 	m_background.setTexture(textures.at(preset["texture"].GetString()));
@@ -90,13 +88,10 @@ void Button::handleEvent(const sf::Event& event)
 				onMouseHover();
 			}
 		}
-		else
+		else if (m_hovered)
 		{
-			if (m_hovered)
-			{
-				m_hovered = false;
-				onMouseExit();
-			}
+			m_hovered = false;
+			onMouseExit();
 		}
 		break;
 	}

@@ -2,6 +2,8 @@
 
 #include "gui/widgets/containers/Container.h"
 
+
+class MenuStack;
 class Scene;
 
 
@@ -22,11 +24,13 @@ private:
 	bool m_blocking = true;
 	bool m_blurred = false;
 
+	MenuStack* p_container = nullptr;
+
 public:
 	Menu();
-	Menu(const std::string& filepath);
+	Menu(const std::string& filepath, MenuStack* stack);
 
-	void loadFromFile(const std::string& filepath);
+	void loadFromFile(const std::string& filepath, MenuStack* stack);
 
 	template<typename _Widget, typename std::enable_if_t<std::is_base_of<gui::Widget, _Widget>::value>* = nullptr>
 	std::shared_ptr<_Widget> getWidget(const std::string& name)

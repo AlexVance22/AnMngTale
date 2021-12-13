@@ -3,6 +3,8 @@
 
 #include "core/Asserts.h"
 
+#include "io/JsonUtils.h"
+
 
 namespace gui
 {
@@ -10,10 +12,8 @@ namespace gui
 void Label::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts)
 {
 	m_text.setString(data["text"].GetString());
-	const auto& pos = data["position"];
-	const auto& size = data["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+
+	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(data["size"]));
 
 	MNG_ASSERT_SLIM(fonts.find(data["font"].GetString()) != fonts.end());
 	setFont(fonts.at(data["font"].GetString()), data["fontsize"].GetUint());
@@ -22,10 +22,8 @@ void Label::load(const rapidjson::Value& data, const TextureMap& textures, const
 void Label::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& preset)
 {
 	m_text.setString(data["text"].GetString());
-	const auto& pos = data["position"];
-	const auto& size = preset["size"];
-	setLayout(sf::Vector2i(pos[0].GetInt(), pos[1].GetInt()),
-			  sf::Vector2i(size[0].GetInt(), size[1].GetInt()));
+
+	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(preset["size"]));
 
 	MNG_ASSERT_SLIM(fonts.find(preset["font"].GetString()) != fonts.end());
 	setFont(fonts.at(preset["font"].GetString()), preset["fontsize"].GetUint());

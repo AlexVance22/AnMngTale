@@ -6,14 +6,6 @@
     
         "shaders": [],
     
-        "sprites": [
-            {
-                "texture": "background",
-                "pos": [ 0, 0 ],
-                "anim": null,
-                "layer": "bg",
-                "shader": null
-            }
-        ]
+        "fonts": []
     }
 ]

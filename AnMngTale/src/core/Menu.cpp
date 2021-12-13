@@ -4,6 +4,7 @@
 #include "core/Scene.h"
 #include "core/Asserts.h"
 #include "core/Profiler.h"
+#include "core/MenuStack.h"
 
 #include "gui/gui.h"
 #include "io/JsonUtils.h"
@@ -15,14 +16,16 @@ Menu::Menu()
 
 }
 
-Menu::Menu(const std::string& filepath)
+Menu::Menu(const std::string& filepath, MenuStack* stack)
 {
-	loadFromFile(filepath);
+	loadFromFile(filepath, stack);
 }
 
 
-void Menu::loadFromFile(const std::string& filepath)
+void Menu::loadFromFile(const std::string& filepath, MenuStack* stack)
 {
+	p_container = stack;
+
 	rapidjson::Document doc;
 	loadjson(doc, filepath);
 
@@ -33,14 +36,23 @@ void Menu::loadFromFile(const std::string& filepath)
 	m_blocking = doc["blocking"].IsTrue();
 	m_blurred = doc["blurred"].IsTrue();
 
-	for (const auto& s : doc["sounds"].GetArray())
-		AudioManager::addSound(s[0].GetString(), s[1].GetString());
-
 	for (const auto& t : doc["textures"].GetArray())
-		MNG_ASSERT_BASIC(m_textures[t[0].GetString()].loadFromFile(t[1].GetString()));
+	{
+		//if (t["shared"].IsFalse() || p_container->empty())
+			MNG_ASSERT_BASIC(m_textures[t["name"].GetString()].loadFromFile(t["file"].GetString()));
+	}
+
+	for (const auto& s : doc["sounds"].GetArray())
+	{
+		if (s["shared"].IsFalse() || p_container->empty())
+			AudioManager::addSound(s["name"].GetString(), s["file"].GetString());
+	}
 
 	for (const auto& f : doc["fonts"].GetArray())
-		MNG_ASSERT_BASIC(m_fonts[f[0].GetString()].loadFromFile(f[1].GetString()));
+	{
+		//if (f["shared"].IsFalse() || p_container->empty())
+			MNG_ASSERT_BASIC(m_fonts[f["name"].GetString()].loadFromFile(f["file"].GetString()));
+	}
 
 	m_widgets = gui::Root::create();
 	m_widgets->load(doc["root"], m_textures, m_fonts, doc["presets"]);

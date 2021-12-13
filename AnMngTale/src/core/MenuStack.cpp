@@ -9,7 +9,7 @@ void MenuStack::push(const std::string& filepath, bool playerLocked)
 	if (m_stack.empty())
 		m_cachePlayerLocked = playerLocked;
 
-	m_stack.emplace(filepath);
+	m_stack.emplace(filepath, this);
 }
 
 void MenuStack::pop()

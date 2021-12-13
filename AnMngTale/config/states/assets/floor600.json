@@ -1,8 +1,8 @@
 [
     {
         "textures": [
-            [ "background", "res/textures/locations/floor400/main_base.png" ],
-            [ "top", "res/textures/locations/floor400/main_top.png" ],
+            [ "background", "res/textures/locations/floor600/main_base.png" ],
+            [ "top", "res/textures/locations/floor600/main_top.png" ],
 
             [ "glow", "res/textures/misc/door_glow.png" ],
         
@@ -16,6 +16,8 @@
                 "type": 2,
                 "texture": true
             }
-        ]
+        ],
+
+        "fonts": []
     }
 ]
