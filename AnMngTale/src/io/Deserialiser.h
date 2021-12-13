@@ -19,6 +19,7 @@ private:
 	void loadEntities(const rapidjson::Value& data);
 	void loadParticles(const rapidjson::Value& data);
 	void loadDialogue(const rapidjson::Value& data);
+	void loadTasks(const rapidjson::Value& data);
 	void loadScripts(const rapidjson::Value& data);
 
 public:

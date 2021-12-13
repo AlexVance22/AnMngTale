@@ -40,7 +40,7 @@ void Deserialiser::loadGraphics(const rapidjson::Value& data)
 {
 	for (const auto& spr : data.GetArray())
 	{
-		Scene::MatSprite* s = nullptr;
+		Sprite* s = nullptr;
 		const char* layer = spr["layer"].GetString();
 		if (strncmp(layer, "bg", 8) == 0)
 			s = &p_scene->m_backgroundSprites.emplace_back();
@@ -48,22 +48,22 @@ void Deserialiser::loadGraphics(const rapidjson::Value& data)
 			s = &p_scene->m_foregroundSprites.emplace_back();
 		MNG_ASSERT_SLIM(s);
 
-		s->sprite.setPosition(JsonToVec2<float>(spr["pos"]));
+		s->setPosition(JsonToVec2<float>(spr["pos"]));
 		MNG_ASSERT_SLIM(p_scene->m_textures.find(spr["texture"].GetString()) != p_scene->m_textures.end());
-		s->sprite.setTexture(p_scene->m_textures[spr["texture"].GetString()]);
+		s->setTexture(p_scene->m_textures[spr["texture"].GetString()]);
 		if (!spr["anim"].IsNull())
 		{
 			const auto& dims = spr["anim"]["dims"];
-			s->sprite.animate(dims[0].GetUint(), dims[1].GetUint());
-			s->sprite.setFrameRate(spr["anim"]["framerate"].GetFloat());
-			s->sprite.setLoop(spr["anim"]["loop"].IsTrue());
-			s->sprite.setIsPlaying(spr["anim"]["play"].IsTrue());
+			s->animate(dims[0].GetUint(), dims[1].GetUint());
+			s->setFrameRate(spr["anim"]["framerate"].GetFloat());
+			s->setLoop(spr["anim"]["loop"].IsTrue());
+			s->setIsPlaying(spr["anim"]["play"].IsTrue());
 		}
 		const auto& sha = spr["shader"];
 		if (!sha.IsNull())
 		{
 			MNG_ASSERT_SLIM(p_scene->m_shaders.find(sha.GetString()) != p_scene->m_shaders.end());
-			s->states.shader = &p_scene->m_shaders[sha.GetString()];
+			s->setShader(p_scene->m_shaders[sha.GetString()]);
 		}
 	}
 }
@@ -263,9 +263,7 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 				fixturedef.shape = &s;
 				body->CreateFixture(&fixturedef);
 
-				const sf::FloatRect collider(JsonToVec2<float>(phys["offset"]), JsonToVec2<float>(shape["size"]));
-
-				entity->simulate(body, collider);
+				entity->simulate(body, sf::FloatRect(JsonToVec2<float>(phys["offset"]), JsonToVec2<float>(shape["size"])));
 			}
 			/*
 			if (strncmp(stype, "polygon", 32) == 0)
@@ -354,10 +352,10 @@ void Deserialiser::loadDialogue(const rapidjson::Value& data)
 
 		for (const auto& p : doc.GetArray())
 		{
-			auto& vec = p_scene->m_dialogueText.emplace_back();
+			auto& que = p_scene->m_dialogue.m_alltext.emplace_back();
 
 			for (const auto& str : p.GetArray())
-				vec.emplace_back(str.GetString());
+				que.emplace_back(str.GetString());
 		}
 
 		MNG_ASSERT_BASIC(p_scene->m_fonts["pixel"].loadFromFile("res/fonts/equipmentpro.ttf"));
@@ -367,6 +365,31 @@ void Deserialiser::loadDialogue(const rapidjson::Value& data)
 		p_scene->m_dialogue.m_background.setTexture(p_scene->m_textures["dialogue"]);
 
 		p_scene->m_dialogue.setPlaySpeed(40.f);
+	}
+}
+
+void Deserialiser::loadTasks(const rapidjson::Value& data)
+{
+	if (!data.IsNull())
+	{
+		/*
+		rapidjson::Document doc;
+		loadjson(doc, std::string("res/dialogue/eng/") + data.GetString());
+
+		for (const auto& p : doc.GetArray())
+		{
+			auto& que = p_scene->m_dialogue.m_alltext.emplace_back();
+
+			for (const auto& str : p.GetArray())
+				que.emplace_back(str.GetString());
+		}
+		*/
+
+		MNG_ASSERT_BASIC(p_scene->m_fonts["hand"].loadFromFile("res/fonts/freestylescript.ttf"));
+		p_scene->m_dialogue.m_text.setFont(p_scene->m_fonts["hand"]);
+
+		//MNG_ASSERT_BASIC(p_scene->m_textures["dialogue"].loadFromFile("res/textures/gui/dialogue.png"));
+		//p_scene->m_dialogue.m_background.setTexture(p_scene->m_textures["dialogue"]);
 	}
 }
 
@@ -415,6 +438,7 @@ void Deserialiser::run()
 	LOAD_MODULE("physics", loadPhysics);
 	LOAD_MODULE("audio", loadSounds);
 	LOAD_MODULE("entities", loadEntities);
+	//LOAD_MODULE("tasks", loadTasks);
 
 	loadjson(doc, "config/states/misc/" + sname + ".json");
 

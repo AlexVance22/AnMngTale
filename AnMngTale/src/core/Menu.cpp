@@ -36,6 +36,9 @@ void Menu::loadFromFile(const std::string& filepath, MenuStack* stack)
 	m_blocking = doc["blocking"].IsTrue();
 	m_blurred = doc["blurred"].IsTrue();
 
+	for (const auto& k : doc["quitkeys"].GetArray())
+		m_quitKeys.insert((sf::Keyboard::Key)k.GetInt());
+
 	for (const auto& t : doc["textures"].GetArray())
 	{
 		//if (t["shared"].IsFalse() || p_container->empty())
@@ -103,7 +106,10 @@ void Menu::handleEvent(const sf::Event& event)
 
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::Escape)
+		//sf::Keyboard::Escape 36
+		//sf::Keyboard::E 4
+
+		if (m_quitKeys.find(event.key.code) != m_quitKeys.end())
 			m_quitTop = true;
 	}
 }

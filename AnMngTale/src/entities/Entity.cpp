@@ -33,9 +33,7 @@ void Entity::simulate(b2Body* body, sf::FloatRect collider)
 
 sf::FloatRect Entity::getCollider() const
 {
-	return sf::FloatRect(m_position.x + m_colliderOffset.x - m_colliderSize.x * 0.5f,
-						 m_position.y + m_colliderOffset.y - m_colliderSize.y * 0.5f,
-						 m_colliderSize.x, m_colliderSize.y);
+	return sf::FloatRect(m_position + m_colliderOffset - m_colliderSize * 0.5f, m_colliderSize);
 }
 
 void Entity::handlePhysics()
@@ -45,7 +43,7 @@ void Entity::handlePhysics()
 		setPosition((sf::Vector2f(m_body->GetPosition().x, m_body->GetPosition().y) * s_invScale) - m_colliderOffset);
 
 #ifdef _DEBUG
-		m_debugCollider.setPosition(getPosition() + m_colliderOffset - m_colliderSize * 0.5f);
+		m_debugCollider.setPosition(m_position + m_colliderOffset - m_colliderSize * 0.5f);
 #endif
 	}
 }
@@ -110,7 +108,7 @@ void Entity::setPosition(sf::Vector2f position)
 		m_body->SetTransform(b2Vec2((position.x + m_colliderOffset.x) * s_physScale, (position.y + m_colliderOffset.y) * s_physScale), 0);
 
 #ifdef _DEBUG
-		m_debugCollider.setPosition(getPosition() + m_colliderOffset - m_colliderSize * 0.5f);
+		m_debugCollider.setPosition(m_position + m_colliderOffset - m_colliderSize * 0.5f);
 #endif
 	}
 }

@@ -99,11 +99,11 @@ void Scene::handleGame(const float deltaTime)
 	PROFILE_DEBUG_ONLY_BEGIN(false, MICROSECONDS);
 
 	for (auto& a : m_backgroundSprites)
-		a.sprite.update(deltaTime);
+		a.update(deltaTime);
 	for (auto& e : m_entities)
 		e->update(deltaTime);
 	for (auto& a : m_foregroundSprites)
-		a.sprite.update(deltaTime);
+		a.update(deltaTime);
 
 	for (auto& s : m_scripts)
 		s.update(deltaTime);
@@ -153,13 +153,13 @@ void Scene::handleEvents()
 		}
 		else
 		{
-			m_overlays.top().handleEvent(event);
-
 			if (!m_overlays.top().isBlocking())
 			{
 				handleEventDefault(event);
 				handleEventSpecial(event);
 			}
+		
+			m_overlays.top().handleEvent(event);
 		}
 	}
 }
@@ -174,10 +174,12 @@ void Scene::handleEventDefault(const sf::Event& event)
 		switch (event.key.code)
 		{
 		case sf::Keyboard::Escape:
-			pushQuitMenu(&m_overlays, m_player ? m_player->isLocked() : false);
+			if (m_overlays.empty())
+				pushQuitMenu(&m_overlays, m_player ? m_player->isLocked() : false);
 			break;
 		case sf::Keyboard::E:
-			//pushAgenda(&m_overlays);
+			if (m_overlays.empty())
+				pushAgenda(&m_overlays);
 			break;
 
 		case sf::Keyboard::R:
@@ -355,11 +357,11 @@ void Scene::render(sf::RenderTarget* target)
 	m_postfx.setView(m_camera);
 
 	for (const auto& sp : m_backgroundSprites)
-		m_postfx.draw(sp.sprite, sp.states);
+		m_postfx.draw(sp, sp.getShader());
 	for (const auto& e : m_entities)
 		m_postfx.draw(*e);
 	for (const auto& sp : m_foregroundSprites)
-		m_postfx.draw(sp.sprite, sp.states);
+		m_postfx.draw(sp, sp.getShader());
 
 #ifdef MNG_DEBUG
 	m_postfx.draw(d_debugChainColliders);
@@ -376,9 +378,6 @@ void Scene::render(sf::RenderTarget* target)
 			m_overlays.top().render(&m_postfx);
 
 		m_postfx.render(target);
-
-		for (const auto& p : m_particles)
-			target->draw(p);
 	}
 	else
 	{
@@ -386,10 +385,10 @@ void Scene::render(sf::RenderTarget* target)
 
 		if (!m_overlays.empty())
 			m_overlays.top().render(target);
-
-		for (const auto& p : m_particles)
-			target->draw(p);
 	}
+
+	for (const auto& p : m_particles)
+		target->draw(p);
 
 	PROFILE_DEBUG_ONLY_STEP();
 

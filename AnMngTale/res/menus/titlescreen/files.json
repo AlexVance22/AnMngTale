@@ -6,7 +6,7 @@
       "shared": true
     }
   ],
-  
+
   "sounds": [
     {
       "name": "mouse_hover",
@@ -27,7 +27,7 @@
 
   "blocking": true,
   "blurred": false,
-  "quit-on-esc": true,
+  "quitkeys": [ 36 ],
 
   "presets": {
 

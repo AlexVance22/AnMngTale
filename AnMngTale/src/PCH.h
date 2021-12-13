@@ -6,12 +6,14 @@
 #include <box2d/box2d.h>
 
 #include <unordered_map>
+#include <unordered_set>
 #include <iostream>
 #include <iomanip>
 #include <random>
 #include <memory>
 #include <string>
 #include <vector>
+#include <deque>
 #include <stack>
 
 #include <functional>

@@ -8,12 +8,12 @@
 class DialogueHandler : public sf::Drawable
 {
 private:
-	const std::vector<std::string>* m_alltext = nullptr;
+	std::vector<std::deque<std::string>> m_alltext;
+	std::deque<std::string>* p_strings = nullptr;
 
 	Sprite m_background;
 	sf::Text m_text;
 
-	size_t m_pageindex = 0;
 	size_t m_charindex = 0;
 
 	float m_chartime = 0.f;
@@ -30,7 +30,7 @@ public:
 	bool isPlaying() const;
 
 	void setPlaySpeed(float charPerSec);
-	void begin(const std::vector<std::string>& text);
+	void begin(size_t snippet);
 	void stop();
 
 	void handleEvent(const sf::Event& event);

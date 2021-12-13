@@ -69,6 +69,7 @@ void Game::render()
 {
 	if (m_scene)
 	{
+		m_window.setView(m_window.getDefaultView());
 		m_scene->render();
 		m_window.display();
 	}

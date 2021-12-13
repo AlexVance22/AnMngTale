@@ -181,8 +181,7 @@ void Script::opSpeak()
 {
 	uint32_t page;
 	fread(m_stream, page);
-
-	p_scene->m_dialogue.begin(p_scene->m_dialogueText[page]);
+	p_scene->m_dialogue.begin(page);
 }
 void Script::opAnim()
 {

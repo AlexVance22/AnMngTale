@@ -13,6 +13,10 @@ private:
 	static float s_svol;
 
 public:
+	AudioManager() = delete;
+	AudioManager(const AudioManager&) = delete;
+	AudioManager(AudioManager&&) = delete;
+
 	static sf::Music track;
 	static std::string trackTitle;
 

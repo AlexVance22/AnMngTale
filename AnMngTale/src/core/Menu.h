@@ -23,6 +23,7 @@ private:
 
 	bool m_blocking = true;
 	bool m_blurred = false;
+	std::unordered_set<sf::Keyboard::Key> m_quitKeys;
 
 	MenuStack* p_container = nullptr;
 

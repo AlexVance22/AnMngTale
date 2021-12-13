@@ -2,19 +2,31 @@
   "sounds": [],
 
   "textures": [
-    [ "background", "res/textures/gui/menus/agenda.png" ]
-    [ "button", "res/textures/gui/widgets/button.png" ]
+    {
+      "name": "background",
+      "file": "res/textures/gui/menus/agenda.png",
+      "shared": false
+    },
+    {
+      "name": "button",
+      "file": "res/textures/gui/widgets/button.png",
+      "shared": false
+    }
   ],
   
   "fonts": [
-    [ "cambria", "res/fonts/freestylescript.ttf" ]
+    {
+      "name": "freestyle",
+      "file": "res/fonts/freestylescript.ttf",
+      "shared": true
+    }
   ],
   
   "view": [ 480, 270 ],
   
   "blocking": false,
   "blurred": true,
-  "quit-on-esc": true,
+  "quitkeys": [ 36, 4 ],
   
   "presets": {
   

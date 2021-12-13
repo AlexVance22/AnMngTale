@@ -19,11 +19,6 @@ public:
 	static sf::RenderWindow* p_window;
 	static sf::RenderTexture m_fadeBuffer;
 
-	struct MatSprite {
-		Sprite sprite;
-		sf::RenderStates states;
-	};
-
 protected:
 	const std::string m_name;
 	uint32_t m_state = 0;
@@ -32,8 +27,8 @@ protected:
 	std::unordered_map<std::string, sf::Texture> m_textures;
 	std::unordered_map<std::string, sf::Shader> m_shaders;
 	std::unordered_map<std::string, sf::Font> m_fonts;
-	std::vector<MatSprite> m_backgroundSprites;
-	std::vector<MatSprite> m_foregroundSprites;
+	std::vector<Sprite> m_backgroundSprites;
+	std::vector<Sprite> m_foregroundSprites;
 
 	std::unordered_map<std::string, BoxTrigger> m_triggers;
 	std::vector<std::unique_ptr<Entity>> m_entities;
@@ -42,7 +37,6 @@ protected:
 	std::vector<ParticleSystem> m_particles;
 	std::vector<Script> m_scripts;
 
-	std::vector<std::vector<std::string>> m_dialogueText;
 	DialogueHandler m_dialogue;
 
 	Obj<Scene> m_nextScene = nullptr;
