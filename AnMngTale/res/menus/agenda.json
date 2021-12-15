@@ -4,7 +4,7 @@
   "textures": [
     {
       "name": "background",
-      "file": "res/textures/gui/menus/agenda.png",
+      "file": "res/textures/gui/menus/agenda-still.png",
       "shared": false
     },
     {

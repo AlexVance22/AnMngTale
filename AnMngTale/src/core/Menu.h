@@ -46,7 +46,7 @@ public:
 		m_hasNextScene = true;
 	}
 	bool hasNextScene() const;
-	std::future<Obj<Scene>>&& getNextScene();
+	[[nodiscard]] std::future<Obj<Scene>>&& getNextScene();
 
 	void scheduleQuit();
 	bool getQuitTop();

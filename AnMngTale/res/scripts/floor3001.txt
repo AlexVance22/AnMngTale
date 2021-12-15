@@ -11,12 +11,16 @@ camvel 5.0
 out 0
 pause
 
+out 1
+pause
+
 lock player false
+wait 0.3
 move c1 0.0 -1.0
 wait 7.5
 move c1 1.0 -1.0
 wait 1.5
-out 1
+out 2
 pause
 
 lock player true

@@ -8,14 +8,38 @@
 #include "scenes/outside/Courtyard.h"
 
 
+void Floor300::handleEventSpecial(const sf::Event& event)
+{
+	switch (m_state)
+	{
+	case 0:
+		switch (event.type)
+		{
+		case sf::Event::KeyPressed:
+			switch (event.key.code)
+			{
+			case sf::Keyboard::E:
+				if (m_scripts[0].output() == 0)
+					m_triggers["interact1"].reset();
+				[[fallthrough]];
+			case sf::Keyboard::Escape:
+				if (m_scripts[0].output() == 1)
+					m_triggers["interact1"].reset();
+			}
+			break;
+		}
+		break;
+	case 1:
+		break;
+	}
+}
+
 void Floor300::impl(const float deltaTime)
 {
 	switch (m_state)
 	{
 	case 0:
-		if (m_scripts[0].output() == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-			m_triggers["interact1"].reset();
-		if (m_scripts[0].output() == 1)
+		if (m_scripts[0].output() == 2)
 		{
 			m_triggers["interact2"].reset();
 			m_progress = true;

@@ -387,6 +387,8 @@ void Scene::render(sf::RenderTarget* target)
 			m_overlays.top().render(target);
 	}
 
+	target->setView(target->getDefaultView());
+
 	for (const auto& p : m_particles)
 		target->draw(p);
 

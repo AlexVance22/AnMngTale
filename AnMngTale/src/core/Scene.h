@@ -75,7 +75,7 @@ public:
 	~Scene();
 
 	bool quit() const;
-	Obj<Scene>&& nextScene();
+	[[nodiscard]] Obj<Scene>&& nextScene();
 
 	void fadeout();
 	void fadein();

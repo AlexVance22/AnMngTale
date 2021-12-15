@@ -10,6 +10,7 @@ private:
 	sf::Vector2f m_topLayerSize{ 1005, 3045 };
 
 private:
+	void handleEventSpecial(const sf::Event& event) override;
 	void impl(const float deltaTime) override;
 
 public:
