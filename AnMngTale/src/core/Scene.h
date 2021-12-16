@@ -44,7 +44,7 @@ protected:
 	bool m_quit = false;
 
 	std::unique_ptr<b2World> m_physWorld;
-	const static float s_physScale;
+	float m_physScale = 1.f;
 
 	Camera m_camera;
 	PostFX m_postfx;

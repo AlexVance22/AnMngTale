@@ -8,6 +8,8 @@
 #include "entities/Player.h"
 #include "global/AudioManager.h"
 
+#define LOG_F(x) std::cout << x << '\n'
+
 
 uint32_t Deserialiser::activeFile = 0;
 
@@ -72,22 +74,27 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 {
 	p_scene->m_physWorld = std::make_unique<b2World>(b2Vec2(0, 0));
 
+	m_lockY = data["y-axis-locked"].IsTrue();
+
+	m_scale = 1.f / data["scale"].GetFloat();
+	p_scene->m_physScale = m_scale;
+
 	for (const auto& box : data["boxes"].GetArray())
 	{
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_staticBody;
-		bodyDef.position.Set((box[0].GetFloat() - box[2].GetFloat() * 0.5f) * Scene::s_physScale,
-			(box[1].GetFloat() - box[3].GetFloat() * 0.5f) * Scene::s_physScale);
+		bodyDef.position.Set((box[0].GetFloat() + box[2].GetFloat() * 0.5f) * m_scale,
+							 (box[1].GetFloat() + box[3].GetFloat() * 0.5f) * m_scale);
 
 		b2PolygonShape shape;
-		shape.SetAsBox(box[2].GetFloat() * 0.5f * Scene::s_physScale, box[3].GetFloat() * 0.5f * Scene::s_physScale);
+		shape.SetAsBox(box[2].GetFloat() * 0.5f * m_scale, box[3].GetFloat() * 0.5f * m_scale);
 
 #ifdef MNG_DEBUG
 		sf::RectangleShape debugShape;
 		debugShape.setFillColor(sf::Color(0, 0, 0, 0));
 		debugShape.setOutlineColor(sf::Color(255, 255, 255));
 		debugShape.setOutlineThickness(0.3f);
-		debugShape.setPosition(box[0].GetFloat() - box[2].GetFloat(), box[1].GetFloat() - box[3].GetFloat());
+		debugShape.setPosition(JsonToVec2<float>(box));
 		debugShape.setSize(sf::Vector2f(box[2].GetFloat(), box[3].GetFloat()));
 		p_scene->d_debugBoxColliders.push_back(debugShape);
 #endif
@@ -112,7 +119,7 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 		vertices.resize(vdata.Size());
 		for (size_t i = 0; i < vdata.Size(); i++)
 		{
-			vertices[i] = JsonToB2Vec(vdata[(rapidjson::SizeType)i], Scene::s_physScale);
+			vertices[i] = JsonToB2Vec(vdata[(rapidjson::SizeType)i], m_scale);
 
 #ifdef MNG_DEBUG
 			p_scene->d_debugChainColliders.append(JsonToVec2<float>(vdata[(rapidjson::SizeType)i]));
@@ -126,7 +133,7 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 		{
 			const auto& ghosts = chain["ghosts"];
 			shape.CreateChain(vertices.data(), (uint32_t)vertices.size(),
-				JsonToB2Vec(ghosts[0], Scene::s_physScale), JsonToB2Vec(ghosts[1], Scene::s_physScale));
+				JsonToB2Vec(ghosts[0], m_scale), JsonToB2Vec(ghosts[1], m_scale));
 		}
 
 		b2FixtureDef fixtureDef;
@@ -209,6 +216,10 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 
 		MNG_ASSERT_SLIM(entity);
 
+		entity->m_physScale = m_scale;
+		entity->m_invScale = 1.f / m_scale;
+
+		entity->set1D(m_lockY);
 		entity->setPosition(JsonToVec2<float>(e["pos"]));
 		entity->setSize(JsonToVec2<float>(e["size"]));
 
@@ -233,7 +244,7 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 		if (!phys.IsNull())
 		{
 			b2BodyDef bodydef;
-			const sf::Vector2f physPos = (entity->getPosition() + JsonToVec2<float>(phys["offset"])) * Scene::s_physScale;
+			const sf::Vector2f physPos = (entity->getPosition() + JsonToVec2<float>(phys["offset"])) * m_scale;
 			bodydef.position.Set(physPos.x, physPos.y);
 
 			const char* type = phys["type"].GetString();
@@ -259,11 +270,11 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 			if (strncmp(stype, "box", 32) == 0)
 			{
 				b2PolygonShape s;
-				s.SetAsBox(shape["size"][0].GetFloat() * Scene::s_physScale * 0.5f, shape["size"][1].GetFloat() * Scene::s_physScale * 0.5f);
+				s.SetAsBox(shape["size"][0].GetFloat() * m_scale * 0.5f, shape["size"][1].GetFloat() * m_scale * 0.5f);
 				fixturedef.shape = &s;
 				body->CreateFixture(&fixturedef);
 
-				entity->simulate(body, sf::FloatRect(JsonToVec2<float>(phys["offset"]), JsonToVec2<float>(shape["size"])));
+				entity->simulate(body, JsonToVec2<float>(phys["offset"]), JsonToVec2<float>(shape["size"]));
 			}
 			/*
 			if (strncmp(stype, "polygon", 32) == 0)

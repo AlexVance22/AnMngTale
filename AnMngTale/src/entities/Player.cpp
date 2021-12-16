@@ -17,13 +17,14 @@ void Player::update(const float deltaTime)
 		sf::Vector2f direction;
 		direction.x -= sf::Keyboard::isKeyPressed(sf::Keyboard::A);
 		direction.x += sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-		direction.y -= sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-		direction.y += sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+		direction.y -= sf::Keyboard::isKeyPressed(sf::Keyboard::W) * !m_lockY;
+		direction.y += sf::Keyboard::isKeyPressed(sf::Keyboard::S) * !m_lockY;
 
 		if (direction.x && direction.y)
 			direction *= s_unitScalar;
 
 		move(direction, deltaTime);
-		handlePhysics();
 	}
+
+	handlePhysics();
 }

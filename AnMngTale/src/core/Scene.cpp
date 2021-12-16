@@ -32,7 +32,6 @@ std::ostream& operator<<(std::ostream& stream, const sf::Vector2<T>& vec)
 
 sf::RenderWindow* Scene::p_window;
 sf::RenderTexture Scene::m_fadeBuffer;
-const float Scene::s_physScale = 1.f / 30.f;
 
 
 void Scene::reloadResources(bool clear)

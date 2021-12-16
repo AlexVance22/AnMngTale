@@ -10,6 +10,9 @@ private:
 	uint32_t m_state = 0;
 	std::vector<std::string> m_entityHandles;
 
+	float m_scale = 1.f;
+	bool m_lockY = false;
+
 private:
 	void loadAssets(const rapidjson::Value& data);
 	void loadCamera(const rapidjson::Value& data);

@@ -7,8 +7,8 @@ class Entity : public sf::Drawable
 {
 protected:
 	static const float s_unitScalar;
-	static const float s_physScale;
-	static const float s_invScale;
+	float m_physScale = 1.f;
+	float m_invScale = 1.f;
 
 	Sprite m_sprite;
 	sf::Vector2f m_position;
@@ -19,6 +19,7 @@ protected:
 	sf::Vector2f m_colliderSize;
 
 	bool m_locked = false;
+	bool m_lockY = false;
 	float m_speed = 3.f;
 
 #ifdef MNG_DEBUG
@@ -28,9 +29,10 @@ protected:
 public:
 	Entity();
 
-	void simulate(b2Body* body, sf::FloatRect collider);
+	void simulate(b2Body* body, sf::Vector2f offset, sf::Vector2f boxSize);
 	sf::FloatRect getCollider() const;
 	void handlePhysics();
+	void set1D(bool dim);
 
 	void move(sf::Vector2f direction, const float deltaTime, bool overridePhysics = false);
 	void lock(bool locked);

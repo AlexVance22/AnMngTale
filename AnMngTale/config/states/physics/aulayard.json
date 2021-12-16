@@ -1,5 +1,8 @@
 [
     {
+        "y-axis-locked": false,
+        "scale": 30,
+
         "boxes": [],
         "chains": [],
         "box-triggers": []

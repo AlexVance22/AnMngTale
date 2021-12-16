@@ -7,8 +7,9 @@
 #include "global/Data.h"
 
 #include "scenes/MainMenu.h"
-#include "scenes/outside/Courtyard.h"
 #include "scenes/floors/Floor400.h"
+#include "scenes/outside/Courtyard.h"
+#include "scenes/rooms/Classroom.h"
 
 
 
@@ -32,6 +33,12 @@ void Game::loadSession()
 	AudioManager::setEffectVolume(evol);
 
 	stream >> Data::language;
+
+	sf::VideoMode mode;
+	stream >> mode.width >> mode.height;
+
+	m_window.create(mode, "AnMngTale", SCREENSPACE);
+	m_window.setVerticalSyncEnabled(true);
 }
 
 void Game::dumpSession()
@@ -43,7 +50,9 @@ void Game::dumpSession()
 			<< AudioManager::getMusicVolume() << '\n'
 			<< AudioManager::getEffectVolume() << '\n';
 
-	stream << Data::language;
+	stream << Data::language << '\n';
+
+	stream << 1920 << '\n' << 1080;
 }
 
 
@@ -76,22 +85,19 @@ void Game::render()
 }
 
 
-Game::Game() : m_window(sf::VideoMode(1920, 1080), "AnMngTale", SCREENSPACE)
+Game::Game()
 {
-	m_window.setVerticalSyncEnabled(true);
+	loadSession();
 
 	srand((uint32_t)time(nullptr));
 
 	Scene::m_fadeBuffer.create(1920, 1080);
 	Scene::p_window = &m_window;
 
-	loadSession();
-
-
 #ifndef MNG_DIST
-	//m_scene = std::make_unique<Courtyard>();
-	m_scene = std::make_unique<MainMenu>();
-	//m_scene = std::make_unique<Floor400>();
+	//m_scene = std::make_unique<MainMenu>();
+	m_scene = std::make_unique<Floor400>();
+	//m_scene = std::make_unique<Classroom>();
 #else
 	m_scene = std::make_unique<MainMenu>();
 #endif

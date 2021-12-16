@@ -1,5 +1,8 @@
 [
     {
+        "y-axis-locked": false,
+        "scale": 30,
+
         "boxes": [
             [ 216, -1280, 63, 17 ]
         ],
@@ -75,6 +78,9 @@
     },
 
     {
+        "y-axis-locked": false,
+        "scale": 30,
+
         "boxes": [
             [ 216, -1280, 63, 17 ]
         ],
@@ -126,6 +132,10 @@
         ],
     
         "box-triggers": [
+            {
+                "name": "classroom",
+                "rect": [ 459, -1249, 4, 86 ]
+            },
             {
                 "name": "bathroom1",
                 "rect": [ 459, -960, 4, 86 ]

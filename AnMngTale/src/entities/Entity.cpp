@@ -3,8 +3,6 @@
 
 
 const float Entity::s_unitScalar = 1.f / (float)sqrt(2);
-const float Entity::s_invScale = 30.f;
-const float Entity::s_physScale = 1.f / Entity::s_invScale;
 
 
 Entity::Entity()
@@ -17,14 +15,12 @@ Entity::Entity()
 }
 
 
-void Entity::simulate(b2Body* body, sf::FloatRect collider)
+void Entity::simulate(b2Body* body, sf::Vector2f offset, sf::Vector2f boxSize)
 {
 	m_body = body;
 
-	m_colliderOffset.x = collider.left;
-	m_colliderOffset.y = collider.top;
-	m_colliderSize.x = collider.width;
-	m_colliderSize.y = collider.height;
+	m_colliderOffset = offset;
+	m_colliderSize = boxSize;
 
 #ifdef _DEBUG
 	m_debugCollider.setSize(m_colliderSize);
@@ -40,7 +36,8 @@ void Entity::handlePhysics()
 {
 	if (m_body)
 	{
-		setPosition((sf::Vector2f(m_body->GetPosition().x, m_body->GetPosition().y) * s_invScale) - m_colliderOffset);
+		m_position = sf::Vector2f(m_body->GetPosition().x, m_body->GetPosition().y) * m_invScale - m_colliderOffset;
+		m_sprite.setPosition(m_position);
 
 #ifdef _DEBUG
 		m_debugCollider.setPosition(m_position + m_colliderOffset - m_colliderSize * 0.5f);
@@ -48,11 +45,18 @@ void Entity::handlePhysics()
 	}
 }
 
+void Entity::set1D(bool dim)
+{
+	m_lockY = dim;
+}
+
 
 void Entity::move(sf::Vector2f direction, const float deltaTime, bool overridePhysics)
 {
 	if (direction.x || direction.y)
 	{
+		direction.y *= !m_lockY;
+
 		if (m_body && !overridePhysics)
 		{
 			sf::Vector2f movement = direction * m_speed;
@@ -66,7 +70,7 @@ void Entity::move(sf::Vector2f direction, const float deltaTime, bool overridePh
 			if (direction.x > 0)
 				m_sprite.setAnimation(0);
 			else if (direction.x < 0)
-				m_sprite.setAnimation(2);
+				m_sprite.setAnimation(2 - m_lockY);
 
 			if (direction.y > 0)
 				m_sprite.setAnimation(1);
@@ -77,7 +81,7 @@ void Entity::move(sf::Vector2f direction, const float deltaTime, bool overridePh
 	else
 	{
 		if (m_sprite.isAnimated())
-			m_sprite.setAnimation(4);
+			m_sprite.setAnimation(4 - 2 * m_lockY);
 
 		if (m_body && !overridePhysics)
 			m_body->SetLinearVelocity(b2Vec2(0, 0));
@@ -105,7 +109,7 @@ void Entity::setPosition(sf::Vector2f position)
 
 	if (m_body)
 	{
-		m_body->SetTransform(b2Vec2((position.x + m_colliderOffset.x) * s_physScale, (position.y + m_colliderOffset.y) * s_physScale), 0);
+		m_body->SetTransform(b2Vec2((position.x + m_colliderOffset.x) * m_physScale, (position.y + m_colliderOffset.y) * m_physScale), 0);
 
 #ifdef _DEBUG
 		m_debugCollider.setPosition(m_position + m_colliderOffset - m_colliderSize * 0.5f);

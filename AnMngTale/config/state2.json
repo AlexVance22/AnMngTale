@@ -8,5 +8,8 @@
     "floor500": 0,
     "floor600": 0,
     "aulayard": 0,
-    "basketball": 0
+    "basketball": 0,
+
+    "classroom": 0,
+    "bathroom": 0
 }
