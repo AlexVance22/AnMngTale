@@ -32,6 +32,18 @@ void gameEnd(MenuStack* menus)
 }
 
 
+void pushWarning(MenuStack* menus, uint8_t save)
+{
+	menus->push("res/menus/titlescreen/warning.json");
+
+	auto no = menus->top().getWidget<gui::Button>("no");
+	auto yes = menus->top().getWidget<gui::Button>("yes");
+
+	no->onClick.bind(&Menu::scheduleQuit, &menus->top());
+	yes->onClick.bind(&gameStart, menus, save);
+}
+
+
 void pushQuitMenu(MenuStack* menus, bool playerLocked)
 {
 	menus->push("res/menus/quit.json", playerLocked);
@@ -69,7 +81,7 @@ void pushOptionsMenu(MenuStack* menus)
 	back->onClick.bind(&Menu::scheduleQuit, &menus->top());
 }
 
-void pushFileMenu(MenuStack* menus, bool* saveData)
+void pushFileMenu(MenuStack* menus, bool load, bool* saveData)
 {
 	menus->push("res/menus/titlescreen/files.json");
 
@@ -77,15 +89,32 @@ void pushFileMenu(MenuStack* menus, bool* saveData)
 	auto f2 = menus->top().getWidget<gui::Button>("1");
 	auto f3 = menus->top().getWidget<gui::Button>("2");
 
-	f1->onClick.bind(&gameStart, menus, 0);
-	f2->onClick.bind(&gameStart, menus, 1);
-	f3->onClick.bind(&gameStart, menus, 2);
-
-	if (saveData)
+	if (load)
 	{
+		f1->onClick.bind(&gameStart, menus, 0);
+		f2->onClick.bind(&gameStart, menus, 1);
+		f3->onClick.bind(&gameStart, menus, 2);
+
 		f1->setEnabled(saveData[0]);
 		f2->setEnabled(saveData[1]);
 		f3->setEnabled(saveData[2]);
+	}
+	else
+	{
+		if (saveData[0])
+			f1->onClick.bind(&pushWarning, menus, 0);
+		else
+			f1->onClick.bind(&gameStart, menus, 0);
+
+		if (saveData[1])
+			f2->onClick.bind(&pushWarning, menus, 1);
+		else
+			f2->onClick.bind(&gameStart, menus, 1);
+
+		if (saveData[2])
+			f3->onClick.bind(&pushWarning, menus, 2);
+		else
+			f3->onClick.bind(&gameStart, menus, 2);
 	}
 }
 

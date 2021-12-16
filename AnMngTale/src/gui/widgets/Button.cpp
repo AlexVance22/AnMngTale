@@ -41,6 +41,8 @@ void Button::load(const rapidjson::Value& data, const TextureMap& textures, cons
 		m_sound.setBuffer(AudioManager::getSound(data["sound"].GetString()));
 
 	MNG_ASSERT_SLIM(textures.find(data["texture"].GetString()) != textures.end());
+	float scale = data["size"][0].GetFloat() / (textures.at(data["texture"].GetString()).getSize().x / data["animlen"].GetUint());
+	m_background.setScale(scale, scale);
 	m_background.setTexture(textures.at(data["texture"].GetString()));
 	m_background.animate(data["animlen"].GetUint(), 2);
 	m_background.setFrameRate(50.f);
@@ -59,6 +61,8 @@ void Button::load(const rapidjson::Value& data, const TextureMap& textures, cons
 		m_sound.setBuffer(AudioManager::getSound(preset["sound"].GetString()));
 
 	MNG_ASSERT_SLIM(textures.find(preset["texture"].GetString()) != textures.end());
+	float scale = preset["size"][0].GetFloat() / (textures.at(preset["texture"].GetString()).getSize().x / preset["animlen"].GetUint());
+	m_background.setScale(scale, scale);
 	m_background.setTexture(textures.at(preset["texture"].GetString()));
 	m_background.animate(preset["animlen"].GetUint(), 2);
 	m_background.setFrameRate(50.f);
