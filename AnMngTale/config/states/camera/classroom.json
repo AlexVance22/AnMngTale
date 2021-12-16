@@ -6,7 +6,7 @@
         "constrain": true,
         "constraints": [
             [ 240, 135 ],
-            [ 400, 135 ]
+            [ 310, 135 ]
         ]
     }
 ]

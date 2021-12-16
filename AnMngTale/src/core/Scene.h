@@ -31,7 +31,7 @@ protected:
 	std::vector<Sprite> m_foregroundSprites;
 
 	std::unordered_map<std::string, BoxTrigger> m_triggers;
-	std::vector<std::unique_ptr<Entity>> m_entities;
+	std::vector<Obj<Entity>> m_entities;
 	Player* m_player = nullptr;
 
 	std::vector<ParticleSystem> m_particles;
@@ -43,7 +43,7 @@ protected:
 	MenuStack m_overlays;
 	bool m_quit = false;
 
-	std::unique_ptr<b2World> m_physWorld;
+	Obj<b2World> m_physWorld;
 	float m_physScale = 1.f;
 
 	Camera m_camera;

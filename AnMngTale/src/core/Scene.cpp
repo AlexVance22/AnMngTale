@@ -107,15 +107,15 @@ void Scene::handleGame(const float deltaTime)
 	for (auto& s : m_scripts)
 		s.update(deltaTime);
 
+	m_physWorld->Step(deltaTime, 6, 2);
+
 	m_dialogue.update(deltaTime);
 
 	impl(deltaTime);
 
 	PROFILE_DEBUG_ONLY_STEP();
 
-	m_physWorld->Step(deltaTime, 6, 2);
-
-	std::sort(m_entities.begin(), m_entities.end(), [](const std::unique_ptr<Entity>& left, const std::unique_ptr<Entity>& right)
+	std::sort(m_entities.begin(), m_entities.end(), [](const Obj<Entity>& left, const Obj<Entity>& right)
 		{
 			return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
 		});

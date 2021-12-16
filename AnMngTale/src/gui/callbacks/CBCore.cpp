@@ -10,11 +10,18 @@
 #include "scenes/outside/Courtyard.h"
 
 #include "io/Deserialiser.h"
+#include "io/JsonUtils.h"
 
 
 void gameStart(MenuStack* menus, uint8_t save)
 {
 	Deserialiser::activeFile = save;
+
+	std::string filepath = "config/state" + std::to_string(save) + ".json";
+	rapidjson::Document doc;
+	loadjson(doc, filepath.c_str());
+	doc["begun"].SetBool(true);
+	dumpjson(doc, filepath.c_str());
 
 	menus->top().setNextScene<Courtyard>();
 }

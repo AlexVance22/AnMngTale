@@ -9,12 +9,13 @@ class DialogueHandler : public sf::Drawable
 {
 private:
 	std::vector<std::deque<std::string>> m_alltext;
-	std::deque<std::string>* p_strings = nullptr;
+	std::deque<std::string> m_strings;
 
 	Sprite m_background;
 	sf::Text m_text;
 
 	size_t m_charindex = 0;
+	bool m_playing = false;
 
 	float m_chartime = 0.f;
 	float m_totaltime = 0.f;

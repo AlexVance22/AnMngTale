@@ -329,7 +329,10 @@ void Script::update(const float deltaTime)
 			m_delay -= deltaTime;
 
 			for (size_t i = 0; i < m_entities.size(); i++)
-				m_entities[i]->move(m_directions[(uint32_t)i], deltaTime, true);
+			{
+				if (m_directions[(uint32_t)i] != sf::Vector2f(0, 0))
+					m_entities[i]->move(m_directions[(uint32_t)i], deltaTime, true);
+			}
 		}
 	}
 }

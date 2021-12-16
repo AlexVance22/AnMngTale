@@ -12,7 +12,7 @@
         "box-triggers": [
             {
                 "name": "floors",
-                "rect": [ 480, 0, 20, 270 ]
+                "rect": [ 550, 0, 20, 270 ]
             }
         ]
     }
