@@ -68,6 +68,9 @@ void Scene::handleGui(const float deltaTime)
 {
 	m_overlays.top().update(deltaTime);
 
+	//p_window->setMouseCursorGrabbed(false);
+	//p_window->setMouseCursorVisible(true);
+
 	if (m_overlays.top().hasNextScene())
 	{
 		auto next = m_overlays.top().getNextScene();
@@ -82,14 +85,22 @@ void Scene::handleGui(const float deltaTime)
 			m_overlays.pop();
 
 		if (m_player)
+		{
 			m_player->lock(m_overlays.getCachedLock());
+			//p_window->setMouseCursorGrabbed(true);
+			//p_window->setMouseCursorVisible(false);
+		}
 	}
 	else if (m_overlays.top().getQuitTop())
 	{
 		m_overlays.pop();
 
 		if (m_player && m_overlays.empty())
+		{
 			m_player->lock(m_overlays.getCachedLock());
+			//p_window->setMouseCursorGrabbed(true);
+			//p_window->setMouseCursorVisible(false);
+		}
 	}
 }
 
@@ -110,6 +121,7 @@ void Scene::handleGame(const float deltaTime)
 	m_physWorld->Step(deltaTime, 6, 2);
 
 	m_dialogue.update(deltaTime);
+	m_agenda.update(deltaTime);
 
 	impl(deltaTime);
 
@@ -370,6 +382,7 @@ void Scene::render(sf::RenderTarget* target)
 
 	m_postfx.setView(sf::View(sf::FloatRect(0, 0, 1920, 1080)));
 	m_postfx.draw(m_dialogue);
+	m_postfx.draw(m_agenda);
 
 	if (m_postfx.guiIncluded)
 	{

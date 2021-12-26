@@ -7,6 +7,8 @@
 #include "scenes/outside/Basketball.h"
 #include "scenes/outside/Courtyard.h"
 
+#include "global/Agenda.h"
+
 
 void Floor300::handleEventSpecial(const sf::Event& event)
 {
@@ -39,6 +41,10 @@ void Floor300::impl(const float deltaTime)
 	switch (m_state)
 	{
 	case 0:
+		if (m_scripts[0].output() == 4)
+			m_agenda.postAssignment("Press 'E'");
+		if (m_scripts[0].output() == 5)
+			m_agenda.postAssignment("Find the classroom");
 		if (m_scripts[0].output() == 2)
 		{
 			m_triggers["interact2"].reset();

@@ -9,7 +9,7 @@ class Scene;
 class Script
 {
 private:
-	enum class Op { WAIT = 0, PAUSE, OUT, PLACE, MOVE, STOP, LOCK, TRACK, VIEW, SPEAK, ANIM, PARTICLE, CAMVEL };
+	enum class Op { WAIT = 0, PAUSE, OUT, PLACE, MOVE, STOP, LOCK, TRACK, VIEW, CAMVEL, SPEAK, ANIM, PARTICLE, ASSIGN };
 	static const std::unordered_map<std::string, Op> s_opMap;
 	std::vector<Entity*> m_entities;
 	Scene* p_scene = nullptr;
@@ -36,10 +36,11 @@ private:
 	void opLock();
 	void opTrack();
 	void opView();
+	void opCamvel();
 	void opSpeak();
 	void opAnim();
 	void opParticle();
-	void opCamvel();
+	void opAssign();
 
 public:
 	static void compile(const std::string& filepath, const std::vector<std::string>& handles);

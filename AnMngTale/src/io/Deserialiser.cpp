@@ -395,13 +395,13 @@ void Deserialiser::loadTasks(const rapidjson::Value& data)
 				que.emplace_back(str.GetString());
 		}
 		*/
-
-		MNG_ASSERT_BASIC(p_scene->m_fonts["hand"].loadFromFile("res/fonts/freestylescript.ttf"));
-		p_scene->m_dialogue.m_text.setFont(p_scene->m_fonts["hand"]);
-
-		//MNG_ASSERT_BASIC(p_scene->m_textures["dialogue"].loadFromFile("res/textures/gui/dialogue.png"));
-		//p_scene->m_dialogue.m_background.setTexture(p_scene->m_textures["dialogue"]);
 	}
+
+	MNG_ASSERT_BASIC(p_scene->m_fonts["hand"].loadFromFile("res/fonts/cambria.ttf"));
+	p_scene->m_agenda.p_font = &p_scene->m_fonts["hand"];
+
+	MNG_ASSERT_BASIC(p_scene->m_textures["alert"].loadFromFile("res/textures/gui/alert.png"));
+	p_scene->m_agenda.p_texture = &p_scene->m_textures["alert"];
 }
 
 void Deserialiser::loadScripts(const rapidjson::Value& data)
@@ -450,6 +450,7 @@ void Deserialiser::run()
 	LOAD_MODULE("audio", loadSounds);
 	LOAD_MODULE("entities", loadEntities);
 	//LOAD_MODULE("tasks", loadTasks);
+	loadTasks({});
 
 	loadjson(doc, "config/states/misc/" + sname + ".json");
 

@@ -9,6 +9,8 @@ private:
 	sf::RenderWindow m_window;
 	sf::Clock m_clock;
 
+	sf::Cursor m_cursor;
+
 	Obj<Scene> m_scene;
 
 private:

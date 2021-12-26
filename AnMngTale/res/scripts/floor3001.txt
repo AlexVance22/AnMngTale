@@ -8,23 +8,23 @@ speak 1
 
 track player
 camvel 5.0
-out 0
-pause
+out 4
+pause 0
 
-out 1
-pause
+pause 1
 
+speak 2
+out 5
 lock player false
 wait 0.3
 move c1 0.0 -1.0
 wait 7.5
 move c1 1.0 -1.0
 wait 1.5
-out 2
-pause
+pause 2
 
 lock player true
-speak 2
+speak 3
 lock player false
 move c1 1.0 0.0
 wait 2.0

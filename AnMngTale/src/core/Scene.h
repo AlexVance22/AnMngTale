@@ -11,6 +11,7 @@
 #include "physics/BoxTrigger.h"
 
 #include "gui/DialogueHandler.h"
+#include "global/Agenda.h"
 
 
 class Scene
@@ -38,6 +39,7 @@ protected:
 	std::vector<Script> m_scripts;
 
 	DialogueHandler m_dialogue;
+	Agenda m_agenda;
 
 	Obj<Scene> m_nextScene = nullptr;
 	MenuStack m_overlays;

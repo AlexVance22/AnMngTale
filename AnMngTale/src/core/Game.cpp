@@ -7,7 +7,7 @@
 #include "global/Data.h"
 
 #include "scenes/MainMenu.h"
-#include "scenes/floors/Floor400.h"
+#include "scenes/floors/Floor300.h"
 #include "scenes/outside/Courtyard.h"
 #include "scenes/rooms/Classroom.h"
 
@@ -38,6 +38,11 @@ void Game::loadSession()
 
 	m_window.create(mode, "AnMngTale", SCREENSPACE);
 	m_window.setVerticalSyncEnabled(true);
+
+	sf::Image cursortex;
+	cursortex.loadFromFile("res/textures/gui/cursor.png");
+	m_cursor.loadFromPixels(cursortex.getPixelsPtr(), sf::Vector2u(16, 16), sf::Vector2u(0, 0));
+	m_window.setMouseCursor(m_cursor);
 }
 
 void Game::dumpSession()
@@ -94,8 +99,8 @@ Game::Game()
 	Scene::p_window = &m_window;
 
 #ifndef MNG_DIST
-	m_scene = std::make_unique<MainMenu>();
-	//m_scene = std::make_unique<Floor400>();
+	//m_scene = std::make_unique<MainMenu>();
+	m_scene = std::make_unique<Floor300>();
 	//m_scene = std::make_unique<Classroom>();
 #else
 	m_scene = std::make_unique<MainMenu>();

@@ -55,10 +55,11 @@ const std::unordered_map<std::string, Script::Op> Script::s_opMap{
 	{ "lock", Op::LOCK },
 	{ "track", Op::TRACK },
 	{ "view", Op::VIEW },
+	{ "camvel", Op::CAMVEL },
 	{ "speak", Op::SPEAK },
 	{ "anim", Op::ANIM },
 	{ "particle", Op::PARTICLE },
-	{ "camvel", Op::CAMVEL }
+	{ "assign", Op::ASSIGN }
 };
 
 
@@ -125,6 +126,8 @@ void Script::opWait()
 }
 void Script::opPause()
 {
+	fread(m_stream, m_output);
+
 	m_running = false;
 
 	for (auto& [_, dir] : m_directions)
@@ -177,6 +180,13 @@ void Script::opView()
 	fread(m_stream, pos);
 	p_scene->m_camera.setStaticTarget(pos);
 }
+void Script::opCamvel()
+{
+	float vel;
+	fread(m_stream, vel);
+
+	p_scene->m_camera.setDamping(vel);
+}
 void Script::opSpeak()
 {
 	uint32_t page;
@@ -195,12 +205,9 @@ void Script::opParticle()
 {
 
 }
-void Script::opCamvel()
+void Script::opAssign()
 {
-	float vel;
-	fread(m_stream, vel);
 
-	p_scene->m_camera.setDamping(vel);
 }
 
 
@@ -284,7 +291,7 @@ void Script::update(const float deltaTime)
 					return;
 				case Op::OUT:
 					opOut();
-					break;
+					return;
 				case Op::PLACE:
 					opPlace();
 					break;
@@ -293,7 +300,7 @@ void Script::update(const float deltaTime)
 					break;
 				case Op::STOP:
 					opStop();
-					break;
+					return;
 				case Op::LOCK:
 					opLock();
 					break;
@@ -302,6 +309,9 @@ void Script::update(const float deltaTime)
 					break;
 				case Op::VIEW:
 					opView();
+					break;
+				case Op::CAMVEL:
+					opCamvel();
 					break;
 				case Op::SPEAK:
 					opSpeak();
@@ -312,8 +322,8 @@ void Script::update(const float deltaTime)
 				case Op::PARTICLE:
 					opParticle();
 					break;
-				case Op::CAMVEL:
-					opCamvel();
+				case Op::ASSIGN:
+					opAssign();
 					break;
 				default:
 					//opInv();
@@ -322,6 +332,7 @@ void Script::update(const float deltaTime)
 
 				m_end = m_stream.eof();
 			}
+
 			m_running = false;
 		}
 		else
