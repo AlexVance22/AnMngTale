@@ -14,7 +14,6 @@ private:
 	FontMap m_fonts;
 
 	gui::Root::Ptr m_widgets;
-	sf::View m_view;
 
 	bool m_quitTop = false;
 	bool m_quitAll = false;
@@ -58,4 +57,7 @@ public:
 	void handleEvent(const sf::Event& event);
 	void update(const float deltaTime);
 	void render(sf::RenderTarget* target = nullptr);
+
+
+	friend void pushAgenda(MenuStack* menus);
 };

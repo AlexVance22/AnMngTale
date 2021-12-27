@@ -14,12 +14,22 @@ private:
 		float timer = 0.f;
 	};
 
+	struct Quest
+	{
+		std::string description;
+		uint32_t progress = 0;
+		uint32_t progmax = 0;
+	};
+
 	std::deque<Alert> m_alerts;
 
 	sf::Texture* p_texture = nullptr;
 	sf::Font* p_font = nullptr;
 
-	static std::unordered_map<std::string, std::string> s_quests;
+	static std::unordered_map<std::string, Quest> s_quests;
+
+public:
+	static std::unordered_map<std::string, Quest> getActiveQuests() { return s_quests; }
 
 public:
 	Agenda();

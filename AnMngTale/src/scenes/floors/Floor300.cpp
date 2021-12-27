@@ -41,14 +41,18 @@ void Floor300::impl(const float deltaTime)
 	switch (m_state)
 	{
 	case 0:
-		if (m_scripts[0].output() == 4)
-			m_agenda.postAssignment("Press 'E'");
-		if (m_scripts[0].output() == 5)
-			m_agenda.postAssignment("Find the classroom");
-		if (m_scripts[0].output() == 2)
+		switch (m_scripts[0].output())
 		{
+		case 3:
+			m_agenda.postAssignment("Press 'E'");
+			break;
+		case 4:
+			m_agenda.postAssignment("Find the classroom");
+			break;
+		case 2:
 			m_triggers["interact2"].reset();
 			m_progress = true;
+			break;
 		}
 		break;
 	case 1:

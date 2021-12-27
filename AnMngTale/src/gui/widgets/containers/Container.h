@@ -15,6 +15,7 @@ private:
 	std::unordered_map<std::string, Widget::Ptr> m_widgets;
 
 	sf::RectangleShape m_block;
+	sf::View m_view;
 
 public:
 	static Ptr create()

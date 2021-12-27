@@ -51,7 +51,7 @@ void Scene::reloadResources(bool clear)
 		m_particles.clear();
 		m_scripts.clear();
 
-		m_dialogue.stop();
+		m_dialogue.clear();
 
 #if MNG_DEBUG
 		d_debugChainColliders.clear();

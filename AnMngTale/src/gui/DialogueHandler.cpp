@@ -7,7 +7,7 @@ DialogueHandler::DialogueHandler()
 	m_background.setPosition(0, 830);
 
 	m_text.setPosition(30, 850);
-	m_text.setCharacterSize(30);
+	m_text.setCharacterSize(35);
 	m_text.setFillColor(sf::Color(0, 0, 0, 255));
 }
 
@@ -36,7 +36,8 @@ void DialogueHandler::setPlaySpeed(float charPerSec)
 
 void DialogueHandler::begin(size_t snippet)
 {
-	stop();
+	m_charindex = 0;
+	m_totaltime = 0.f;
 
 	m_strings = std::move(m_alltext[snippet]);
 	m_text.setString(m_strings.front()[0]);
@@ -44,7 +45,7 @@ void DialogueHandler::begin(size_t snippet)
 	m_playing = true;
 }
 
-void DialogueHandler::stop()
+void DialogueHandler::clear()
 {
 	m_playing = false;
 
@@ -52,6 +53,9 @@ void DialogueHandler::stop()
 
 	m_charindex = 0;
 	m_totaltime = 0.f;
+
+	m_alltext.clear();
+	m_strings.clear();
 }
 
 

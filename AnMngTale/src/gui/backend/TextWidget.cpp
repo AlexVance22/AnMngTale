@@ -7,8 +7,8 @@ namespace gui
 
 void TextWidget::centerTextPosition()
 {
-	m_text.setPosition(m_boundingBox.left + m_boundingBox.width / 2 - m_text.getLocalBounds().width / 2,
-					   m_boundingBox.top + m_boundingBox.height / 2 - m_text.getLocalBounds().height / 2 - 5);
+	m_text.setPosition(floor(m_boundingBox.left + m_boundingBox.width / 2 - m_text.getLocalBounds().width / 2),
+					   floor(m_boundingBox.top + m_boundingBox.height / 2 - m_text.getLocalBounds().height / 2 - 5));
 }
 
 
@@ -42,6 +42,11 @@ void TextWidget::setString(const std::string& text)
 		centerTextPosition();
 }
 
+void TextWidget::setTextColor(sf::Color color)
+{
+	m_text.setFillColor(color);
+}
+
 
 void TextWidget::setTextCentered(bool centered)
 {
@@ -54,7 +59,7 @@ void TextWidget::setTextCentered(bool centered)
 void TextWidget::setTextPosition(sf::Vector2f position)
 {
 	if (!m_centered) 
-		m_text.setPosition(position);
+		m_text.setPosition(m_boundingBox.left + position.x, m_boundingBox.top + position.y);
 }
 
 

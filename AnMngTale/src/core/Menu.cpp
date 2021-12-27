@@ -29,10 +29,6 @@ void Menu::loadFromFile(const std::string& filepath, MenuStack* stack)
 	rapidjson::Document doc;
 	loadjson(doc, filepath);
 
-	const sf::Vector2f vSize = JsonToVec2<float>(doc["view"]);
-	m_view.setSize(vSize);
-	m_view.setCenter(vSize * 0.5f);
-
 	m_blocking = doc["blocking"].IsTrue();
 	m_blurred = doc["blurred"].IsTrue();
 
@@ -121,6 +117,5 @@ void Menu::update(const float deltaTime)
 
 void Menu::render(sf::RenderTarget* target)
 {
-	target->setView(m_view);
 	target->draw(*m_widgets);
 }

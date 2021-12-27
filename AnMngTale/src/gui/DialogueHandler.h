@@ -32,7 +32,7 @@ public:
 
 	void setPlaySpeed(float charPerSec);
 	void begin(size_t snippet);
-	void stop();
+	void clear();
 
 	void handleEvent(const sf::Event& event);
 	void update(const float deltaTime);

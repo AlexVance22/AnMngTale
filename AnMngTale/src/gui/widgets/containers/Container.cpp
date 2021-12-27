@@ -32,6 +32,9 @@ Widget::Ptr Container::get(const std::string& name)
 
 void Container::load(const rapidjson::Value& data, const TextureMap& textures, const FontMap& fonts, const rapidjson::Value& presets)
 {
+	m_view.setSize(JsonToVec2<float>(data["view"]));
+	m_view.setCenter(JsonToVec2<float>(data["view"]) * 0.5f);
+
 	const auto& tex = data["texture"];
 	if (tex.IsNull())
 	{
@@ -117,6 +120,8 @@ void Container::update(const float deltaTime)
 
 void Container::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	target.setView(m_view);
+
 	target.draw(m_block);
 	target.draw(m_background);
 

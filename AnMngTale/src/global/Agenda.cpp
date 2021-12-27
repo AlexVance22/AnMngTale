@@ -13,7 +13,11 @@ static float lerp(float a, float b, float t)
 }
 
 
-std::unordered_map<std::string, std::string> Agenda::s_quests;
+std::unordered_map<std::string, Agenda::Quest> Agenda::s_quests = {
+	{ { "Text1" }, { "Testingtestingtestingtesting" } },
+	{ { "Text2" }, { "Testingtestingtestingtesting" } },
+	{ { "Text3" }, { "Testingtestingtestingtesting" } }
+};
 
 
 Agenda::Agenda()
@@ -26,19 +30,19 @@ void Agenda::postAssignment(const std::string& text)
 {
 	Alert a;
 	a.sprite.setTexture(*p_texture);
-	a.sprite.setPosition(-480.f, m_alerts.size() * 130.f + 20.f);
+	a.sprite.setPosition(-480.f, m_alerts.size() * 130.f + 40.f);
 
 	a.title.setFont(*p_font);
 	a.title.setPosition(a.sprite.getPosition() + sf::Vector2f(20, 5));
 	a.title.setString("New assignment:");
-	a.title.setCharacterSize(25);
+	a.title.setCharacterSize(30);
 	a.title.setFillColor(sf::Color(0, 0, 0));
 	a.title.setStyle(sf::Text::Style::Bold);
 
 	a.text.setFont(*p_font);
-	a.text.setPosition(a.sprite.getPosition() + sf::Vector2f(20, 40));
+	a.text.setPosition(a.sprite.getPosition() + sf::Vector2f(20, 35));
 	a.text.setString(text);
-	a.text.setCharacterSize(20);
+	a.text.setCharacterSize(25);
 	a.text.setFillColor(sf::Color(0, 0, 0));
 
 	m_alerts.push_back(a);
@@ -54,14 +58,14 @@ void Agenda::update(const float deltaTime)
 {
 	if (!m_alerts.empty())
 	{
-		const float p1 = 0.5f, p2 = 3.f, p3 = 3.5f;
+		const float p1 = 0.7f, p2 = 3.f, p3 = 3.5f;
 
 		for (auto& a : m_alerts)
 		{
 			if (a.timer < p1)
-				a.sprite.setPosition(lerp(-480, 20, normal(a.timer, p1)), a.sprite.getPosition().y);
+				a.sprite.setPosition(lerp(-480, 40, normal(a.timer, p1)), a.sprite.getPosition().y);
 			else if (a.timer < p2)
-				a.sprite.setPosition(20, a.sprite.getPosition().y);
+				a.sprite.setPosition(40, a.sprite.getPosition().y);
 			else if (a.timer < p3)
 			{
 				a.sprite.move(0, -1.f * deltaTime * 60.f);

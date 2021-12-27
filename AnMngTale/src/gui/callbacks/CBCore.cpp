@@ -5,6 +5,7 @@
 #include "gui/gui.h"
 
 #include "global/AudioManager.h"
+#include "global/Agenda.h"
 
 #include "scenes/MainMenu.h"
 #include "scenes/outside/Courtyard.h"
@@ -122,6 +123,33 @@ void pushFileMenu(MenuStack* menus, bool load, bool* saveData)
 void pushAgenda(MenuStack* menus)
 {
 	menus->push("res/menus/agenda.json");
+
+	uint32_t count = 0;
+
+	for (const auto& [name, quest] : Agenda::getActiveQuests())
+	{
+		auto label = gui::Label::create();
+		label->setString(name);
+		label->setFont(menus->top().m_fonts["cambria"], 25);
+		label->setLayout(sf::Vector2i(400, 150 + 100 * count), sf::Vector2i(400, 100));
+		label->setTextCentered(false);
+		label->setTextPosition(sf::Vector2f(0, 0));
+		label->setTextColor(sf::Color::Black);
+
+		auto desc = gui::Label::create();
+		desc->setString(quest.description);
+		desc->setFont(menus->top().m_fonts["cambria"], 25);
+		desc->setLayout(sf::Vector2i(400, 190 + 100 * count), sf::Vector2i(400, 100));
+		desc->setTextCentered(false);
+		desc->setTextPosition(sf::Vector2f(0, 0));
+		desc->setTextColor(sf::Color::Black);
+
+		auto lst = gui::cast<gui::Container>(menus->top().m_widgets->get("list"));
+		lst->add(label, "label" + std::to_string(count));
+		lst->add(desc, "desc" + std::to_string(count));
+
+		count++;
+	}
 }
 
 void pushDialogue(MenuStack* menus, const std::vector<std::string>& text)

@@ -22,6 +22,7 @@ public:
 	virtual void setLayout(sf::Vector2i position, sf::Vector2i size);
 	virtual void setFont(const sf::Font& font, uint32_t size);
 	void setString(const std::string& text);
+	void setTextColor(sf::Color color);
 
 	void setTextCentered(bool centered);
 	void setTextPosition(sf::Vector2f position);

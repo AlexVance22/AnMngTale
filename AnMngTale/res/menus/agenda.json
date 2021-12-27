@@ -6,48 +6,48 @@
       "name": "background",
       "file": "res/textures/gui/menus/agenda-still.png",
       "shared": false
-    },
-    {
-      "name": "button",
-      "file": "res/textures/gui/widgets/button.png",
-      "shared": false
     }
   ],
-  
+
   "fonts": [
     {
-      "name": "freestyle",
-      "file": "res/fonts/freestylescript.ttf",
+      "name": "cambria",
+      "file": "res/fonts/cambria.ttf",
       "shared": true
     }
   ],
-  
-  "view": [ 480, 270 ],
   
   "blocking": false,
   "blurred": true,
   "quitkeys": [ 36, 4 ],
   
-  "presets": {
-  
-    "label": {
-  
-      "entry": {
-        "font": "cambria",
-        "fontsize": 25
-      }
-    }
-  },
-  
+  "presets": {},
+
   "root": {
-  
-    "color": [ 0, 0, 0, 0 ],
+
     "texture": "background",
-    "font": "cambria",
+    "view": [ 480, 270 ],
+
+    "color": [ 0, 0, 0, 0 ],
     "pos": [ 0, 0 ],
     "size": [ 480, 270 ],
-  
+
     "children": {
+
+      "list": {
+        "type": "container",
+
+        "color": [ 0, 0, 0, 0 ],
+        "texture": null,
+        "view": [ 1920, 1080 ],
+
+        "pos": [ 0, 0 ],
+        "size": [ 1920, 1080 ],
+
+        "children": {
+
+        }
+      }
 
     }
   }

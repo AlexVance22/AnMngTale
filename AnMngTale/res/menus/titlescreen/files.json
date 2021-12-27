@@ -17,13 +17,11 @@
 
   "fonts": [
     {
-      "name": "cambria",
-      "file": "res/fonts/cambria.ttf",
+      "name": "trajan",
+      "file": "res/fonts/trajan_pro.ttf",
       "shared": true
     }
   ],
-
-  "view": [ 1920, 1080 ],
 
   "blocking": true,
   "blurred": false,
@@ -37,7 +35,7 @@
         "size": [ 320, 100 ],
         "texture": "button",
         "animlen": 3,
-        "font": "cambria",
+        "font": "trajan",
         "fontsize": 25,
         "sound": "mouse_hover"
       }
@@ -46,9 +44,10 @@
 
   "root": {
 
-    "color": [ 0, 0, 0, 0 ],
     "texture": null,
-    "font": "cambria",
+    "view": [ 1920, 1080 ],
+
+    "color": [ 0, 0, 0, 0 ],
     "pos": [ 0, 0 ],
     "size": [ 1920, 1080 ],
 
