@@ -36,11 +36,10 @@ void Dialogue::setPlaySpeed(float charPerSec)
 
 void Dialogue::begin(size_t snippet)
 {
-	m_charindex = 0;
+	m_charindex = -1;
 	m_totaltime = 0.f;
 
 	m_strings = std::move(m_alltext[snippet]);
-	m_text.setString(m_strings.front()[0]);
 
 	m_playing = true;
 }
@@ -51,7 +50,7 @@ void Dialogue::clear()
 
 	m_text.setString("");
 
-	m_charindex = 0;
+	m_charindex = -1;
 	m_totaltime = 0.f;
 
 	m_alltext.clear();
@@ -73,17 +72,18 @@ void Dialogue::handleEvent(const sf::Event& event)
 				{
 					if (!isEndOfPage())
 					{
-						m_charindex = m_strings.front().size() - 1;
-						m_text.setString(m_strings.front());
+						std::string res = m_strings.front();
+						res.erase(std::remove(res.begin(), res.end(), '_'), res.end());
+						m_charindex = (int)m_strings.front().size() - 1;
+						m_text.setString(res);
 					}
 					else
 					{
-						m_charindex = 0;
+						m_charindex = -1;
 						m_strings.pop_front();
+						m_text.setString("");
 
-						if (!isEndOfScript())
-							m_text.setString(m_strings.front()[0]);
-						else
+						if (isEndOfScript())
 						{
 							onFinish();
 							m_playing = false;
@@ -111,7 +111,11 @@ void Dialogue::update(const float deltaTime)
 				if (!isEndOfPage())
 				{
 					m_charindex++;
-					m_text.setString(m_text.getString() + m_strings.front()[m_charindex]);
+
+					if (m_strings.front()[m_charindex] == '_')
+						m_totaltime += 0.1f;
+					else
+						m_text.setString(m_text.getString() + m_strings.front()[m_charindex]);
 				}
 			}
 		}

@@ -14,7 +14,7 @@ private:
 	Sprite m_background;
 	sf::Text m_text;
 
-	size_t m_charindex = 0;
+	int m_charindex = -1;
 	bool m_playing = false;
 
 	float m_chartime = 0.f;
