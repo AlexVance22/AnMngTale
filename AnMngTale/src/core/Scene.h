@@ -82,7 +82,7 @@ public:
 	void fadeout();
 	void fadein();
 
-	template<typename S, typename std::enable_if_t<std::is_base_of<Scene, S>::value>* = nullptr>
+	template<typename S>
 	void loadScene()
 	{
 		std::future<Obj<Scene>> next = std::async(std::launch::async, []() -> Obj<Scene> { return std::make_unique<S>(); });

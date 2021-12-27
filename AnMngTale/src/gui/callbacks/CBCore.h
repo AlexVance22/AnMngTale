@@ -11,5 +11,3 @@ void pushFileMenu(MenuStack* menus, bool load, bool* saveData);
 
 
 void pushAgenda(MenuStack* menus);
-
-void pushDialogue(MenuStack* menus, const std::vector<std::string>& text);

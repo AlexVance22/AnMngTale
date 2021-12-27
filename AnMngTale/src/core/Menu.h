@@ -32,13 +32,13 @@ public:
 
 	void loadFromFile(const std::string& filepath, MenuStack* stack);
 
-	template<typename _Widget, typename std::enable_if_t<std::is_base_of<gui::Widget, _Widget>::value>* = nullptr>
-	std::shared_ptr<_Widget> getWidget(const std::string& name)
+	template<typename W>
+	std::shared_ptr<W> getWidget(const std::string& name)
 	{
-		return gui::cast<_Widget>(m_widgets->get(name));
+		return gui::cast<W>(m_widgets->get(name));
 	}
 
-	template<typename S, typename std::enable_if_t<std::is_base_of<Scene, S>::value>* = nullptr>
+	template<typename S>
 	void setNextScene()
 	{
 		m_nextScene = std::async(std::launch::async, []() -> Obj<Scene> { return std::make_unique<S>(); });
