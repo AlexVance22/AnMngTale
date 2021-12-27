@@ -8,7 +8,7 @@ namespace gui
 void TextWidget::centerTextPosition()
 {
 	m_text.setPosition(floor(m_boundingBox.left + m_boundingBox.width / 2 - m_text.getLocalBounds().width / 2),
-					   floor(m_boundingBox.top + m_boundingBox.height / 2 - m_text.getLocalBounds().height / 2 - 5));
+					   floor(m_boundingBox.top + m_boundingBox.height / 2 - m_text.getLocalBounds().height / 2 - m_boundingBox.height * 0.1f));
 }
 
 
@@ -25,10 +25,23 @@ void TextWidget::setLayout(sf::Vector2i position, sf::Vector2i size)
 		centerTextPosition();
 }
 
-void TextWidget::setFont(const sf::Font& font, uint32_t size)
+
+void TextWidget::setCharacterSize(uint32_t size)
+{
+	m_text.setCharacterSize(size);
+
+	if (m_centered)
+		centerTextPosition();
+}
+
+void TextWidget::setTextColor(sf::Color color)
+{
+	m_text.setFillColor(color);
+}
+
+void TextWidget::setFont(const sf::Font& font)
 {
 	m_text.setFont(font);
-	m_text.setCharacterSize(size);
 
 	if (m_centered)
 		centerTextPosition();
@@ -42,24 +55,24 @@ void TextWidget::setString(const std::string& text)
 		centerTextPosition();
 }
 
-void TextWidget::setTextColor(sf::Color color)
+void TextWidget::setStyle(uint32_t style)
 {
-	m_text.setFillColor(color);
+	m_text.setStyle(style);
 }
 
 
-void TextWidget::setTextCentered(bool centered)
+void TextWidget::centerText()
 {
-	m_centered = centered;
+	m_centered = true;
 
-	if (m_centered)
-		centerTextPosition();
+	centerTextPosition();
 }
 
 void TextWidget::setTextPosition(sf::Vector2f position)
 {
-	if (!m_centered) 
-		m_text.setPosition(m_boundingBox.left + position.x, m_boundingBox.top + position.y);
+	m_centered = false;
+
+	m_text.setPosition(m_boundingBox.left + position.x, m_boundingBox.top + position.y);
 }
 
 

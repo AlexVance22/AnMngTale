@@ -35,7 +35,8 @@ void Button::load(const rapidjson::Value& data, const TextureMap& textures, cons
 	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(data["size"]));
 
 	MNG_ASSERT_SLIM(fonts.find(data["font"].GetString()) != fonts.end());
-	setFont(fonts.at(data["font"].GetString()), data["fontsize"].GetUint());
+	setFont(fonts.at(data["font"].GetString()));
+	setCharacterSize(data["fontsize"].GetUint());
 
 	if (!data["sound"].IsNull())
 		m_sound.setBuffer(AudioManager::getSound(data["sound"].GetString()));
@@ -55,7 +56,8 @@ void Button::load(const rapidjson::Value& data, const TextureMap& textures, cons
 	setLayout(JsonToVec2<int>(data["position"]), JsonToVec2<int>(preset["size"]));
 
 	MNG_ASSERT_SLIM(fonts.find(preset["font"].GetString()) != fonts.end());
-	setFont(fonts.at(preset["font"].GetString()), preset["fontsize"].GetUint());
+	setFont(fonts.at(preset["font"].GetString()));
+	setCharacterSize(preset["fontsize"].GetUint());
 
 	if (!preset["sound"].IsNull())
 		m_sound.setBuffer(AudioManager::getSound(preset["sound"].GetString()));

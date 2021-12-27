@@ -8,7 +8,6 @@
 #include "../Label.h"
 #include "../Button.h"
 #include "../Slider.h"
-#include "../Dialogue.h"
 
 
 namespace gui
@@ -45,8 +44,9 @@ void Container::load(const rapidjson::Value& data, const TextureMap& textures, c
 	else
 	{
 		MNG_ASSERT_SLIM(textures.find(tex.GetString()) != textures.end());
-		m_background.setTexture(textures.at(tex.GetString()));
 		m_block.setFillColor(sf::Color(0, 0, 0, 0));
+		m_background.setTexture(textures.at(tex.GetString()));
+		m_background.setPosition(JsonToVec2<float>(data["pos"]));
 	}
 
 	for (const auto& w : data["children"].GetObject())
@@ -81,12 +81,6 @@ void Container::load(const rapidjson::Value& data, const TextureMap& textures, c
 			else
 				slr->load(data, textures, fonts, presets["slider"][data["preset"].GetString()]);
 			m_widgets[name] = slr;
-		}
-		else if (strncmp(type, "dialogue", 32) == 0)
-		{
-			auto dia = gui::Dialogue::create();
-			dia->load(data, textures, fonts);
-			m_widgets[name] = dia;
 		}
 		else if (strncmp(type, "container", 32) == 0)
 		{

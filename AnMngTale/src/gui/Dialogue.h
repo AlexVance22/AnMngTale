@@ -5,7 +5,7 @@
 #include "graphics/Sprite.h"
 
 
-class DialogueHandler : public sf::Drawable
+class Dialogue : public sf::Drawable
 {
 private:
 	std::vector<std::deque<std::string>> m_alltext;
@@ -24,7 +24,7 @@ public:
 	Callback onFinish;
 
 public:
-	DialogueHandler();
+	Dialogue();
 
 	bool isEndOfPage() const;
 	bool isEndOfScript() const;

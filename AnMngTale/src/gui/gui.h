@@ -7,7 +7,6 @@
 #include "backend/Callback.h"
 
 #include "widgets/containers/Container.h"
-#include "widgets/Dialogue.h"
 #include "widgets/Button.h"
 #include "widgets/Slider.h"
 #include "widgets/Label.h"

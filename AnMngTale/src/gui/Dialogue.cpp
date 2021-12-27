@@ -1,8 +1,8 @@
 #include "PCH.h"
-#include "DialogueHandler.h"
+#include "Dialogue.h"
 
 
-DialogueHandler::DialogueHandler()
+Dialogue::Dialogue()
 {
 	m_background.setPosition(0, 830);
 
@@ -12,29 +12,29 @@ DialogueHandler::DialogueHandler()
 }
 
 
-bool DialogueHandler::isEndOfPage() const
+bool Dialogue::isEndOfPage() const
 {
 	return m_charindex == m_strings.front().size() - 1;
 }
 
-bool DialogueHandler::isEndOfScript() const
+bool Dialogue::isEndOfScript() const
 {
 	return m_strings.empty();
 }
 
-bool DialogueHandler::isPlaying() const
+bool Dialogue::isPlaying() const
 {
 	return m_playing;
 }
 
 
-void DialogueHandler::setPlaySpeed(float charPerSec)
+void Dialogue::setPlaySpeed(float charPerSec)
 {
 	m_chartime = 1.f / charPerSec;
 	m_totaltime = m_chartime;
 }
 
-void DialogueHandler::begin(size_t snippet)
+void Dialogue::begin(size_t snippet)
 {
 	m_charindex = 0;
 	m_totaltime = 0.f;
@@ -45,7 +45,7 @@ void DialogueHandler::begin(size_t snippet)
 	m_playing = true;
 }
 
-void DialogueHandler::clear()
+void Dialogue::clear()
 {
 	m_playing = false;
 
@@ -59,7 +59,7 @@ void DialogueHandler::clear()
 }
 
 
-void DialogueHandler::handleEvent(const sf::Event& event)
+void Dialogue::handleEvent(const sf::Event& event)
 {
 	switch (event.type)
 	{
@@ -96,7 +96,7 @@ void DialogueHandler::handleEvent(const sf::Event& event)
 	}
 }
 
-void DialogueHandler::update(const float deltaTime)
+void Dialogue::update(const float deltaTime)
 {
 	if (isPlaying())
 	{
@@ -118,7 +118,7 @@ void DialogueHandler::update(const float deltaTime)
 	}
 }
 
-void DialogueHandler::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (isPlaying())
 	{

@@ -44,7 +44,6 @@ void pushWarning(MenuStack* menus, uint8_t save)
 	yes->onClick.bind(&gameStart, menus, save);
 }
 
-
 void pushQuitMenu(MenuStack* menus, bool playerLocked)
 {
 	menus->push("res/menus/quit.json", playerLocked);
@@ -130,17 +129,18 @@ void pushAgenda(MenuStack* menus)
 	{
 		auto label = gui::Label::create();
 		label->setString(name);
-		label->setFont(menus->top().m_fonts["cambria"], 25);
+		label->setFont(menus->top().m_fonts["cambria"]);
+		label->setCharacterSize(25);
 		label->setLayout(sf::Vector2i(400, 150 + 100 * count), sf::Vector2i(400, 100));
-		label->setTextCentered(false);
 		label->setTextPosition(sf::Vector2f(0, 0));
 		label->setTextColor(sf::Color::Black);
+		label->setStyle(sf::Text::Bold);
 
 		auto desc = gui::Label::create();
 		desc->setString(quest.description);
-		desc->setFont(menus->top().m_fonts["cambria"], 25);
+		desc->setFont(menus->top().m_fonts["cambria"]);
+		desc->setCharacterSize(25);
 		desc->setLayout(sf::Vector2i(400, 190 + 100 * count), sf::Vector2i(400, 100));
-		desc->setTextCentered(false);
 		desc->setTextPosition(sf::Vector2f(0, 0));
 		desc->setTextColor(sf::Color::Black);
 
@@ -150,15 +150,4 @@ void pushAgenda(MenuStack* menus)
 
 		count++;
 	}
-}
-
-void pushDialogue(MenuStack* menus, const std::vector<std::string>& text)
-{
-	menus->push("res/menus/dialayer.json");
-
-	auto d = menus->top().getWidget<gui::Dialogue>("popup");
-
-	d->setText(text);
-	d->setPlaySpeed(40.f);
-	d->onFinish.bind(&Menu::scheduleQuit, &menus->top());
 }

@@ -17,8 +17,8 @@
 
   "fonts": [
     {
-      "name": "trajan",
-      "file": "res/fonts/trajan_pro.ttf",
+      "name": "cambria",
+      "file": "res/fonts/cambria.ttf",
       "shared": true
     }
   ],
@@ -31,12 +31,12 @@
 
   "root": {
 
-    "color": [ 0, 0, 0, 0 ],
     "texture": null,
-    "font": "trajan",
+    "view": [ 1920, 1080 ],
+
+    "color": [ 0, 0, 0, 0 ],
     "pos": [ 0, 0 ],
     "size": [ 1920, 1080 ],
-    "view": [ 1920, 1080 ],
 
     "children": {
 
@@ -45,9 +45,10 @@
         "preset": null,
         "position": [ 800, 300 ],
         "size": [ 320, 40 ],
-        "font": "trajan",
-        "fontsize": 25,
-        "text": "There is already a game saved here. Overwrite it?"
+        "font": "cambria",
+        "fontsize": 30,
+        "text": "There is already a game saved here. Overwrite it?",
+        "style": []
       },
 
       "no": {
@@ -56,8 +57,8 @@
         "size": [ 320, 100 ],
         "texture": "button",
         "animlen": 3,
-        "font": "trajan",
-        "fontsize": 25,
+        "font": "cambria",
+        "fontsize": 30,
         "sound": "mouse_hover",
         "position": [ 800, 375 ],
         "text": "No"
@@ -66,13 +67,13 @@
       "yes": {
         "type": "button",
         "preset": null,
-        "size": [ 260, 70 ],
+        "size": [ 320, 100 ],
         "texture": "button",
         "animlen": 3,
-        "font": "trajan",
-        "fontsize": 22,
+        "font": "cambria",
+        "fontsize": 30,
         "sound": "mouse_hover",
-        "position": [ 830, 500 ],
+        "position": [ 800, 500 ],
         "text": "Yes"
       }
     }

@@ -17,8 +17,8 @@
 
   "fonts": [
     {
-      "name": "trajan",
-      "file": "res/fonts/trajan_pro.ttf",
+      "name": "cambria",
+      "file": "res/fonts/cambria.ttf",
       "shared": true
     }
   ],
@@ -35,8 +35,8 @@
         "size": [ 320, 100 ],
         "texture": "button",
         "animlen": 3,
-        "font": "trajan",
-        "fontsize": 25,
+        "font": "cambria",
+        "fontsize": 30,
         "sound": "mouse_hover"
       }
     },
@@ -54,8 +54,9 @@
 
       "menu-label": {
         "size": [ 320, 40 ],
-        "font": "trajan",
-        "fontsize": 25
+        "font": "cambria",
+        "fontsize": 30,
+        "style": []
       }
     }
   },
@@ -74,11 +75,13 @@
       "volume-label": {
         "type": "label",
         "preset": null,
-        "position": [ 800, 150 ],
+        "position": [ 800, 130 ],
         "size": [ 320, 40 ],
-        "font": "trajan",
-        "fontsize": 30,
-        "text": "Volume"
+        "font": "cambria",
+        "fontsize": 35,
+        "text": "     Volume     ",
+        "underline": true,
+        "style": [ 4 ]
       },
 
       "global-vol": {

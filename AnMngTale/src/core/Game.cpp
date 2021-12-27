@@ -99,8 +99,8 @@ Game::Game()
 	Scene::p_window = &m_window;
 
 #ifndef MNG_DIST
-	//m_scene = std::make_unique<MainMenu>();
-	m_scene = std::make_unique<Floor300>();
+	m_scene = std::make_unique<MainMenu>();
+	//m_scene = std::make_unique<Floor300>();
 	//m_scene = std::make_unique<Classroom>();
 #else
 	m_scene = std::make_unique<MainMenu>();

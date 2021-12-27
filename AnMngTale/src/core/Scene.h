@@ -10,7 +10,7 @@
 #include "scripting/Script.h"
 #include "physics/BoxTrigger.h"
 
-#include "gui/DialogueHandler.h"
+#include "gui/Dialogue.h"
 #include "global/Agenda.h"
 
 
@@ -38,7 +38,7 @@ protected:
 	std::vector<ParticleSystem> m_particles;
 	std::vector<Script> m_scripts;
 
-	DialogueHandler m_dialogue;
+	Dialogue m_dialogue;
 	Agenda m_agenda;
 
 	Obj<Scene> m_nextScene = nullptr;
