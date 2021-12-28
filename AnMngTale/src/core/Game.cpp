@@ -99,8 +99,11 @@ Game::Game()
 	Scene::p_window = &m_window;
 
 #ifndef MNG_DIST
-	//m_scene = std::make_unique<MainMenu>();
-	m_scene = std::make_unique<Floor400>();
+	m_scene = std::make_unique<MainMenu>();
+	
+	//Scene::s_spawnpoint = sf::Vector2f(420, -500);
+	//m_scene = std::make_unique<Floor400>();
+
 	//m_scene = std::make_unique<Classroom>();
 #else
 	m_scene = std::make_unique<MainMenu>();

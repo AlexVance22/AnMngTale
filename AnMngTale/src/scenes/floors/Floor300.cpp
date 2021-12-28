@@ -70,14 +70,15 @@ Floor300::Floor300() : Scene("floor300")
 	switch (m_state)
 	{
 	case 0:
-		m_triggers["f400top"].onCollide.bind(&Scene::loadScene<Floor400>, this);
-		m_triggers["f400bot"].onCollide.bind(&Scene::loadScene<Floor400>, this);
+		LOAD_SCENE("f400top", Floor400, 370, -1460);
+		LOAD_SCENE("f400bot", Floor400, 420, -500);
 		break;
 	case 1:
-		m_triggers["f400top"].onCollide.bind(&Scene::loadScene<Floor400>, this);
-		m_triggers["f400bot"].onCollide.bind(&Scene::loadScene<Floor400>, this);
-		m_triggers["courtyard"].onCollide.bind(&Scene::loadScene<Courtyard>, this);
-		m_triggers["basketball"].onCollide.bind(&Scene::loadScene<Basketball>, this);
+		LOAD_SCENE("f400top", Floor400, 370, -1460);
+		LOAD_SCENE("f400bot", Floor400, 420, -500);
+
+		LOAD_SCENE("courtyard", Courtyard, 321, 84);
+		LOAD_SCENE("basketball", Basketball, 345, 206);
 		break;
 	}
 }

@@ -3,7 +3,7 @@
         "script-handle": "player",
         "type": "player",
         "camera-target": true,
-        "pos": [ 240, 135 ],
+        "pos": null,
         "size": [ 14, 40 ],
         "texture": "player",
         "locked": false,

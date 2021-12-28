@@ -21,6 +21,8 @@ public:
 	static sf::RenderTexture m_fadeBuffer;
 
 protected:
+	static sf::Vector2f s_spawnpoint;
+
 	const std::string m_name;
 	uint32_t m_state = 0;
 	bool m_progress = false;
@@ -83,9 +85,12 @@ public:
 	void fadein();
 
 	template<typename S>
-	void loadScene()
+	void loadScene(sf::Vector2f spawnpoint)
 	{
+		s_spawnpoint = spawnpoint;
+
 		std::future<Obj<Scene>> next = std::async(std::launch::async, []() -> Obj<Scene> { return std::make_unique<S>(); });
+
 		m_quit = true;
 		fadeout();
 		m_nextScene = std::move(next.get());
@@ -97,4 +102,10 @@ public:
 
 	friend class Deserialiser;
 	friend class Script;
+	friend class Game;
+
+	friend void getSceneFromID(MenuStack* menus, uint32_t scene);
+
+
+#define LOAD_SCENE(trigger, scene, spawn_x, spawn_y) m_triggers[trigger].onCollide.bind(&Scene::loadScene<scene>, this, sf::Vector2f(spawn_x, spawn_y))
 };

@@ -2,6 +2,8 @@
 #include "Floor600.h"
 
 #include "Floor500.h"
+#include "scenes/rooms/Classroom.h"
+#include "scenes/rooms/Bathroom.h"
 
 #include "entities/Player.h"
 
@@ -25,10 +27,13 @@ Floor600::Floor600() : Scene("floor600")
 	switch (m_state)
 	{
 	case 0:
-		//m_triggers["classroom"].onCollide.bind(&Scene::loadScene<Classroom>, this);
+		LOAD_SCENE("classroom", Classroom, 1, 0);
 
-		m_triggers["f500top"].onCollide.bind(&Scene::loadScene<Floor500>, this);
-		m_triggers["f500bot"].onCollide.bind(&Scene::loadScene<Floor500>, this);
+		LOAD_SCENE("bathroom1", Bathroom, 1, 0);
+		LOAD_SCENE("bathroom2", Bathroom, 1, 1);
+
+		LOAD_SCENE("f500top", Floor500, 370, -1460);
+		LOAD_SCENE("f500bot", Floor500, 420, -500);
 		break;
 	}
 }

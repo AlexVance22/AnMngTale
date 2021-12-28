@@ -34,6 +34,9 @@ sf::RenderWindow* Scene::p_window;
 sf::RenderTexture Scene::m_fadeBuffer;
 
 
+sf::Vector2f Scene::s_spawnpoint{ 0, 0 };
+
+
 void Scene::reloadResources(bool clear)
 {
 	if (clear)

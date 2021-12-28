@@ -15,7 +15,7 @@
 #include "scenes/outside/Basketball.h"
 
 
-#define SET_SCENE(s) menus->top().setNextScene<s>()
+#define SET_SCENE(scene, spawn_x, spawn_y) Scene::s_spawnpoint = sf::Vector2f(spawn_x, spawn_y); menus->top().setNextScene<scene>()
 
 
 void getSceneFromID(MenuStack* menus, uint32_t scene)
@@ -23,31 +23,31 @@ void getSceneFromID(MenuStack* menus, uint32_t scene)
 	switch (scene)
 	{
 	case 1:
-		SET_SCENE(Courtyard);
+		SET_SCENE(Courtyard, 250, 230);
 		break;
 	case 2:
-		SET_SCENE(Floor300);
+		SET_SCENE(Floor300, 0, 0);
 		break;
 	case 3:
-		SET_SCENE(Floor400);
+		SET_SCENE(Floor400, 0, 0);
 		break;
 	case 4:
-		SET_SCENE(Floor500);
+		SET_SCENE(Floor500, 0, 0);
 		break;
 	case 5:
-		SET_SCENE(Floor600);
+		SET_SCENE(Floor600, 0, 0);
 		break;
 	case 6:
-		SET_SCENE(AulaYard);
+		SET_SCENE(AulaYard, 0, 0);
 		break;
 	case 7:
-		SET_SCENE(Basketball);
+		SET_SCENE(Basketball, 0, 0);
 		break;
 	case 8:
-		SET_SCENE(Classroom);
+		SET_SCENE(Classroom, 0, 0);
 		break;
 	case 9:
-		//SET_SCENE(Bathroom);
+		//SET_SCENE(Bathroom, 0, 0);
 		break;
 	default:
 		MNG_ASSERT_MSG(false, "Invalid scene ID");

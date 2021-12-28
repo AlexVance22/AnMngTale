@@ -220,7 +220,10 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 		entity->m_invScale = 1.f / m_scale;
 
 		entity->set1D(m_lockY);
-		entity->setPosition(JsonToVec2<float>(e["pos"]));
+		if (e["pos"].IsNull())
+			entity->setPosition(Scene::s_spawnpoint);
+		else
+			entity->setPosition(JsonToVec2<float>(e["pos"]));
 		entity->setSize(JsonToVec2<float>(e["size"]));
 
 		MNG_ASSERT_SLIM(p_scene->m_textures.find(e["texture"].GetString()) != p_scene->m_textures.end());

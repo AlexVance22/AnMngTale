@@ -25,12 +25,12 @@ Courtyard::Courtyard() : Scene("courtyard")
 	switch (m_state)
 	{
 	case 0:
-		m_triggers["entrance"].onCollide.bind(&Scene::loadScene<Floor300>, this);
+		LOAD_SCENE("entrance", Floor300, 310, 190);
 		break;
 	case 1:
-		m_triggers["entrance"].onCollide.bind(&Scene::loadScene<Floor300>, this);
-		m_triggers["basketball"].onCollide.bind(&Scene::loadScene<Basketball>, this);
-		m_triggers["aulayard"].onCollide.bind(&Scene::loadScene<AulaYard>, this);
+		LOAD_SCENE("entrance", Floor300, 310, 190);
+		LOAD_SCENE("basketball", Basketball, 240, 135);
+		LOAD_SCENE("aulayard", AulaYard, 240, 135);
 		break;
 	}
 }
