@@ -142,9 +142,9 @@ void pushFileMenu(MenuStack* menus, bool load, bool* saveData)
 }
 
 
-void pushAgenda(MenuStack* menus)
+void pushAgenda(MenuStack* menus, bool playerLocked)
 {
-	menus->push("res/menus/agenda.json");
+	menus->push("res/menus/agenda.json", playerLocked);
 
 	uint32_t count = 0;
 

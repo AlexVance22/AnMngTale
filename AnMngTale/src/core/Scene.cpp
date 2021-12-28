@@ -193,7 +193,7 @@ void Scene::handleEventDefault(const sf::Event& event)
 			break;
 		case sf::Keyboard::E:
 			if (m_overlays.empty())
-				pushAgenda(&m_overlays);
+				pushAgenda(&m_overlays, m_player ? m_player->isLocked() : false);
 			break;
 
 		case sf::Keyboard::R:

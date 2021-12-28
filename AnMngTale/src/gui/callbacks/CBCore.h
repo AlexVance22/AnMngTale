@@ -10,4 +10,4 @@ void pushOptionsMenu(MenuStack* menus);
 void pushFileMenu(MenuStack* menus, bool load, bool* saveData);
 
 
-void pushAgenda(MenuStack* menus);
+void pushAgenda(MenuStack* menus, bool playerLocked);

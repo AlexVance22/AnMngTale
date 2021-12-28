@@ -17,13 +17,13 @@ Classroom::Classroom() : Scene("classroom")
 	switch ((int)s_spawnpoint.x)
 	{
 	case 1:
-		LOAD_SCENE("floors", Floor400, 420, -1249);
+		LOAD_SCENE("floors", Floor400, 420, -1229);
 		break;
 	case 2:
-		LOAD_SCENE("floors", Floor500, 420, -1249);
+		LOAD_SCENE("floors", Floor500, 420, -1229);
 		break;
 	case 3:
-		LOAD_SCENE("floors", Floor600, 420, -1249);
+		LOAD_SCENE("floors", Floor600, 420, -1229);
 		break;
 	}
 }

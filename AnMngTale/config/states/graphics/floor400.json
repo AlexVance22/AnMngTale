@@ -9,6 +9,47 @@
         },
         {
             "texture": "glow",
+            "pos": [ 415, -1246 ],
+            "anim": {
+                "dims": [ 4, 1 ],
+                "framerate": 10,
+                "loop": true,
+                "play": true
+            },
+            "layer": "bg",
+            "shader": null
+        },
+        {
+            "texture": "top",
+            "pos": [ -525, -2775 ],
+            "anim": null,
+            "layer": "fg",
+            "shader": "xray"
+        }
+    ],
+
+    [
+        {
+            "texture": "background",
+            "pos": [ -525, -2775 ],
+            "anim": null,
+            "layer": "bg",
+            "shader": null
+        },
+        {
+            "texture": "glow",
+            "pos": [ 415, -1246 ],
+            "anim": {
+                "dims": [ 4, 1 ],
+                "framerate": 10,
+                "loop": true,
+                "play": true
+            },
+            "layer": "bg",
+            "shader": null
+        },
+        {
+            "texture": "glow",
             "pos": [ 415, -957 ],
             "anim": {
                 "dims": [ 4, 1 ],
@@ -38,7 +79,5 @@
             "layer": "fg",
             "shader": "xray"
         }
-    ],
-
-    0
+    ]
 ]

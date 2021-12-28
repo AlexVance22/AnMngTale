@@ -59,5 +59,5 @@ public:
 	void render(sf::RenderTarget* target = nullptr);
 
 
-	friend void pushAgenda(MenuStack* menus);
+	friend void pushAgenda(MenuStack* menus, bool playerLocked);
 };
