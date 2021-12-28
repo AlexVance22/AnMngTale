@@ -2,29 +2,52 @@
 #include "CBCore.h"
 
 #include "core/MenuStack.h"
+#include "core/Asserts.h"
 #include "gui/gui.h"
 
 #include "global/AudioManager.h"
 #include "global/Agenda.h"
 
 #include "scenes/MainMenu.h"
-#include "scenes/outside/Courtyard.h"
 
 #include "io/Deserialiser.h"
 #include "io/JsonUtils.h"
 
+#include "LoadScene.h"
+
 
 void gameStart(MenuStack* menus, uint8_t save)
+{
+	std::string filepath = "config/state" + std::to_string(save) + ".json";
+
+	std::ofstream target(filepath);
+	MNG_ASSERT_SLIM(target.is_open());
+	std::ifstream base("config/statedef.json");
+	MNG_ASSERT_SLIM(base.is_open());
+
+	for (std::string line; std::getline(base, line);)
+		target << line;
+
+	target.close();
+
+	Deserialiser::activeFile = save;
+
+	rapidjson::Document doc;
+	loadjson(doc, filepath.c_str());
+	doc["begun"].SetBool(true);
+	dumpjson(doc, filepath.c_str());
+
+	getSceneFromID(menus, 1);
+}
+
+void gameLoad(MenuStack* menus, uint8_t save)
 {
 	Deserialiser::activeFile = save;
 
 	std::string filepath = "config/state" + std::to_string(save) + ".json";
 	rapidjson::Document doc;
 	loadjson(doc, filepath.c_str());
-	doc["begun"].SetBool(true);
-	dumpjson(doc, filepath.c_str());
-
-	menus->top().setNextScene<Courtyard>();
+	getSceneFromID(menus, doc["scene"].GetUint());
 }
 
 void gameEnd(MenuStack* menus)

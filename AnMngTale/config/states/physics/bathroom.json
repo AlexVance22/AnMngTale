@@ -1,0 +1,19 @@
+[
+    {
+        "y-axis-locked": true,
+        "scale": 105,
+
+        "boxes": [
+            [ 580, 0, 20, 270 ]
+        ],
+
+        "chains": [],
+
+        "box-triggers": [
+            {
+                "name": "floors",
+                "rect": [ -20, 0, 20, 270 ]
+            }
+        ]
+    }
+]

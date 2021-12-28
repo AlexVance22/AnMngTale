@@ -241,7 +241,6 @@ void Script::compile(const std::string& filepath, const std::vector<std::string>
 	}
 
 	writeToken(out, token, handles);
-	out.close();
 	delete[] buf;
 #endif
 }

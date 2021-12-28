@@ -7,7 +7,7 @@
 #include "global/Data.h"
 
 #include "scenes/MainMenu.h"
-#include "scenes/floors/Floor300.h"
+#include "scenes/floors/Floor400.h"
 #include "scenes/outside/Courtyard.h"
 #include "scenes/rooms/Classroom.h"
 
@@ -100,7 +100,7 @@ Game::Game()
 
 #ifndef MNG_DIST
 	//m_scene = std::make_unique<MainMenu>();
-	m_scene = std::make_unique<Floor300>();
+	m_scene = std::make_unique<Floor400>();
 	//m_scene = std::make_unique<Classroom>();
 #else
 	m_scene = std::make_unique<MainMenu>();

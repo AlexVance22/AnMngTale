@@ -9,5 +9,6 @@
     "aulayard": 0,
     "basketball": 0,
     "classroom": 0,
-    "bathroom": 0
+    "bathroom": 0,
+    "quests": {}
 }

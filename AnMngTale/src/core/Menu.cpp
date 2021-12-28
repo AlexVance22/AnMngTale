@@ -3,7 +3,6 @@
 
 #include "core/Scene.h"
 #include "core/Asserts.h"
-#include "core/Profiler.h"
 #include "core/MenuStack.h"
 
 #include "gui/gui.h"

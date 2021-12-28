@@ -4,6 +4,7 @@
 #include "Floor300.h"
 #include "Floor500.h"
 #include "scenes/rooms/Classroom.h"
+#include "scenes/rooms/Bathroom.h"
 
 #include "entities/Player.h"
 
@@ -35,6 +36,9 @@ Floor400::Floor400() : Scene("floor400")
 		break;
 	case 1:
 		m_triggers["classroom"].onCollide.bind(&Scene::loadScene<Classroom>, this);
+
+		m_triggers["bathroom1"].onCollide.bind(&Scene::loadScene<Bathroom>, this);
+		m_triggers["bathroom2"].onCollide.bind(&Scene::loadScene<Bathroom>, this);
 
 		m_triggers["f300top"].onCollide.bind(&Scene::loadScene<Floor300>, this);
 		m_triggers["f300bot"].onCollide.bind(&Scene::loadScene<Floor300>, this);
