@@ -14,6 +14,9 @@
 #include "global/Agenda.h"
 
 
+class Player;
+
+
 class Scene
 {
 public:

@@ -7,7 +7,7 @@
 #include "global/Data.h"
 
 #include "scenes/MainMenu.h"
-#include "scenes/floors/Floor400.h"
+#include "scenes/floors/Floor300.h"
 #include "scenes/outside/Courtyard.h"
 #include "scenes/rooms/Classroom.h"
 
@@ -99,12 +99,13 @@ Game::Game()
 	Scene::p_window = &m_window;
 
 #ifndef MNG_DIST
-	m_scene = std::make_unique<MainMenu>();
+	//m_scene = std::make_unique<MainMenu>();
 	
-	//Scene::s_spawnpoint = sf::Vector2f(420, -500);
-	//m_scene = std::make_unique<Floor400>();
+	Scene::s_spawnpoint = sf::Vector2f(300, 200);
+	m_scene = std::make_unique<Floor300>();
 
-	//m_scene = std::make_unique<Classroom>();
+	//Scene::s_spawnpoint = sf::Vector2f(250, 230);
+	//m_scene = std::make_unique<Courtyard>();
 #else
 	m_scene = std::make_unique<MainMenu>();
 #endif

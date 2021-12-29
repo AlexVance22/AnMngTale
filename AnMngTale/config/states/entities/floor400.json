@@ -26,7 +26,7 @@
             "script-handle": "c1",
             "type": "character",
             "camera-target": false,
-            "pos": [ 300, -530 ],
+            "pos": [ 350, -530 ],
             "size": [ 20, 50 ],
             "texture": "chronodox",
             "locked": false,

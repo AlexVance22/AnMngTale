@@ -1,20 +1,22 @@
 #pragma once
 
 class Entity;
-class Camera;
-class Player;
 class Scene;
 
 
 class Script
 {
 private:
-	enum class Op { WAIT = 0, PAUSE, OUT, PLACE, MOVE, STOP, LOCK, TRACK, VIEW, CAMVEL, SPEAK, ANIM, PARTICLE, ASSIGN };
+	enum class Op { WAIT = 0, PAUSE, OUT, PLACE, MOVE, CURVE, STOP, LOCK, TRACK, VIEW, CAMVEL, SPEAK, ANIM, PARTICLE, ASSIGN };
 	static const std::unordered_map<std::string, Op> s_opMap;
-	std::vector<Entity*> m_entities;
+
 	Scene* p_scene = nullptr;
 
+	std::vector<Entity*> m_entities;
 	std::unordered_map<uint32_t, sf::Vector2f> m_directions;
+
+	struct Curve { float angle; float speed; };
+	std::unordered_map<uint32_t, Curve> m_curves;
 
 	float m_delay = 0.f;
 	bool m_running = false;
@@ -24,14 +26,13 @@ private:
 	std::ifstream m_stream;
 
 private:
-	static void writeToken(std::ofstream& out, char* token, const std::vector<std::string>& handles);
-
 	void opInv();
 	void opWait();
 	void opPause();
 	void opOut();
 	void opPlace();
 	void opMove();
+	void opCurve();
 	void opStop();
 	void opLock();
 	void opTrack();
@@ -41,6 +42,11 @@ private:
 	void opAnim();
 	void opParticle();
 	void opAssign();
+
+	void computeCurves(const float deltaTime);
+
+private:
+	static void writeToken(std::ofstream& out, char* token, const std::vector<std::string>& handles);
 
 public:
 	static void compile(const std::string& filepath, const std::vector<std::string>& handles);

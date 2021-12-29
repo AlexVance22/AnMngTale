@@ -18,9 +18,11 @@ out 4
 lock player false
 wait 0.7
 move c1 0.0 -1.0
-wait 7.5
+wait 7.6
+curve c1 -45.0 0.5 true
 move c1 1.0 -1.0
-wait 1.5
+wait 0.5
+curve c1 -45.0 0.5 true
 pause 2
 
 lock player true

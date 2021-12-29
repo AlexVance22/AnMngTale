@@ -44,7 +44,7 @@ void Floor300::impl(const float deltaTime)
 		switch (m_scripts[0].output())
 		{
 		case 3:
-			m_agenda.postAssignment("Press 'E'");
+			m_agenda.postAssignment("Open your Agenda by pressing 'E'");
 			break;
 		case 4:
 			m_agenda.postAssignment("Find the classroom");

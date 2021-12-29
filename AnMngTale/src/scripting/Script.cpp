@@ -51,6 +51,7 @@ const std::unordered_map<std::string, Script::Op> Script::s_opMap{
 	{ "out", Op::OUT },
 	{ "place", Op::PLACE },
 	{ "move", Op::MOVE },
+	{ "curve", Op::CURVE },
 	{ "stop", Op::STOP },
 	{ "lock", Op::LOCK },
 	{ "track", Op::TRACK },
@@ -61,59 +62,6 @@ const std::unordered_map<std::string, Script::Op> Script::s_opMap{
 	{ "particle", Op::PARTICLE },
 	{ "assign", Op::ASSIGN }
 };
-
-
-void Script::writeToken(std::ofstream& out, char* token, const std::vector<std::string>& handles)
-{
-	switch (isnumerical(token))
-	{
-	case 0: {
-		const uint32_t num = std::atoi(token);
-		out.write((char*)&num, sizeof(uint32_t));
-		memset(token, 0, 32);
-		return; }
-	case 1: {
-		const float num = (float)std::atof(token);
-		out.write((char*)&num, sizeof(float));
-		memset(token, 0, 32);
-		return; }
-	}
-	if (strncmp(token, "false", 32) == 0)
-	{
-		const bool val = false;
-		out.write((char*)&val, sizeof(bool));
-		memset(token, 0, 32);
-		return;
-	}
-	if (strncmp(token, "true", 32) == 0)
-	{
-		const bool val = true;
-		out.write((char*)&val, sizeof(bool));
-		memset(token, 0, 32);
-		return;
-	}
-	const auto it1 = s_opMap.find(token);
-#ifdef _DEBUG
-	if (it1 == s_opMap.end())
-	{
-		const auto it2 = std::find_if(handles.begin(), handles.end(),
-			[&](const std::string& handle) { return token == handle; });
-		if (it2 == handles.end())
-		{
-			out.close();
-			MNG_ASSERT_MSG(false, "Invalid compilation token");
-		}
-
-		uint32_t idx = (uint32_t)(it2 - handles.begin());
-		out.write((char*)&idx, sizeof(uint32_t));
-		memset(token, 0, 32);
-		return;
-	}
-#endif
-	char op = (char)it1->second;
-	out.write(&op, sizeof(char));
-	memset(token, 0, 32);
-}
 
 
 void Script::opInv()
@@ -153,6 +101,22 @@ void Script::opMove()
 	fread(m_stream, dir);
 	sf::Vector2f normal = dir / (std::sqrt(dir.x * dir.x + dir.y * dir.y));
 	m_directions[entity] = normal;
+}
+void Script::opCurve()
+{
+	uint32_t entity;
+	fread(m_stream, entity);
+	float angle;
+	fread(m_stream, angle);
+	float speed;
+	fread(m_stream, speed);
+
+	m_curves[entity] = { angle, speed };
+
+	bool autotime;
+	fread(m_stream, autotime);
+	if (autotime)
+		m_delay = std::abs(angle) / (180.f * speed);
 }
 void Script::opStop()
 {
@@ -210,6 +174,88 @@ void Script::opAssign()
 
 }
 
+
+void Script::computeCurves(const float deltaTime)
+{
+	constexpr float radconvert = 3.14159f / 180.f;
+
+	std::vector<uint32_t> to_erase;
+
+	for (const auto [e, curve] : m_curves)
+	{
+		const float step = curve.speed * 3.f * ((curve.angle < 0.f) - (curve.angle > 0.f));
+		const float radstep = step * radconvert;
+		const float cosstep = std::cos(radstep);
+		const float sinstep = std::sin(radstep);
+
+		const sf::Vector2f base = m_directions[e];
+
+		m_directions[e].x = base.x * cosstep - base.y * sinstep;
+		m_directions[e].y = base.x * sinstep + base.y * cosstep;
+
+		m_curves[e].angle += step * deltaTime * 60.f;
+
+		if (std::abs(curve.angle) < 1.6f)
+			to_erase.push_back(e);
+	}
+
+	for (const uint32_t e : to_erase)
+		m_curves.erase(e);
+}
+
+
+void Script::writeToken(std::ofstream& out, char* token, const std::vector<std::string>& handles)
+{
+	switch (isnumerical(token))
+	{
+	case 0: {
+		const uint32_t num = std::atoi(token);
+		out.write((char*)&num, sizeof(uint32_t));
+		memset(token, 0, 32);
+		return; }
+	case 1: {
+		const float num = (float)std::atof(token);
+		out.write((char*)&num, sizeof(float));
+		memset(token, 0, 32);
+		return; }
+	}
+	if (strncmp(token, "false", 32) == 0)
+	{
+		const bool val = false;
+		out.write((char*)&val, sizeof(bool));
+		memset(token, 0, 32);
+		return;
+	}
+	if (strncmp(token, "true", 32) == 0)
+	{
+		const bool val = true;
+		out.write((char*)&val, sizeof(bool));
+		memset(token, 0, 32);
+		return;
+	}
+
+	const auto it1 = s_opMap.find(token);
+#ifdef _DEBUG
+	if (it1 == s_opMap.end())
+	{
+		const auto it2 = std::find_if(handles.begin(), handles.end(),
+			[&](const std::string& handle) { return token == handle; });
+		if (it2 == handles.end())
+		{
+			out.close();
+			MNG_ASSERT_MSG(false, "Invalid compilation token");
+		}
+
+		uint32_t idx = (uint32_t)(it2 - handles.begin());
+		out.write((char*)&idx, sizeof(uint32_t));
+		memset(token, 0, 32);
+		return;
+	}
+#endif
+	char op = (char)it1->second;
+	out.write(&op, sizeof(char));
+	memset(token, 0, 32);
+}
 
 void Script::compile(const std::string& filepath, const std::vector<std::string>& handles)
 {
@@ -271,7 +317,7 @@ void Script::update(const float deltaTime)
 {
 	if (m_running)
 	{
-		if (m_delay < 0 && !p_scene->m_dialogue.isPlaying())
+		if (m_delay <= 0.f && !p_scene->m_dialogue.isPlaying())
 		{
 			m_output = -1;
 
@@ -297,6 +343,9 @@ void Script::update(const float deltaTime)
 				case Op::MOVE:
 					opMove();
 					break;
+				case Op::CURVE:
+					opCurve();
+					return;
 				case Op::STOP:
 					opStop();
 					return;
@@ -334,9 +383,12 @@ void Script::update(const float deltaTime)
 
 			m_running = false;
 		}
-		else
+
+		if (m_delay > 0.f)
 		{
 			m_delay -= deltaTime;
+
+			computeCurves(deltaTime);
 
 			for (size_t i = 0; i < m_entities.size(); i++)
 			{

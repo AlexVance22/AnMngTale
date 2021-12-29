@@ -6,9 +6,8 @@ speak 0
 camvel 40.0
 track c1
 move c1 1.0 0.0
-wait 2.0
-move c1 1.0 -1.0
-wait 0.5
+wait 2.2
+curve c1 90.0 1.0 true
 move c1 0.0 -1.0
 wait 0.8
 
