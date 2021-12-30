@@ -123,8 +123,14 @@ void Scene::handleGame(const float deltaTime)
 
 	m_physWorld->Step(deltaTime, 6, 2);
 
-	m_dialogue.update(deltaTime);
-	m_agenda.update(deltaTime);
+	for (auto& [_, state] : m_triggers)
+	{
+		if (state.inside && !state.used)
+		{
+			state.used = true;
+			state.onEnter();
+		}
+	}
 
 	impl(deltaTime);
 
@@ -135,15 +141,10 @@ void Scene::handleGame(const float deltaTime)
 			return left->getPosition().y + left->getSize().y < right->getPosition().y + right->getSize().y;
 		});
 
+	m_dialogue.update(deltaTime);
+	m_agenda.update(deltaTime);
+
 	m_camera.update(deltaTime);
-
-	if (m_player)
-	{
-		const sf::FloatRect collider = m_player->getCollider();
-
-		for (auto& [_, t] : m_triggers)
-			t.triggerOnIntersects(collider);
-	}
 
 	PROFILE_DEBUG_ONLY_STEP();
 

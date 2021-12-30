@@ -4,6 +4,9 @@ lock player false
 out 0
 
 move c1 0.0 -1.0
-wait 7.0
-move c1 1.0 -1.0
+wait 7.2
+curve c1 -70.0 0.5 true
+pause 1
+
+move c1 1.0 0.0
 wait 1.0

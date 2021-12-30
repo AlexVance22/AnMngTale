@@ -32,7 +32,8 @@
                 "rect": [ 0, 160, 495, 20 ],
                 "auto-reset": false
             }
-        ]
+        ],
+        "line-triggers": []
     },
     {
         "y-axis-locked": false,
@@ -90,6 +91,7 @@
                 "rect": [ -546, 2516, 200, 20 ],
                 "auto-reset": false
             }
-        ]
+        ],
+        "line-triggers": []
     }
 ]

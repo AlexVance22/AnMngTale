@@ -8,7 +8,9 @@
 
 #include "entities/Entity.h"
 #include "scripting/Script.h"
-#include "physics/BoxTrigger.h"
+
+#include "physics/ContactListener.h"
+#include "physics/TriggerState.h"
 
 #include "gui/Dialogue.h"
 #include "global/Agenda.h"
@@ -36,7 +38,7 @@ protected:
 	std::vector<Sprite> m_backgroundSprites;
 	std::vector<Sprite> m_foregroundSprites;
 
-	std::unordered_map<std::string, BoxTrigger> m_triggers;
+	std::unordered_map<std::string, TriggerState> m_triggers;
 	std::vector<Obj<Entity>> m_entities;
 	Player* m_player = nullptr;
 
@@ -50,6 +52,7 @@ protected:
 	MenuStack m_overlays;
 	bool m_quit = false;
 
+	ContactListener m_listener;
 	Obj<b2World> m_physWorld;
 	float m_physScale = 1.f;
 
@@ -110,5 +113,5 @@ public:
 	friend void getSceneFromID(MenuStack* menus, uint32_t scene);
 
 
-#define LOAD_SCENE(trigger, scene, spawn_x, spawn_y) m_triggers[trigger].onCollide.bind(&Scene::loadScene<scene>, this, sf::Vector2f(spawn_x, spawn_y))
+#define LOAD_SCENE(trigger, scene, spawn_x, spawn_y) m_triggers[trigger].onEnter.bind(&Scene::loadScene<scene>, this, sf::Vector2f(spawn_x, spawn_y));
 };

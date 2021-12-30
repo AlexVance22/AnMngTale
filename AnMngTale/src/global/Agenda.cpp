@@ -14,9 +14,8 @@ static float lerp(float a, float b, float t)
 
 
 std::unordered_map<std::string, Agenda::Quest> Agenda::s_quests = {
-	{ { "Text1" }, { "Testingtestingtestingtesting" } },
-	{ { "Text2" }, { "Testingtestingtestingtesting" } },
-	{ { "Text3" }, { "Testingtestingtestingtesting" } }
+	{ { "Text1" }, { "Testing testing testing testing" } },
+	{ { "Text2" }, { "Testing testing testing testing" } },
 };
 
 
@@ -58,7 +57,7 @@ void Agenda::update(const float deltaTime)
 {
 	if (!m_alerts.empty())
 	{
-		const float p1 = 0.7f, p2 = 3.f, p3 = 3.5f;
+		const float p1 = 0.7f, p2 = 4.f, p3 = 4.5f;
 
 		for (auto& a : m_alerts)
 		{

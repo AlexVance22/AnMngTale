@@ -5,6 +5,8 @@
 
         "boxes": [],
         "chains": [],
-        "box-triggers": []
+
+        "box-triggers": [],
+        "line-triggers": []
     }
 ]

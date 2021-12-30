@@ -73,21 +73,37 @@ void Deserialiser::loadGraphics(const rapidjson::Value& data)
 void Deserialiser::loadPhysics(const rapidjson::Value& data)
 {
 	p_scene->m_physWorld = std::make_unique<b2World>(b2Vec2(0, 0));
+	p_scene->m_physWorld->SetContactListener(&p_scene->m_listener);
 
 	m_lockY = data["y-axis-locked"].IsTrue();
 
 	m_scale = 1.f / data["scale"].GetFloat();
 	p_scene->m_physScale = m_scale;
 
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_staticBody;
+	bodyDef.position.Set(0, 0);
+	b2Body* body = p_scene->m_physWorld->CreateBody(&bodyDef);
+	MNG_ASSERT_SLIM(body);
+
 	for (const auto& box : data["boxes"].GetArray())
 	{
-		b2BodyDef bodyDef;
-		bodyDef.type = b2_staticBody;
-		bodyDef.position.Set((box[0].GetFloat() + box[2].GetFloat() * 0.5f) * m_scale,
-							 (box[1].GetFloat() + box[3].GetFloat() * 0.5f) * m_scale);
-
+		const b2Vec2 points[4] = {
+			JsonToB2Vec(box, m_scale),
+			JsonToB2Vec(box, m_scale) + b2Vec2(box[2].GetFloat() * m_scale, 0.f),
+			JsonToB2Vec(box, m_scale) + b2Vec2(box[2].GetFloat() * m_scale, box[3].GetFloat() * m_scale),
+			JsonToB2Vec(box, m_scale) + b2Vec2(0.f, box[3].GetFloat() * m_scale),
+		};
 		b2PolygonShape shape;
-		shape.SetAsBox(box[2].GetFloat() * 0.5f * m_scale, box[3].GetFloat() * 0.5f * m_scale);
+		shape.Set(points, 4);
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = 0.f;
+		fixtureDef.shape = &shape;
+		fixtureDef.filter.categoryBits = 0x0001;
+		fixtureDef.filter.maskBits = 0x0003;
+
+		body->CreateFixture(&fixtureDef);
 
 #ifdef MNG_DEBUG
 		sf::RectangleShape debugShape;
@@ -98,22 +114,10 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 		debugShape.setSize(sf::Vector2f(box[2].GetFloat(), box[3].GetFloat()));
 		p_scene->d_debugBoxColliders.push_back(debugShape);
 #endif
-
-		b2FixtureDef fixtureDef;
-		fixtureDef.density = 0.f;
-		fixtureDef.shape = &shape;
-
-		b2Body* body = p_scene->m_physWorld->CreateBody(&bodyDef);
-		MNG_ASSERT_SLIM(body);
-		body->CreateFixture(&fixtureDef);
 	}
 
 	for (const auto& chain : data["chains"].GetArray())
 	{
-		b2BodyDef bodyDef;
-		bodyDef.type = b2_staticBody;
-		bodyDef.position.Set(0, 0);
-
 		std::vector<b2Vec2> vertices;
 		const auto& vdata = chain["verts"];
 		vertices.resize(vdata.Size());
@@ -139,15 +143,43 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = 0.f;
 		fixtureDef.shape = &shape;
+		fixtureDef.filter.categoryBits = 0x0001;
+		fixtureDef.filter.maskBits = 0x0003;
 
-		b2Body* body = p_scene->m_physWorld->CreateBody(&bodyDef);
-		MNG_ASSERT_SLIM(body);
 		body->CreateFixture(&fixtureDef);
 	}
 
+
 	for (const auto& bt : data["box-triggers"].GetArray())
 	{
-		p_scene->m_triggers[bt["name"].GetString()] = BoxTrigger(JsonToRect(bt["rect"]));
+		TriggerState* trig = &p_scene->m_triggers[bt["name"].GetString()];
+
+		b2BodyDef bodyDef;
+		bodyDef.type = b2_staticBody;
+		bodyDef.position.Set(0, 0);
+
+		const auto& box = bt["rect"];
+
+		const b2Vec2 points[4] = {
+			JsonToB2Vec(box, m_scale),
+			JsonToB2Vec(box, m_scale) + b2Vec2(box[2].GetFloat() * m_scale, 0.f),
+			JsonToB2Vec(box, m_scale) + b2Vec2(box[2].GetFloat() * m_scale, box[3].GetFloat() * m_scale),
+			JsonToB2Vec(box, m_scale) + b2Vec2(0.f, box[3].GetFloat() * m_scale),
+		};
+		b2PolygonShape shape;
+		shape.Set(points, 4);
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = 0.f;
+		fixtureDef.shape = &shape;
+		fixtureDef.filter.categoryBits = 0x0002;
+		fixtureDef.filter.maskBits = 0x0003;
+		fixtureDef.isSensor = true;
+		fixtureDef.userData.pointer = (uintptr_t)trig;
+
+		b2Body* _body = p_scene->m_physWorld->CreateBody(&bodyDef);
+		MNG_ASSERT_SLIM(_body);
+		_body->CreateFixture(&fixtureDef);
 
 #ifdef MNG_DEBUG
 		sf::RectangleShape debugShape;
@@ -156,6 +188,40 @@ void Deserialiser::loadPhysics(const rapidjson::Value& data)
 		debugShape.setOutlineThickness(0.3f);
 		debugShape.setPosition(JsonToVec2<float>(bt["rect"]));
 		debugShape.setSize(sf::Vector2f(bt["rect"][2].GetFloat(), bt["rect"][3].GetFloat()));
+		p_scene->d_debugBoxColliders.push_back(debugShape);
+#endif
+	}
+
+	for (const auto& lt : data["line-triggers"].GetArray())
+	{
+		TriggerState* trig = &p_scene->m_triggers[lt["name"].GetString()];
+
+		b2BodyDef bodyDef;
+		bodyDef.type = b2_staticBody;
+		bodyDef.position.Set(0, 0);
+
+		b2EdgeShape shape;
+		shape.SetTwoSided(JsonToB2Vec(lt["start"], m_scale), JsonToB2Vec(lt["end"], m_scale));
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = 0.f;
+		fixtureDef.shape = &shape;
+		fixtureDef.filter.categoryBits = 0x0002;
+		fixtureDef.filter.maskBits = 0x0003;
+		fixtureDef.isSensor = true;
+		fixtureDef.userData.pointer = (uintptr_t)trig;
+
+		b2Body* _body = p_scene->m_physWorld->CreateBody(&bodyDef);
+		MNG_ASSERT_SLIM(_body);
+		_body->CreateFixture(&fixtureDef);
+
+#ifdef MNG_DEBUG
+		sf::RectangleShape debugShape;
+		debugShape.setFillColor(sf::Color(0, 0, 0, 0));
+		debugShape.setOutlineColor(sf::Color(255, 255, 255));
+		debugShape.setOutlineThickness(0.3f);
+		debugShape.setPosition(JsonToVec2<float>(lt["start"]));
+		debugShape.setSize(JsonToVec2<float>(lt["end"]) - JsonToVec2<float>(lt["start"]));
 		p_scene->d_debugBoxColliders.push_back(debugShape);
 #endif
 	}
@@ -265,8 +331,10 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 			b2Body* body = p_scene->m_physWorld->CreateBody(&bodydef);
 			MNG_ASSERT_SLIM(body);
 
-			b2FixtureDef fixturedef;
-			fixturedef.density = phys["density"].GetFloat();
+			b2FixtureDef fixtureDef;
+			fixtureDef.density = phys["density"].GetFloat();
+			fixtureDef.filter.categoryBits = 0x0003;
+			fixtureDef.filter.maskBits = 0x0001 | 0x0002;
 
 			const auto& shape = phys["shape"];
 			const char* stype = shape["type"].GetString();
@@ -274,8 +342,8 @@ void Deserialiser::loadEntities(const rapidjson::Value& data)
 			{
 				b2PolygonShape s;
 				s.SetAsBox(shape["size"][0].GetFloat() * m_scale * 0.5f, shape["size"][1].GetFloat() * m_scale * 0.5f);
-				fixturedef.shape = &s;
-				body->CreateFixture(&fixturedef);
+				fixtureDef.shape = &s;
+				body->CreateFixture(&fixtureDef);
 
 				entity->simulate(body, JsonToVec2<float>(phys["offset"]), JsonToVec2<float>(shape["size"]));
 			}
@@ -416,7 +484,7 @@ void Deserialiser::loadScripts(const rapidjson::Value& data)
 		p_scene->m_scripts[i].load(data[i]["bin"].GetString(), p_scene);
 
 		for (const auto& t : data[i]["trigger"].GetArray())
-			p_scene->m_triggers[t.GetString()].onCollide.bind(&Script::play, &p_scene->m_scripts[i]);
+			p_scene->m_triggers[t.GetString()].onEnter.bind(&Script::play, &p_scene->m_scripts[i]);
 	}
 }
 

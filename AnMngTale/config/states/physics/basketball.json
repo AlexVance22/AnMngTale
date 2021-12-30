@@ -21,6 +21,7 @@
                 "name": "courtyard",
                 "rect": [ 325, 266, 121, 20 ]
             }
-        ]
+        ],
+        "line-triggers": []
     }
 ]

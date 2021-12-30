@@ -74,6 +74,13 @@
                 "name": "f400bot",
                 "rect": [ 480, -717, 20, 103 ]
             }
+        ],
+        "line-triggers": [
+            { 
+                "name": "library",
+                "start": [ -14, -52 ],
+                "end": [ 50, -35 ]
+            }
         ]
     },
 
@@ -170,10 +177,11 @@
             }
         ],
 
-        "slope-triggers": [
+        "line-triggers": [
             { 
                 "name": "library",
-                "points": [ [ -14, -52 ], [ 50, -35 ] ]
+                "start": [ -14, -52 ],
+                "end": [ 50, -35 ]
             }
         ]
     }

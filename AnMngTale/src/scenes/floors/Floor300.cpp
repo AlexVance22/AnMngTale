@@ -6,6 +6,7 @@
 #include "scenes/floors/Floor400.h"
 #include "scenes/outside/Basketball.h"
 #include "scenes/outside/Courtyard.h"
+#include "scenes/rooms/Library.h"
 
 #include "global/Agenda.h"
 
@@ -72,6 +73,8 @@ Floor300::Floor300() : Scene("floor300")
 	case 0:
 		LOAD_SCENE("f400top", Floor400, 370, -1460);
 		LOAD_SCENE("f400bot", Floor400, 420, -500);
+
+		LOAD_SCENE("library", Library, 0, 0);
 		break;
 	case 1:
 		LOAD_SCENE("f400top", Floor400, 370, -1460);
@@ -79,6 +82,8 @@ Floor300::Floor300() : Scene("floor300")
 
 		LOAD_SCENE("courtyard", Courtyard, 321, 84);
 		LOAD_SCENE("basketball", Basketball, 345, 206);
+
+		LOAD_SCENE("library", Library, 0, 0);
 		break;
 	}
 }

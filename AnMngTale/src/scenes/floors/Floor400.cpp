@@ -16,6 +16,8 @@ void Floor400::impl(const float deltaTime)
 	case 0:
 		if (m_scripts[0].output() == 0)
 			m_progress = true;
+		if (m_scripts[0].output() == 1)
+			m_triggers["interact2"].reset();
 		break;
 	case 1:
 		break;

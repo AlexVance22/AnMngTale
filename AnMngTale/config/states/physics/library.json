@@ -4,15 +4,15 @@
         "scale": 105,
 
         "boxes": [
-            [ 580, 0, 20, 270 ]
+            [ -20, 0, 20, 270 ]
         ],
 
         "chains": [],
 
         "box-triggers": [
             {
-                "name": "floors",
-                "rect": [ -20, 0, 20, 270 ]
+                "name": "exit",
+                "rect": [ 900, 0, 20, 270 ]
             }
         ],
         "line-triggers": []
